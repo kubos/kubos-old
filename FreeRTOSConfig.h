@@ -88,14 +88,19 @@
 #define configUSE_IDLE_HOOK			1
 #define configUSE_TICK_HOOK			0
 #define configCPU_CLOCK_HZ			( ( unsigned long ) 7995392 ) /* Clock setup from main.c in the demo application. */
+// #define configCPU_CLOCK_HZ			( ( unsigned long ) 4000000 )
+// #define configLFXT_CLOCK_HZ         ( 32768L )
 #define configTICK_RATE_HZ			( ( TickType_t ) 1000 )
+// #define configTICK_VECTOR           TIMER0_A0_VECTOR
 #define configMAX_PRIORITIES		( 4 )
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 50 )
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 1800 ) )
 #define configMAX_TASK_NAME_LEN		( 8 )
-#define configUSE_TRACE_FACILITY	0
+#define configUSE_TRACE_FACILITY	1
 #define configUSE_16_BIT_TICKS		1
 #define configIDLE_SHOULD_YIELD		1
+
+#define configUSE_STATS_FORMATTING_FUNCTIONS 1
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES 		0
@@ -113,8 +118,17 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelay				1
 
 
+#define configUSE_MUTEXES 1
+#define configSUPPORT_DYNAMIC_ALLOCATION 1
+#define configUSE_COUNTING_SEMAPHORES   1
+#define configUSE_RECURSIVE_MUTEXES     1
 
 
+#define configCHECK_FOR_STACK_OVERFLOW 0
+#define configUSE_MALLOC_FAILED_HOOK 0
+
+
+#define configUSE_TICKLESS_IDLE     0
 
 
 
