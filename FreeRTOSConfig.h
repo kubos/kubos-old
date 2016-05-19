@@ -90,8 +90,8 @@
 #define configCPU_CLOCK_HZ			( ( unsigned long ) 7995392 ) /* Clock setup from main.c in the demo application. */
 #define configTICK_RATE_HZ			( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES		( 4 )
-#define configMINIMAL_STACK_SIZE	( ( unsigned short ) 50 )
-#define configTOTAL_HEAP_SIZE		( ( size_t ) ( 1800 ) )
+#define configMINIMAL_STACK_SIZE	( ( unsigned short ) 200 )
+#define configTOTAL_HEAP_SIZE		( ( size_t ) ( 1024 ) )
 #define configMAX_TASK_NAME_LEN		( 8 )
 #define configUSE_TRACE_FACILITY	1
 #define configUSE_16_BIT_TICKS		1
@@ -128,5 +128,8 @@ to exclude the API function. */
 #define configUSE_TICKLESS_IDLE     0
 
 
+/* Define configASSERT() to call vAssertCalled() if the assertion fails.  The assertion
+has failed if the value of the parameter passed into configASSERT() equals zero. */
+// #define configASSERT( x )     if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
 
 #endif /* FREERTOS_CONFIG_H */
