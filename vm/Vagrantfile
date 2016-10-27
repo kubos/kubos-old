@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
       add-apt-repository ppa:george-edison55/cmake-3.x
       apt-get install -y cmake=3.2.2-2~ubuntu14.04.1~ppa1
       apt-get install -y gcc-msp430 gdb-msp430 msp430-libc
+      apt-get install mspdebug
 
       pip install kubos-cli
       kubos update
