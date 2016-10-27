@@ -45,7 +45,7 @@
  * @{
  */
 
-#include "lib/list.h"
+#include "list.h"
 
 #define NULL 0
 

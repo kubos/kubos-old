@@ -8,27 +8,13 @@ https://github.com/contiki-os/contiki/tree/master/examples/cc26xx/cc26xx-web-dem
 
 */
 
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "list.h"
-
-/* The "objects" representing telemetry readings */
-#define GENERIC_TELEMETRY_READING(name, type, units) \
-  telemetry_reading name##_reading = \
-  { NULL, 0, 0, units, type, 1, 1 }
-  
+#include "telemetry.h"
 
 /* A cache of telemetry readings. */
 LIST(telemetry_list);
-
-
-GENERIC_TELEMETRY_READING(telemetry_temp, TELEMETRY_READING_TEMP,
-            TELEMETRY_UNIT_TEMP);
-
-GENERIC_TELEMETRY_READING(telemetry_volt, TELEMETRY_READING_VOLT,
-            TELEMETRY_UNIT_VOLT);
-
 
 const telemetry_reading_t *telemetry_reading_lookup(int reading_type)
 {
@@ -52,7 +38,7 @@ const telemetry_reading_t *telemetry_reading_first()
 }
 
 
-static void compare_and_update(telemetry_reading_t *reading)
+void telemetry_compare_and_update(telemetry_reading_t *reading)
 {
   if(reading->last == reading->raw) {
     reading->changed = 0;
@@ -63,14 +49,13 @@ static void compare_and_update(telemetry_reading_t *reading)
 }
 
 
-static void init_telemetry_readings(void)
+void init_telemetry_reading(telemetry_reading_t *reading)
 {
-
-  list_add(telemetry_list, &telemetry_temp_reading);
-  list_add(telemetry_list, &telemetry_volt_reading);
-
+  list_add(telemetry_list, &reading);
 }
 
+
+/*
 
 static void test_print_telemetry_beacon(void)
 {
@@ -137,3 +122,4 @@ static void load_telemetry_config()
 
 }
 
+*/
