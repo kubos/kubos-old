@@ -24,6 +24,8 @@ Vagrant.configure("2") do |config|
       easy_install pip
       # pip install kubos-cli
       # kubos update
+
+      # TODO: removed the lines below and replace with `kubos update`
       git clone https://github.com/kubostech/kubos.git /home/vagrant/.kubos
       cd /home/vagrant/.kubos && git fetch --all
 
