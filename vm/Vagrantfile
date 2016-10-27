@@ -21,7 +21,6 @@ Vagrant.configure("2") do |config|
       apt-get install -y gcc-msp430 gdb-msp430 msp430-libc
 
       mkdir -p /home/vagrant/.kubos
-      easy_install pip
       # pip install kubos-cli
       # kubos update
 
@@ -31,8 +30,8 @@ Vagrant.configure("2") do |config|
 
       apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
   }
+
   config.vm.provider "virtualbox" do |vb|
-    vb.name = "kubos"
     vb.customize ['modifyvm', :id, '--usbehci', 'on']
     vb.customize ['modifyvm', :id, '--usb', 'on']
   end
