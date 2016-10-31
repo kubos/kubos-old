@@ -1,0 +1,44 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/trusty64"
+
+  config.vm.provision "shell", inline: %Q{
+      apt-get update
+      add-apt-repository ppa:team-gcc-arm-embedded/ppa
+      add-apt-repository ppa:george-edison55/cmake-3.x
+      add-apt-repository ppa:git-core/ppa
+      apt-get update
+      apt-get -y install build-essential libssl-dev libffi-dev
+      apt-get install -y python-setuptools build-essential ninja-build python-dev libffi-dev libssl-dev
+      apt-get install -y gcc-arm-none-eabi
+      apt-get -y install python-pip
+      apt-get -y install git
+      apt-get install -y cmake
+      apt-get install -y gcc-msp430 gdb-msp430 msp430-libc
+
+      # flash tools
+      apt-get install mspdebug
+      apt-get install dfu-util
+      apt-get install openocd
+
+      # download libmsp430.so
+      wget -P /usr/lib https://github.com/kubostech/kubos/raw/vagrant-provision/vm/lib/libmsp430.so
+
+      pip install --upgrade pip
+      pip install kubos-cli
+      kubos update
+
+      apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  }
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.customize ['modifyvm', :id, '--usbehci', 'on']
+    vb.customize ['modifyvm', :id, '--usb', 'on']
+  end
+end
