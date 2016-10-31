@@ -21,6 +21,11 @@ Vagrant.configure("2") do |config|
       apt-get install -y gcc-msp430 gdb-msp430 msp430-libc
       apt-get install mspdebug
 
+
+      # flash tools
+      apt-get install dfu-util
+      apt-get install openocd
+
       pip install kubos-cli
       kubos update
 
