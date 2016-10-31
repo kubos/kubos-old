@@ -25,6 +25,9 @@ Vagrant.configure("2") do |config|
       apt-get install dfu-util
       apt-get install openocd
 
+      # download libmsp430.so
+      wget -P /usr/lib https://github.com/kubostech/kubos/raw/vagrant-provision/vm/lib/libmsp430.so
+
       pip install kubos-cli
       kubos update
 
