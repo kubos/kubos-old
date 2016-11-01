@@ -91,3 +91,5 @@ upload.tar.gz
 
 # vim files
 .*.sw*
+
+.vscode

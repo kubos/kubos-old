@@ -1,0 +1,20 @@
+{
+    "bin":"./source",
+    "license":"Apache-2.0",
+    "name":"example",
+    "repository":{
+        "url":"git://<repository_url>",
+        "type":"git"
+    },
+    "version":"0.1.0",
+    "dependencies":{
+        "telemetry-gather":"kubostech/telemetry-gather#~0.1.0",
+        "telemetry":"kubostech/telemetry#~0.1.0",
+        "csp":"kubostech/libcsp"
+    },
+    "targetDependencies":{
+      "kubos-rt":{
+        "kubos-rt":"kubostech/kubos-rt"
+      }
+    }
+}

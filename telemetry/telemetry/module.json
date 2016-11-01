@@ -1,0 +1,14 @@
+{
+    "license":"Apache-2.0",
+    "name":"telemetry",
+    "version":"0.1.0",
+    "homepage":"https://<homepage>",
+    "dependencies":{
+      "csp":"kubostech/libcsp"
+    },
+    "targetDependencies":{
+      "kubos-rt":{
+        "kubos-rt":"kubostech/kubos-rt"
+      }
+    }
+}
