@@ -37,6 +37,7 @@
 #include "kubos-core/modules/sensors/bno055.h"
 #endif
 
+
 #ifdef YOTTA_CFG_SENSORS_HTU21D
 CREATE_TELEMETRY_READING(telemetry_temp, TELEMETRY_READING_HTU21D_TEMP,
             TELEMETRY_UNIT_TEMP);
@@ -62,8 +63,7 @@ void test_print_beacon(void) {
  for(reading = telemetry_reading_first();
       reading != NULL; reading = reading->next) {
     if(reading->beacon) {
-      printf("Value: %d (%s) Type: %d\r\n", reading->raw, reading->units,
-                     reading->type);
+      printf("Value: %d\r\n", reading->raw.i);
         }
     }
 }
@@ -118,29 +118,36 @@ void task_i2c(void *p) {
         htu21d_read_temperature(&temp);
         htu21d_read_humidity(&hum);
         
-        temp_trunc = (int) temp;
-        hum_trunc = (int) hum;
+        //temp_trunc = (int) temp;
+        //hum_trunc = (int) hum;
+        temp_trunc = 1;
+        hum_trunc = 2;
 
-        ret = telemetry_reading_write(&telemetry_temp_reading, &temp_trunc);
-        ret = telemetry_reading_write(&telemetry_humidity_reading, &hum_trunc);
-        
-        //printf("temp - %f\r\n", temp);
-        //printf("humidity - %f\r\n", hum);
+        ret = telemetry_reading_write_int(&telemetry_temp_reading, &temp_trunc);
+        ret = telemetry_reading_write_int(&telemetry_humidity_reading, &hum_trunc);
+
+        //printf("temp %d\r\n", telemetry_reading_read_int(&telemetry_temp_reading));
+        //printf("humidity %d\r\n", telemetry_reading_read_int(&telemetry_humidity_reading));
 #endif
 
 #ifdef YOTTA_CFG_SENSORS_BNO055
         bno055_get_position(&pos);
         
         int x, y, z, w;
-        x = pos.x;
-        y = pos.y;
-        z = pos.z;
-        w = pos.w;
+        //x = pos.x;
+        //y = pos.y;
+        //z = pos.z;
+        //w = pos.w;
         
-        ret = telemetry_reading_write(&telemetry_position_x_reading, &x);
-        ret = telemetry_reading_write(&telemetry_position_y_reading, &y);
-        ret = telemetry_reading_write(&telemetry_position_z_reading, &z);
-        ret = telemetry_reading_write(&telemetry_position_w_reading, &w);
+        x = 3;
+        y = 4;
+        z = 5;
+        w = 6;
+        
+        ret = telemetry_reading_write_int(&telemetry_position_x_reading, &x);
+        ret = telemetry_reading_write_int(&telemetry_position_y_reading, &y);
+        ret = telemetry_reading_write_int(&telemetry_position_z_reading, &z);
+        ret = telemetry_reading_write_int(&telemetry_position_w_reading, &w);
 
         //printf("imu - %d %d %d %d\r\n", pos.x, pos.y, pos.z, pos.w);
 #endif

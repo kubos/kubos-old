@@ -39,6 +39,8 @@ typedef enum {
         TELEMETRY_READING_LIMIT_ERROR
 } telemetry_reading_status;
 
+
+
 /* Telemetry reading units */
 #define TELEMETRY_UNIT_TEMP                    "C"
 #define TELEMETRY_UNIT_HUMIDITY                "%RH"
@@ -47,14 +49,23 @@ typedef enum {
 /* Converted reading value length */
 #define TELEMETRY_CONVERTED_LEN                 12
 
+
 /**
- * @brief A data type for sensor readings, internally stored in a linked 
- *        list. 
+ * @brief A union data type for telemetry data.
+ */
+typedef union telemetry_union_data {
+  int i;
+  float f;
+} telemetry_union_data_t;
+
+/**
+ * @brief A data type for sensor readings that will be internally 
+ *        stored in a linked list. 
  */
 typedef struct telemetry_reading {
   struct telemetry_reading *next;
-  int raw;
-  int last;
+  telemetry_union_data_t raw;
+  telemetry_union_data_t last;
   char *units;
   uint8_t type;
   uint8_t beacon;
@@ -95,8 +106,13 @@ const telemetry_reading_t *telemetry_reading_first(void);
  */
 void init_telemetry_reading(telemetry_reading_t *reading);
 
-/* For right now data is hard coded as an int ptr */
-telemetry_reading_status telemetry_reading_write(telemetry_reading_t *reading, int *data);
+telemetry_reading_status telemetry_reading_write_int(telemetry_reading_t *reading, int *data);
+
+telemetry_reading_status telemetry_reading_write_float(telemetry_reading_t *reading, float *data);
+
+int telemetry_reading_read_int(telemetry_reading_t *reading);
+
+float telemetry_reading_read_float(telemetry_reading_t *reading);
 
 /* telemetry_limit_checker(); */
 

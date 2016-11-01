@@ -31,28 +31,27 @@ const telemetry_reading_t *telemetry_reading_lookup(int reading_type)
   return NULL;
 }
 
+static void telemetry_compare_and_update(telemetry_reading_t *reading)
+{
+  if(reading->last.i == reading->raw.i) {
+    reading->changed = 0;
+  } else {
+    reading->last.i = reading->raw.i;
+    reading->changed = 1;
+  }
+}
+
 const telemetry_reading_t *telemetry_reading_first()
 {
   return list_head(telemetry_list);
 }
 
-static void telemetry_compare_and_update(telemetry_reading_t *reading)
-{
-  if(reading->last == reading->raw) {
-    reading->changed = 0;
-  } else {
-    reading->last = reading->raw;
-    reading->changed = 1;
-  }
-}
-
 void init_telemetry_reading(telemetry_reading_t *reading)
 {
-  list_add(telemetry_list, &reading);
+  list_add(telemetry_list, reading);
 }
 
-/* For right now data is hard coded as an int ptr */
-telemetry_reading_status telemetry_reading_write(telemetry_reading_t *reading, int *data)
+telemetry_reading_status telemetry_reading_write_int(telemetry_reading_t *reading, int *data)
 {
 /* 
   if(reading == NULL || data == NULL)
@@ -63,55 +62,26 @@ telemetry_reading_status telemetry_reading_write(telemetry_reading_t *reading, i
     
 /* Type check and limit check could go here*/
 
-  reading->raw = *data;
-  telemetry_compare_and_update(reading);
+  reading->raw.i = *data;
   return TELEMETRY_READING_OK;
 }
 
+int telemetry_reading_read_int(telemetry_reading_t *reading)
+{
+  return reading->raw.i;
+}
+
+telemetry_reading_status telemetry_reading_write_float(telemetry_reading_t *reading, float *data)
+{
+  reading->raw.f = *data;
+  return TELEMETRY_READING_OK;
+}
+
+float telemetry_reading_read_float(telemetry_reading_t *reading)
+{
+  return reading->raw.f;
+}
 /*
-
-static void test_print_telemetry_beacon(void)
-{
-
-telemetry_reading_t *reading = NULL;
-
-  for(reading = list_head(telemetry_list);
-      reading != NULL;
-      reading = list_item_next(reading)) {
-    if(reading->beacon) {
-      //Print here
-    }
-  }
-}
-
-
-static void test_dump_telemetry(void)
-{
-
-telemetry_reading_t *reading = NULL;
-
-  for(reading = list_head(telemetry_list);
-      reading != NULL;
-      reading = list_item_next(reading)) {
-      //Print here
-  }
-}
-
-
-static void test_log_telemetry(void)
-{
-
-telemetry_reading_t *reading = NULL;
-
-  for(reading = list_head(telemetry_list);
-      reading != NULL;
-      reading = list_item_next(reading)) {
-    if(reading->changed) {
-      //Log it
-    }
-  }
-}
-
 
 static void save_telemetry_config()
 {
