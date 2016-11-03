@@ -18,15 +18,36 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <telemetry/service.h>
+#include <telemetry/telemetry.h>
+#include <telemetry/sources.h>
 #include <telemetry-gather/gather.h>
+#include <telemetry-beacon/beacon.h>
+#include <telemetry-health/health.h>
 
 #include <csp/csp.h>
 #include <csp/arch/csp_thread.h>
+#include <csp/arch/csp_time.h>
 
 #ifdef TARGET_LIKE_FREERTOS
 #include "kubos-hal/uart.h"
 #endif
+
+
+CSP_DEFINE_TASK(pos_y_thread)
+{
+    static int pos_data = 2;
+    while(1)
+    {
+        telem_data data;
+        data.data = pos_data--;
+        data.source = pos_y_source;
+        data.timestamp = csp_get_ms();
+
+        telemetry_submit(data);
+        csp_sleep_ms(300);
+    }
+}
+
 
 int main(void)
 {
@@ -41,8 +62,21 @@ int main(void)
     __enable_interrupt();
     #endif
 
+    printf("Initialising CSP\r\n");
+    csp_buffer_init(5, 20);
+
+    /* Init CSP with address MY_ADDRESS */
+    csp_init(1);
+
+    /* Start router task with 500 word stack, OS task priority 1 */
+    csp_route_start_task(50, 1);
+
     BEACON_THREAD;
     GATHER_THREAD;
+    HEALTH_THREAD;
+
+    csp_thread_handle_t pos_y_handle;
+    csp_thread_create(pos_y_thread, "POS_Y", 50, NULL, 0, &pos_y_handle);
 
     #ifdef TARGET_LIKE_FREERTOS
     vTaskStartScheduler();
@@ -50,7 +84,7 @@ int main(void)
 
     /* Wait for program to terminate (ctrl + c) */
     while(1) {
-    	csp_sleep_ms(1000000);
+        csp_sleep_ms(1000000);
     }
 
     return 0;

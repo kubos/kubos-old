@@ -8,8 +8,10 @@
     },
     "version":"0.1.0",
     "dependencies":{
-        "telemetry-gather":"kubostech/telemetry-gather#~0.1.0",
-        "telemetry":"kubostech/telemetry#~0.1.0",
+        "telemetry-gather":"kubostech/telemetry-gather",
+        "telemetry-beacon":"kubostech/telemetry-beacon",
+        "telemetry-health":"kubostech/telemetry-health",
+        "telemetry":"kubostech/telemetry",
         "csp":"kubostech/libcsp"
     },
     "targetDependencies":{
