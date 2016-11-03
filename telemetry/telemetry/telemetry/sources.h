@@ -1,21 +1,13 @@
-/**
- * The contents of this file would ideally be generated based
- * off of configuration values.
- */
-
 #ifndef SOURCES_H
 #define SOURCES_H
 
-#include "telemetry/service.h"
+#include "telemetry/telemetry.h"
 
-static telem_source gps_source = {
-    .source_id = 0,
-    .in_beacon = 1
-};
-
-static telem_source temp_source = {
-    .source_id = 1,
-    .in_beacon = 1
-};
+#define TELEMETRY_NUM_HEALTH 2
+#define TELEMETRY_NUM_BEACON 2
+static telem_source pos_x_source = { .source_id = 0, .dest_flag = TELEMETRY_BEACON_FLAG };
+static telem_source pos_y_source = { .source_id = 1, .dest_flag = 0 };
+static telem_source temp_source = { .source_id = 2, .dest_flag = TELEMETRY_HEALTH_FLAG };
+static telem_source gps_source = { .source_id = 3, .dest_flag = TELEMETRY_BEACON_FLAG | TELEMETRY_HEALTH_FLAG};
 
 #endif
