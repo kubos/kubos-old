@@ -4,13 +4,14 @@
 #include "telemetry-beacon/beacon.h"
 #include <csp/csp.h>
 
+static uint8_t data_count = 0;
+
 void telemetry_update_beacon(telem_data data)
 {
     if (data.source.dest_flag & TELEMETRY_BEACON_FLAG)
     {
-        // telem_beacon[data.source.beacon_id] = data;
-        telem_beacon[data.source.source_id % TELEMETRY_NUM_BEACON] = data;
-        // printf("BEACON:%d:%d:%d\r\n", data.source.source_id, data.timestamp, data.data);
+        /* A dirty hack to fill up the whole array with data */
+        telem_beacon[data_count++ % TELEMETRY_NUM_BEACON] = data;
     }
 }
 
@@ -21,7 +22,7 @@ CSP_DEFINE_TASK(beacon_rx_thread)
     csp_conn_t *conn;
     csp_packet_t *packet;
 
-    csp_bind(socket, TELEMETRY_HEALTH_PORT);
+    csp_bind(socket, TELEMETRY_BEACON_PORT);
     csp_listen(socket, 5);
     telem_data data;
 
@@ -32,7 +33,7 @@ CSP_DEFINE_TASK(beacon_rx_thread)
 
         while( (packet = csp_read(conn, 100)) != NULL ) {
             switch( csp_conn_dport(conn) ) {
-                case TELEMETRY_HEALTH_PORT:
+                case TELEMETRY_BEACON_PORT:
                     data = *((telem_data*)packet->data);
                     csp_buffer_free(packet);
                     telemetry_update_beacon(data);

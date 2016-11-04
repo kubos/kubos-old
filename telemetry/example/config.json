@@ -12,7 +12,9 @@
         "temp":{
           "health": 20
         },
-        "pos_x": true,
+        "pos_x": {
+          "beacon":true
+        },
         "pos_y":{
           "beacon":true
         }

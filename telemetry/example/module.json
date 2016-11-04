@@ -18,5 +18,8 @@
       "kubos-rt":{
         "kubos-rt":"kubostech/kubos-rt"
       }
+    },
+    "scripts":{
+      "preBuild":"scripts/prebuild.py"
     }
 }
