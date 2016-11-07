@@ -32,7 +32,10 @@
 #include "kubos-hal/uart.h"
 #endif
 
-
+/**
+ * Example "user created" thread gathering extra data
+ * and sending it to telemetry
+ */
 CSP_DEFINE_TASK(pos_y_thread)
 {
     static int pos_data = 2;
@@ -71,9 +74,9 @@ int main(void)
     /* Start router task with 500 word stack, OS task priority 1 */
     csp_route_start_task(50, 1);
 
-    BEACON_THREAD;
-    GATHER_THREAD;
-    HEALTH_THREAD;
+    BEACON_THREADS;
+    GATHER_THREADS;
+    HEALTH_THREADS;
 
     csp_thread_handle_t pos_y_handle;
     csp_thread_create(pos_y_thread, "POS_Y", 50, NULL, 0, &pos_y_handle);

@@ -10,6 +10,11 @@ void telemetry_submit(telem_data data)
     telemetry_publish(data);
 }
 
+/**
+ * This function represents a future "storage" destination for telemetry data.
+ * Ideally this function would not exist, instead telemetry would publish data
+ * to storage in the same way it publishes data to beacon and health
+ */
 void telemetry_log_data(telem_data data)
 {
     printf("TELEM:%d:%d:%d\r\n", data.source.source_id, data.timestamp, data.data);
@@ -57,6 +62,8 @@ void telemetry_publish(telem_data data)
     /** autogen list of ports which telem should publish to */
     telemetry_publish_send(TELEMETRY_BEACON_PORT, data);
     telemetry_publish_send(TELEMETRY_HEALTH_PORT, data);
+    /* Future destination for storage - to replace logging direct in telemetry layer*/
+    //telemetry_publish_send(TELEMETRY_STORAGE_PORT, data);
 }
 
 #endif

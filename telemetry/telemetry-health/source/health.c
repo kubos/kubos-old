@@ -15,6 +15,9 @@ void update(telem_data data)
     }
 }
 
+/**
+ * Thread for receiving data packets from telemetry service
+ */
 CSP_DEFINE_TASK(health_rx_thread)
 {
     int running = 1;
@@ -48,6 +51,9 @@ CSP_DEFINE_TASK(health_rx_thread)
     }
 }
 
+/**
+ * Thread for performing health/limit checks on data
+ */
 CSP_DEFINE_TASK(health_thread)
 {
     telem_data data;
@@ -59,6 +65,10 @@ CSP_DEFINE_TASK(health_thread)
         {
             data = health_data[i];
             printf("HEALTH:%d:%d:%d\r\n", data.source.source_id, data.timestamp, data.data);
+            /* Perform limit check and take action here
+                if (data > limit)
+                    log("alert bad")
+            */
         }        
     }
 }

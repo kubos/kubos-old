@@ -8,10 +8,10 @@ void gps_telem();
 CSP_DEFINE_TASK(gather_thread);
 
 #ifdef YOTTA_CFG_TELEMETRY
-#define GATHER_THREAD   csp_thread_handle_t gather_handle; \
+#define GATHER_THREADS   csp_thread_handle_t gather_handle; \
                         csp_thread_create(gather_thread, "GATHER", 50, NULL, 0, &gather_handle);
 #else
-#define GATHER_THREAD
+#define GATHER_THREADS
 #endif
 
 #endif
