@@ -15,13 +15,11 @@ MEMORY {
   /* Remaining banks are absent */
   ram2 (wx)        : ORIGIN = 0x0000, LENGTH = 0x0000
   ram_mirror (wx)  : ORIGIN = 0x0000, LENGTH = 0x0000
-  signature        : ORIGIN = 0x0000, LENGTH = 0x0000
+  usbram (wx)      : ORIGIN = 0x0000, LENGTH = 0x0000
 }
 REGION_ALIAS("REGION_TEXT", rom);
 REGION_ALIAS("REGION_DATA", ram);
-REGION_ALIAS("REGION_FAR_ROM", far_rom); /* Legacy name, no longer used */
-REGION_ALIAS("REGION_FAR_TEXT", far_rom);
-REGION_ALIAS("REGION_FAR_DATA", ram2);
+REGION_ALIAS("REGION_FAR_ROM", far_rom);
 PROVIDE (__info_segment_size = 0x80);
 PROVIDE (__infod = 0x1800);
 PROVIDE (__infoc = 0x1880);
