@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
 project (csp)
-include (CheckIncludeFiles)
+
+include (KubosChecks)
+
 set (CSP_VERSION "1.4.0" CACHE STRING "")
 
 option (CSP_USE_RDP "" OFF)
@@ -111,7 +113,7 @@ if (TARGET_LIKE_MSP430_GCC)
 endif()
 
 file (GLOB_RECURSE ARCH_FILES src/arch/${CSP_ARCH}/*.c)
-target_sources (csp PUBLIC ${ARCH_FILES})
+target_sources (csp PRIVATE ${ARCH_FILES})
 
 target_compile_options(csp PUBLIC -std=gnu99)
 
@@ -133,5 +135,5 @@ if (LOGLEVEL STREQUAL "debug" OR LOGLEVEL STREQUAL "info" OR
     set (CSP_LOG_LEVEL_ERROR ON)
 endif()
 
-check_include_files (stdbool.h CSP_HAVE_STDBOOL_H)
+kubos_check_include_file(stdbool.h CSP_HAVE_STDBOOL_H)
 configure_file (csp_autoconfig.h.in csp/csp_autoconfig.h @ONLY)

@@ -146,7 +146,7 @@ int _getpid()
     return -1;
 }
 
-#if KUBOS_USE_MALLOC_LOCK
+#ifdef KUBOS_USE_MALLOC_LOCK
 void __malloc_lock(struct _reent *r)
 {
     vPortEnterCritical();
