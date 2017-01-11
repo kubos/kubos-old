@@ -65,6 +65,9 @@ SECTIONS
      . = ALIGN(2);
     *(.text .text.* .gnu.linkonce.t.*)
      . = ALIGN(2);
+     PROVIDE(__start_slash = .);
+     KEEP(*(slash))
+     PROVIDE(__stop_slash = .);
   }  > REGION_TEXT
   .rodata   :
   {
