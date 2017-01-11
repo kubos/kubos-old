@@ -1,0 +1,43 @@
+#ifndef LIBSLASH_H
+#define LIBSLASH_H
+
+#cmakedefine HAVE_TERMIOS_H
+#cmakedefine HAVE_UNISTD_H
+#cmakedefine HAVE_FCNTL_H
+#cmakedefine HAVE_GETOPT
+
+#cmakedefine SLASH_ENABLED
+#cmakedefine SLASH_ASF
+
+#ifdef YOTTA_CFG_SLASH_LF
+#define SLASH_LF 1
+#endif
+
+/* Maximum number of arguments */
+#ifndef SLASH_ARG_MAX
+#  ifdef YOTTA_CFG_SLASH_ARGMAX
+#    define SLASH_ARG_MAX YOTTA_CFG_SLASH_ARGMAX
+#  else
+#    define SLASH_ARG_MAX 16
+#  endif
+#endif
+
+/* Maximum number of commands to list */
+#ifndef SLASH_SHOW_MAX
+#  ifdef YOTTA_CFG_SLASH_SHOWMAX
+#    define SLASH_SHOW_MAX YOTTA_CFG_SLASH_SHOWMAX
+#  else
+#    define SLASH_SHOW_MAX 10
+#  endif
+#endif
+
+/* Do not provide the builtin 'exit' cmd */
+#ifndef SLASH_NOEXIT
+#  ifdef YOTTA_CFG_SLASH_NOEXIT
+#    define SLASH_NOEXIT YOTTA_CFG_SLASH_NOEXIT
+#  else
+#    define SLASH_NOEXIT 1
+#  endif
+#endif
+
+#endif /* LIBSLASH_H */

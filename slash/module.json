@@ -1,0 +1,22 @@
+{
+  "name": "slash",
+  "version": "0.0.1",
+  "description": "Slash!",
+  "keywords": [],
+  "author": "Kubos",
+  "homepage": "https://www.kubos.co",
+  "license": "Apache-2.0",
+  "lib": "./src",
+  "extraIncludes": ["include"],
+  "targetDependencies": {
+    "kubos-rt": {
+        "csp": "kubostech/libcsp#~1.5.0",
+        "kubos-hal": "kubostech/kubos-hal#~0.1.0"
+    }
+  },
+  "testTargetDependencies": {
+    "kubos-rt": {
+      "kubos-rt": "kubostech/kubos-rt#~0.1.0"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.gdbinit
+.lock*
+.settings
+.waf*
+*.bin
+*.elf
+*.hex
+*.lss
+*.o
+*.d
+*.map
+*.sym
+
+build
+yotta_modules
+yotta_targets
