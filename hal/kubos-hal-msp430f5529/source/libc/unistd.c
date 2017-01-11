@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2016 Kubos Corporation
+ * KubOS HAL
+ * Copyright (C) 2017 Kubos Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,32 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
-  * @defgroup syscalls
-  * @addtogroup syscalls
-  * @{
-  */
 
-/**
-  *
-  * @file       putchar.c
-  * @brief      Kubos-HAL-MSP430F5529 - putchar
-  *
-  * @author     kubos.co
-  */
+#include <errno.h>
+#include <stddef.h>
+#include <stdio.h>
+
+#include "kubos-hal-msp430f5529/msp430-stdio.h"
 #include "kubos-hal/uart.h"
 
-/**
-  * @brief uart putchar implementation using default console
-  */
-int putchar(int c)
+ssize_t read(int fd, void *ptr, size_t len)
 {
-#ifdef K_UART_CONSOLE
-    return k_uart_write(K_UART_CONSOLE, (char*)&c, 1);
-#else
-#warning "putchar console undefined"
-    return -1;
-#endif
+    if (fd == STDIN_FILENO) {
+        return k_uart_read(K_UART_CONSOLE, (char *) ptr, (int) len);
+    }
+    errno = ENOSYS;
+    return len;
 }
 
-/* @} */
+ssize_t write(int fd, const void *ptr, size_t len)
+{
+    if (fd == STDOUT_FILENO || fd == STDERR_FILENO) {
+        return k_uart_write(K_UART_CONSOLE, (char *) ptr, (int) len);
+    }
+
+    errno = ENOSYS;
+    return len;
+}
