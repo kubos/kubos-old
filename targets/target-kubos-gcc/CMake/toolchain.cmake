@@ -15,6 +15,8 @@ set(CMAKE_SYSTEM_VERSION 1)
 
 # required for -include yotta_config.h
 set(YOTTA_FORCE_INCLUDE_FLAG "-include")
+set(YOTTA_LINK_WHOLE_ARCHIVE_PRE "-Wl,--whole-archive")
+set(YOTTA_LINK_WHOLE_ARCHIVE_POST "-Wl,--no-whole-archive")
 
 # provide compatibility definitions for compiling with this target: these are
 # definitions that legacy code assumes will be defined.
