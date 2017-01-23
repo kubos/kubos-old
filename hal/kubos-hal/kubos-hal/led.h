@@ -24,33 +24,55 @@
  * @author kubos.co
  */
 
+#ifndef K_LED_H
+#define K_LED_H
+
 #include "pins.h"
 #include "kubos-hal/gpio.h"
 
 #define K_LED_UNKNOWN -1
 
-inline int kprv_led_at(int i) {
-    if (i < 0 || i >= K_LED_COUNT) return K_LED_UNKNOWN;
-
-#ifdef K_LED_0
-    if (i == 0) return K_LED_0;
-#endif
-#ifdef K_LED_1
-    if (i == 1) return K_LED_1;
-#endif
-#ifdef K_LED_2
-    if (i == 2) return K_LED_2;
-#endif
-#ifdef K_LED_3
-    if (i == 3) return K_LED_3;
-#endif
-}
-
-#define K_LED_AT(i) kprv_led_at(i)
-
+/**
+ * Setup and initialize an on-board LEDs
+ *
+ * @param led_pin The pin number of the LED (usually K_LED_0 - K_LED_<n>)
+ */
 void k_led_init(int led_pin);
+
+/**
+ * Setup and initialize all on-board LEDs
+ */
 void k_led_init_all(void);
+
+/**
+ * Turn an LED on
+ *
+ * @param led_pin The pin number of the LED (usually K_LED_0 - K_LED_<n>)
+ */
+void k_led_on(int led_pin);
+
+/**
+ * Turn an LED off
+ *
+ * @param led_pin The pin number of the LED (usually K_LED_0 - K_LED_<n>)
+ */
+void k_led_off(int led_pin);
+
+/**
+ * Get the LED pin number for a specific LED index (useful for iterating)
+ * @param index a value in the range [0, K_LED_COUNT-1].
+ * @return The pin number of the LED, or K_LED_UNKNOWN (-1) if the index is
+ *         outside the valid range.
+ */
+int k_led_at(int index);
+
+/**
+ * Get a description of an LED
+ *
+ * @param led_pin The pin number of the LED (usually K_LED_0 - K_LED_<n>)
+ * @return A string description of the LED i.e. "red", or NULL if the passed in
+ *         led_pin is unknown.
+ */
 const char * k_led_get_desc(int led_pin);
 
-#define K_LED_ON(pin) k_gpio_write(pin, 1)
-#define K_LED_OFF(pin) k_gpio_write(pin, 0)
+#endif // K_LED_H
