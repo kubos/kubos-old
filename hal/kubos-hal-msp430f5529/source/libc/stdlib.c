@@ -25,12 +25,13 @@ void atexit(void (*fn)(void)) { } // noop stub
 
 void *calloc (size_t nelem, size_t elsize)
 {
-  register void *ptr;
-  if (nelem == 0 || elsize == 0)
-    nelem = elsize = 1;
+    register void *ptr;
+    if (nelem == 0 || elsize == 0) {
+        return NULL;
+    }
 
-  ptr = malloc (nelem * elsize);
-  if (ptr) bzero (ptr, nelem * elsize);
+    ptr = malloc (nelem * elsize);
+    if (ptr) bzero (ptr, nelem * elsize);
 
-  return ptr;
+    return ptr;
 }
