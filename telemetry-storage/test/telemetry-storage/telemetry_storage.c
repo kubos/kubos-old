@@ -32,6 +32,11 @@ static void test_format_log_entry_csv_null_pointers(void **state)
     assert_int_equal(format_log_entry_csv(NULL, packet), 0);
 }
 
+static void test_format_log_entry_hex_null_pointers(void **state)
+{
+    telemetry_packet packet;
+    assert_int_equal(format_log_entry_hex(NULL, packet), 0);
+}
 
 static void test_create_filename(void **state)
 {
@@ -86,6 +91,24 @@ static void test_format_log_entry_csv(void **state)
 }
 
 
+static void test_format_log_entry_hex(void **state)
+{
+    static char data_buffer[DATA_BUFFER_SIZE];
+    static char *data_buf_ptr;
+    char test_compare_string[] = "0000000000000000000000000100000001000000";
+
+    telemetry_packet test_packet = { .data.i = 1, .timestamp = 1, \
+         .source.data_type = TELEMETRY_TYPE_INT};
+    
+    data_buf_ptr = data_buffer;
+
+     format_log_entry_hex(data_buf_ptr, test_packet);
+     
+    /* Test string comparison with expected output */
+    assert_string_equal(data_buffer, test_compare_string);
+}
+
+
 static void test_telemetry_store(void **state)
 {
     telemetry_packet packet = { .data.i = 1, .timestamp = 0, \
@@ -114,8 +137,10 @@ int main(void)
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_create_filename_null_pointers),
         cmocka_unit_test(test_format_log_entry_csv_null_pointers),
+        cmocka_unit_test(test_format_log_entry_hex_null_pointers),
         cmocka_unit_test(test_create_filename),
         cmocka_unit_test(test_format_log_entry_csv),
+        cmocka_unit_test(test_format_log_entry_hex),
         cmocka_unit_test(test_telemetry_store),
     };
 

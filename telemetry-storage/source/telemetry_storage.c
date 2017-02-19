@@ -124,6 +124,45 @@ static uint16_t format_log_entry_csv(char *data_buf_ptr, telemetry_packet packet
 
 
 /**
+ * @brief Filter out any negative error return values of snprintf.
+ */
+static int length_added(int result_of_snprintf)
+{
+    return (result_of_snprintf > 0) ? result_of_snprintf : 0;
+}
+
+
+/**
+ * @brief creates a formatted hex dump of a telemetry packet.
+ * @param data_buf_ptr a pointer to the char[] to write to.
+ * @param packet a telemetry packet to create a hex dump from.
+ * @retval The length of the hex dump written.
+ */
+static uint16_t format_log_entry_hex(char *data_buf_ptr, telemetry_packet packet) 
+{
+    int len = 0;
+    const unsigned char *byte_array = (unsigned char*)&packet;
+
+    if (data_buf_ptr == NULL) 
+    {
+        return 0;
+    }
+    
+    for(int i = 0; i < sizeof(telemetry_packet); i++)
+    {
+        len += length_added(snprintf(data_buf_ptr + len, DATA_BUFFER_SIZE - len, "%02X", byte_array[i]));
+    }
+    
+    if(len < 0 || len >= DATA_BUFFER_SIZE) 
+    {
+        printf("Data char limit exceeded for packet. Have %d, need %d + \\0\n", DATA_BUFFER_SIZE, len);
+        return 0;
+    }
+    return len;
+}
+
+
+/**
  * @brief print telemetry packet data.
  * @param packet a telemetry packet with data to print.
  */
@@ -160,8 +199,8 @@ bool telemetry_store(telemetry_packet packet)
         filename_len = create_filename(filename_buf_ptr, packet.source.topic_id, packet.source.subsystem_id, FILE_EXTENSION_NONE);
         data_len = format_log_entry_csv(data_buf_ptr, packet);
         
-        /* Save log entry */
-        if (filename_len > 0 && data_len > 0)
+        /* Save CSV format log entry */
+        if(filename_len > 0 && data_len > 0)
         {
             klog_handle telemetry_log_handle = { .config.file_path = filename_buf_ptr, \
                                                  .config.file_path_len = filename_len, \
@@ -185,8 +224,33 @@ bool telemetry_store(telemetry_packet packet)
         }
     }
     else if(DATA_OUTPUT_FORMAT == FORMAT_TYPE_HEX)
-    { 
-        /* Placeholder for hexidecimal format */
+    {
+        filename_len = create_filename(filename_buf_ptr, packet.source.topic_id, packet.source.subsystem_id, FILE_EXTENSION_NONE);
+        data_len = format_log_entry_hex(data_buf_ptr, packet);
+        
+        /* Save HEX format log entry */
+        if(filename_len > 0 && data_len > 0)
+        {
+            klog_handle telemetry_log_handle = { .config.file_path = filename_buf_ptr, \
+                                                 .config.file_path_len = filename_len, \
+                                                 .config.part_size = DATA_PART_SIZE, \
+                                                 .config.max_parts = DATA_MAX_PARTS, \
+                                                 .config.klog_console_level = LOG_NONE, \
+                                                 .config.klog_file_level = LOG_TELEMETRY, \
+                                                 .config.klog_file_logging = true };
+                                                
+            init_ret = klog_init_file(&telemetry_log_handle);
+            if(init_ret == 0)
+            {
+                KLOG_TELEMETRY(&telemetry_log_handle, "", data_buf_ptr);
+                klog_cleanup(&telemetry_log_handle);
+                return true;
+            }
+        }
+        else 
+        {
+            printf("Error decoding telemetry packet. Log entry or filename is blank \r\n");
+        }
     }
     else
     {
