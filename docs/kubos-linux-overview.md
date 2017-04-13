@@ -13,11 +13,66 @@ Ideally, all the files will be delivered to the customer as a pre-baked OBC. The
 
 Boot-up UML diagram:
 
-![Boot UML Diagram](images/Linux-UML.png)
+@msc
+a [label="Bootloader 0"], 
+b [label="Bootloader 1"],
+c [label="U-Boot"],
+d [label="zImage"],
+e [label="Linux"];
+
+a => b [label="Load (SDRAM)"];
+a => b [label="Execute"];
+b => c [label="Load (SDRAM)"];
+b => c [label="Execute"];
+c => d [label="Load (SDRAM)"];
+c => d [label="Execute"];
+d => e [label="Unzip/Load"];
+d => e [label="Execute"];
+@endmsc
 
 Boot-up with storage flow:
 
-![Storage Bootup Flow Diagram](images/Linux_Boot_Diagram.png)
+@dot
+digraph boot {
+    node [shape=box];
+    rankdir=LR;
+
+    subgraph cluster0 {
+        label = "Persistent Storage";
+        stor_boot1 [label="Bootloader 1"];
+        stor_uboot [label="U-Boot"];
+        stor_uboot_env [label="U-Boot Env"];
+        stor_zimage [label="zImage"];
+        stor_board [label="{board}.dtb"];
+        stor_rootfs [label="rootfs"];        
+    }
+
+    subgraph cluster1 {
+        label = "ROM";
+        rom_boot0 [label="Bootloader 0"];
+    }
+
+    subgraph cluster2 {
+        label = "SDRAM";
+        ram_boot1 [label="Bootloader 1"];
+        ram_uboot [label="U-Boot"];
+        ram_kernel [label="Linux Kernel"];
+    }
+    
+    stor_boot1 -> ram_boot1;
+    stor_uboot -> ram_uboot;
+    stor_uboot_env -> ram_uboot [style=dotted];
+    stor_zimage -> ram_kernel;
+    
+    {stor_board, stor_rootfs} -> ram_kernel;
+    
+    rom_boot0 -> stor_boot1;
+
+    ram_boot1 -> stor_uboot;
+    ram_uboot -> stor_zimage;
+
+}
+@enddot
 
 ## OS Installation
 
