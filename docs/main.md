@@ -16,7 +16,7 @@ If for some reason Slack won't work for you, feel free to email us at info@kubos
 
  - [Contributing to the Kubos Project](docs/contribution-process.md)
 
- - [Big Kubos Architecture](docs/kubos-arch.md)
+ - [Kubos High Level Architecture](docs/kubos-arch.md)
 
 ### Kubos SDK
 
