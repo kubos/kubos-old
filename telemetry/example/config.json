@@ -1,0 +1,23 @@
+{
+    "telemetry":{
+      "beacon":{
+         "interval":2000
+      },
+      "gather_interval":500,
+      "sources":{
+        "gps":{
+          "beacon":true,
+          "health": 100
+        },
+        "temp":{
+          "health": 20
+        },
+        "pos_x": {
+          "beacon":true
+        },
+        "pos_y":{
+          "beacon":true
+        }
+      }
+    }
+}
