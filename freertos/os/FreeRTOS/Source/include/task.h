@@ -67,6 +67,9 @@
     1 tab == 4 spaces!
 */
 
+/**
+ * \defgroup TaskUtils
+ */
 
 #ifndef INC_TASK_H
 #define INC_TASK_H
