@@ -1,9 +1,11 @@
 #!/bin/bash
 
 #TODO: Figure out the sudo permissions things
+vagrant_deb="vagrant_1.9.5_x86_64.deb"
+vagrant_deb_url="https://releases.hashicorp.com/vagrant/1.9.5/$vagrant_deb"
 
-vagrant_rpm_url="https://releases.hashicorp.com/vagrant/1.9.4/vagrant_1.9.4_x86_64.rpm"
-vagrant_rpm="vagrant_1.9.4_x86_64.rpm"
+vagrant_rpm="vagrant_1.9.5_x86_64.rpm"
+vagrant_rpm_url="https://releases.hashicorp.com/vagrant/1.9.5/$vagrant_rpm"
 
 red='\E[31m'
 green='\E[32m'
@@ -41,7 +43,8 @@ set_platform() {
         then
             os="ubuntu"
             pm="apt-get"
-            codename=$(lsb_release -a | grep Codename | tail -n 1 | awk '{print $2') #needed for adding the appropriate .deb repo
+            codename=$(lsb_release -a | grep Codename | tail -n 1 | awk '{ print $2 }') #needed for adding the appropriate .deb repo
+            echo "codename: $codename"
         else
             os="unknown"
             pm="unknown"
@@ -80,12 +83,10 @@ then
     echo "Installing homebrew"
     #this installs the xCode command line tools if they're not already
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-else
-    echo "Homebrew is already installed... Skippping installing it."
 fi
 
 # Do the VirtualBox installation things
-if [[ " ${install_list[*]} " =~ VirtualBox ]];
+if [[ " ${install_list[*]} " =~ virtualbox ]];
 then
     echo "Installing VirtualBox"
     case $pm in
@@ -93,24 +94,22 @@ then
             brew cask install VirtualBox
             ;;
         apt-get)
-            sudo echo "deb http://download.VirtualBox.org/VirtualBox/debian precise contrib" >>  /etc/apt/sources.list
+            sudo echo "deb http://download.VirtualBox.org/VirtualBox/debian $codename contrib" >>  /etc/apt/sources.list
             curl https://www.VirtualBox.org/download/oracle_vbox_2016.asc | sudo apt-key add -y -
             sudo apt-get update
-            sudo apt-get install -y VirtualBox-5.1
+            sudo apt-get install -y virtualbox-5.1
             ;;
         yum)
             case $os in
                 centos)
-                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.VirtualBox.org/VirtualBox/rpm/rhel/VirtualBox.repo
-                    sudo yum update -y
-                    sudo yum install -y VirtualBox-5.1
+                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.VirtualBox.org/virtualbox/rpm/rhel/virtualbox.repo
                     ;;
                 fedora)
-                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.VirtualBox.org/VirtualBox/rpm/fedora/VirtualBox.repo
-                    sudo yum update -y
-                    sudo yum install -y VirtualBox-5.1
+                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
                     ;;
             esac
+            sudo yum update -y
+            sudo yum install -y VirtualBox-5.1
             ;;
     esac
 else
@@ -123,13 +122,16 @@ ext_version=$(vboxmanage list extpacks | grep Version | awk '{ print $2 }')
 vbox_version=$(vboxmanage -v)
 maj_version=$(echo $vbox_version | cut -d 'r' -f 1)
 build_no=$(echo $vbox_version | cut -d 'r' -f 2)
-if [[ -z $ext_version ]] && [[ $vbox_version == $maj_version ]];
+echo "iext_version: $ext_version"
+echo "maj_version:  $maj_version"
+if [[ -z $ext_version ]] && [[ "$ext_version" == "$maj_version" ]];
 then
-    file="Oracle_VM_VirtualBox_Extension_Pack-$maj_version-$build_no.vbox-extpack"
-    curl http://download.VirtualBox.org/VirtualBox/$maj_version/$file -o /tmp/$file
-    sudo VBoxManage extpack install /tmp/$file --replace
-else
     echo "Found a matching VirtualBox and VirtualBox extension pack installation"
+else
+    file="Oracle_VM_VirtualBox_Extension_Pack-$maj_version-$build_no.vbox-extpack"
+    curl http://download.virtualbox.org/virtualbox/$maj_version/$file -o $file
+    sudo vboxmanage extpack install "$file" --replace
+    rm $file
 fi
 
 #INSTALL VAGRANT
@@ -143,13 +145,16 @@ then
             ;;
         apt-get)
             echo "apt-get installing vagrant"
-            sudo apt-get install -y vagrant
+            curl -o $vagrant_deb $vagrant_deb_url
+            sudo dpkg -i $vagrant_deb
+            sudo apt-get install -f
+            rm $vagrant_deb
             ;;
         yum)
-            echo "yum installing vagrant"
+            echo "yum installing vagrant: $vagrant_rpm"
             curl -o $vagrant_rpm $vagrant_rpm_url
-            sudo rpm -Uhv vagrant_1.9.4_x86_64.rpm
-            rm vagrant_1.9.4_x86_64.rpm
+            sudo rpm -Uhv $vagrant_rpm
+            rm $vagrant_rpm
             echo "Finished installing vagrant"
             ;;
     esac
