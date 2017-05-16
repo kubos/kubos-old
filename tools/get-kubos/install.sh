@@ -1,9 +1,13 @@
 #!/bin/bash
 
-virtualbox_rpm
+#TODO: Figure out the sudo permissions things
+
+vagrant_rpm_url="https://releases.hashicorp.com/vagrant/1.9.4/vagrant_1.9.4_x86_64.rpm"
+vagrant_rpm="vagrant_1.9.4_x86_64.rpm"
 
 red='\E[31m'
 green='\E[32m'
+
 brew="brew"
 apt="apt-get"
 dnf="dnf"
@@ -21,6 +25,7 @@ set_platform() {
     then
         os="macos"
         pm="brew"
+        programs+=( "brew" )
     elif [[ $platform == "Linux" ]];
     then
         dist_info=$(cat /etc/*-release)
@@ -31,7 +36,7 @@ set_platform() {
         elif [[ $dist_info =~ .*Fedora.* ]]; #Fedora and CentOS do things differently
         then
             os="fedora"
-            pm="yum" #yum should proxy to dnf?
+            pm="yum" #yum should proxy to dnf on more modern distros
         elif [[ $dist_info =~ .*ubuntu.* ||  $dist_info =~ .*debian.*  ]];
         then
             os="ubuntu"
@@ -70,31 +75,38 @@ do
     test_installed $prog
 done
 
-# Do the virtualbox installation things
-if [[ " ${install_list[*]} " =~ virtualbox ]];
+if [[ " ${install_list[*]} " =~ brew ]];
 then
-    echo "Installing Virtualbox"
+    echo "Installing homebrew"
+    #this installs the xcode command line tools if they're not already
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+else
+    echo "Homebrew is already installed... Skippping installing it."
+fi
+
+# Do the VirtualBox installation things
+if [[ " ${install_list[*]} " =~ VirtualBox ]];
+then
+    echo "Installing VirtualBox"
     case $pm in
         brew)
-            echo "brew installing virtualbox"
+            brew cask install VirtualBox
             ;;
         apt-get)
-            echo "Apt-get installing virtualbox"
-            sudo echo "deb http://download.virtualbox.org/virtualbox/debian precise contrib" >>  /etc/apt/sources.list
-            curl https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo apt-key add -y -
+            sudo echo "deb http://download.VirtualBox.org/VirtualBox/debian precise contrib" >>  /etc/apt/sources.list
+            curl https://www.VirtualBox.org/download/oracle_vbox_2016.asc | sudo apt-key add -y -
             sudo apt-get update
-            sudo apt-get install -y virtualbox-5.1
+            sudo apt-get install -y VirtualBox-5.1
             ;;
         yum)
-            echo "yum installing virtualbox"
             case $os in
                 centos)
-                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo
+                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.VirtualBox.org/VirtualBox/rpm/rhel/VirtualBox.repo
                     sudo yum update -y
                     sudo yum install -y VirtualBox-5.1
                     ;;
                 fedora)
-                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
+                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.VirtualBox.org/VirtualBox/rpm/fedora/VirtualBox.repo
                     sudo yum update -y
                     sudo yum install -y VirtualBox-5.1
                     ;;
@@ -102,26 +114,24 @@ then
             ;;
     esac
 else
-    echo "not installing virtualbox"
+    echo "Skipping the VirtualBox installation."
 fi
 
 
-#do the virtualbox extension installation things
-virtualbox_version=$(VBoxManage --version)
-ext_version=$(VBoxManage list extpacks | grep Version | awk '{ print $2}')
-echo "vbox v = $virtualbox_version"
-echo "ext version = $ext_version"
-if [[ -z $ext_version ]]; # && [[ $virtualbox_version =~ .*$ext_version.* ]];
+#do the VirtualBox extension installation things
+VirtualBox_version=$(VBoxManage --version)
+ext_version=$(VBoxManage list extpacks | grep Version | awk '{ print $2 }')
+#TODO: Fix this if comparison.
+if [[ -z $ext_version ]]; # && [[ $VirtualBox_version =~ .*$ext_version.* ]];
 then
     version=$(vboxmanage -v)
-    var1=$(echo $version | cut -d 'r' -f 1)
-    var2=$(echo $version | cut -d 'r' -f 2)
-    file="Oracle_VM_VirtualBox_Extension_Pack-$var1-$var2.vbox-extpack"
-    curl http://download.virtualbox.org/virtualbox/$var1/$file -o /tmp/$file
-    sudo VBoxManage extpack uninstall "Oracle VM VirtualBox Extension Pack"
+    maj_version=$(echo $version | cut -d 'r' -f 1)
+    build_no=$(echo $version | cut -d 'r' -f 2)
+    file="Oracle_VM_VirtualBox_Extension_Pack-$maj_version-$build_no.vbox-extpack"
+    curl http://download.VirtualBox.org/VirtualBox/$maj_version/$file -o /tmp/$file
     sudo VBoxManage extpack install /tmp/$file --replace
 else
-    echo "Found a matching Virtualbox and Virtualbox extension pack installation"
+    echo "Found a matching VirtualBox and VirtualBox extension pack installation"
 fi
 
 #INSTALL VAGRANT
@@ -131,6 +141,7 @@ then
     case $pm in
         brew)
             echo "brew installing vagrant"
+            brew cask install vagrant
             ;;
         apt-get)
             echo "apt-get installing vagrant"
@@ -138,7 +149,7 @@ then
             ;;
         yum)
             echo "yum installing vagrant"
-            curl -o vagrant_1.9.4_x86_64.rpm https://releases.hashicorp.com/vagrant/1.9.4/vagrant_1.9.4_x86_64.rpm?_ga=2.56964207.411444733.1494863016-480936336.1491230930
+            curl -o $vagrant_rpm $vagrant_rpm_url
             sudo rpm -Uhv vagrant_1.9.4_x86_64.rpm
             rm vagrant_1.9.4_x86_64.rpm
             echo "Finished installing vagrant"
@@ -146,9 +157,18 @@ then
     esac
 fi
 
+#install the vbox-guest vagrant plugin
+plugin_version=$(vagrant plugin list  | grep vagrant-vbguest)
+if [[ -z $plugin_version ]];
+then
+    vagrant plugin install vagrant-vbguest
+else
+    echo "Found a version of the vbguest Vagrant plugin... Skipping plugin installation."
+fi
+
 #finally download the latest vagrant env
 echo "Pulling the latest Kubos development environment"
-boxes=$(vagrant box list | grep kuboostech/kubos-dev)
+boxes=$(vagrant box list | grep kubostech/kubos-dev)
 if [[ -z $boxes ]];
 then
     echo "Adding new box kubostech/kubos-dev"
