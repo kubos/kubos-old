@@ -78,7 +78,7 @@ done
 if [[ " ${install_list[*]} " =~ brew ]];
 then
     echo "Installing homebrew"
-    #this installs the xcode command line tools if they're not already
+    #this installs the xCode command line tools if they're not already
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 else
     echo "Homebrew is already installed... Skippping installing it."
@@ -119,14 +119,12 @@ fi
 
 
 #do the VirtualBox extension installation things
-VirtualBox_version=$(VBoxManage --version)
-ext_version=$(VBoxManage list extpacks | grep Version | awk '{ print $2 }')
-#TODO: Fix this if comparison.
-if [[ -z $ext_version ]]; # && [[ $VirtualBox_version =~ .*$ext_version.* ]];
+ext_version=$(vboxmanage list extpacks | grep Version | awk '{ print $2 }')
+vbox_version=$(vboxmanage -v)
+maj_version=$(echo $vbox_version | cut -d 'r' -f 1)
+build_no=$(echo $vbox_version | cut -d 'r' -f 2)
+if [[ -z $ext_version ]] && [[ $vbox_version == $maj_version ]];
 then
-    version=$(vboxmanage -v)
-    maj_version=$(echo $version | cut -d 'r' -f 1)
-    build_no=$(echo $version | cut -d 'r' -f 2)
     file="Oracle_VM_VirtualBox_Extension_Pack-$maj_version-$build_no.vbox-extpack"
     curl http://download.VirtualBox.org/VirtualBox/$maj_version/$file -o /tmp/$file
     sudo VBoxManage extpack install /tmp/$file --replace
