@@ -1,5 +1,4 @@
 #!/bin/bash
-( #Start of subshell
 
 vagrant_deb="vagrant_1.9.5_x86_64.deb"
 vagrant_deb_url="https://releases.hashicorp.com/vagrant/1.9.5/$vagrant_deb"
@@ -44,10 +43,8 @@ set_platform() {
             os="ubuntu"
             pm="apt-get"
             codename=$(lsb_release -a | grep Codename | tail -n 1 | awk '{ print $2 }') #needed for adding the appropriate .deb repo
-            echo "codename: $codename"
         else
             os="unknown"
-            pm="unknown"
         fi
     else
         os="unknown"
@@ -70,8 +67,11 @@ test_installed () {
 
 set_platform
 
-echo "OS is: $os"
-echo "PM is: $pm"
+if [[ $os == "unknown" ]];
+then
+    echo "Your operating system type is not supported at this time. For more information see the docs <kubos_doc_link here>"
+    exit 1
+fi
 
 for prog in "${programs[@]}"
 do
@@ -80,7 +80,7 @@ done
 
 if [[ " ${install_list[*]} " =~ brew ]];
 then
-    echo "Installing homebrew"
+    echo "Installing Homebrew"
     #this installs the xCode command line tools if they're not already
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
@@ -117,22 +117,22 @@ else
 fi
 
 
-#do the VirtualBox extension installation things
+#Do the VirtualBox extension installation things
 ext_version=$(vboxmanage list extpacks | grep Version | awk '{ print $2 }')
 vbox_version=$(vboxmanage -v)
 maj_version=$(echo $vbox_version | cut -d 'r' -f 1)
 build_no=$(echo $vbox_version | cut -d 'r' -f 2)
-echo "iext_version: $ext_version"
-echo "maj_version:  $maj_version"
+
 if [[ -z $ext_version ]] && [[ "$ext_version" == "$maj_version" ]];
 then
     echo "Found a matching VirtualBox and VirtualBox extension pack installation"
 else
     file="Oracle_VM_VirtualBox_Extension_Pack-$maj_version-$build_no.vbox-extpack"
     curl http://download.virtualbox.org/virtualbox/$maj_version/$file -o $file
-    sudo stdbuf -o0 vboxmanage extpack install "$file" --replace
+    sudo vboxmanage extpack install "$file" --replace --accept-license=715c7246dc0f779ceab39446812362b2f9bf64a55ed5d3a905f053cfab36da9e
     rm $file
 fi
+
 
 #INSTALL VAGRANT
 if [[ " ${install_list[*]} " =~ " vagrant " ]];
@@ -160,7 +160,7 @@ then
     esac
 fi
 
-#install the vbox-guest vagrant plugin
+#Install the vbox-guest vagrant plugin
 plugin_version=$(vagrant plugin list  | grep vagrant-vbguest)
 if [[ -z $plugin_version ]];
 then
@@ -169,8 +169,7 @@ else
     echo "Found a version of the vbguest Vagrant plugin... Skipping plugin installation."
 fi
 
-echo " All done..."
-#finally download the latest vagrant env
+#Finally download the latest vagrant box
 echo "Pulling the latest Kubos development environment"
 boxes=$(vagrant box list | grep kubostech/kubos-dev)
 if [[ -z $boxes ]];
@@ -184,11 +183,3 @@ fi
 
 echo "Done installing Kubos dependencies..."
 
-#this script is started by the command: `(curl <script url> && cat) | /bin/bash`
-# The cat is needed to allow passing stdin to the script to enter passwords,
-# accept the virtual box license, etc. When this script ends, it's just sitting there
-# as the cat command is still running. The following command kills that cat 
-# instance to end the installation
-ps -a | grep cat | awk '{ print $1}' | xargs kill #This could be better...
-
-) #End subshell
