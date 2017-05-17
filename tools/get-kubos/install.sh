@@ -1,6 +1,6 @@
 #!/bin/bash
+( #Start of subshell
 
-#TODO: Figure out the sudo permissions things
 vagrant_deb="vagrant_1.9.5_x86_64.deb"
 vagrant_deb_url="https://releases.hashicorp.com/vagrant/1.9.5/$vagrant_deb"
 
@@ -130,7 +130,7 @@ then
 else
     file="Oracle_VM_VirtualBox_Extension_Pack-$maj_version-$build_no.vbox-extpack"
     curl http://download.virtualbox.org/virtualbox/$maj_version/$file -o $file
-    sudo vboxmanage extpack install "$file" --replace
+    sudo stdbuf -o0 vboxmanage extpack install "$file" --replace
     rm $file
 fi
 
@@ -169,6 +169,7 @@ else
     echo "Found a version of the vbguest Vagrant plugin... Skipping plugin installation."
 fi
 
+echo " All done..."
 #finally download the latest vagrant env
 echo "Pulling the latest Kubos development environment"
 boxes=$(vagrant box list | grep kubostech/kubos-dev)
@@ -180,3 +181,14 @@ else
     echo "Updating kubostech/kubos-dev to the latest version"
     vagrant box update --box kubostech/kubos-dev
 fi
+
+echo "Done installing Kubos dependencies..."
+
+#this script is started by the command: `(curl <script url> && cat) | /bin/bash`
+# The cat is needed to allow passing stdin to the script to enter passwords,
+# accept the virtual box license, etc. When this script ends, it's just sitting there
+# as the cat command is still running. The following command kills that cat 
+# instance to end the installation
+ps -a | grep cat | awk '{ print $1}' | xargs kill #This could be better...
+
+) #End subshell
