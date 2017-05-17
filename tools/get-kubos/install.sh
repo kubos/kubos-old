@@ -51,6 +51,7 @@ set_platform() {
     fi
 }
 
+
 test_installed () {
     if command -v $1 > /dev/null
     then
@@ -73,10 +74,12 @@ then
     exit 1
 fi
 
+
 for prog in "${programs[@]}"
 do
     test_installed $prog
 done
+
 
 if [[ " ${install_list[*]} " =~ brew ]];
 then
@@ -85,19 +88,20 @@ then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
+
 # Do the VirtualBox installation things
 if [[ " ${install_list[*]} " =~ virtualbox ]];
 then
     echo "Installing VirtualBox"
     case $pm in
         brew)
-            brew cask install VirtualBox
+            brew cask install virtualbox
             ;;
         apt-get)
-            sudo echo "deb http://download.VirtualBox.org/VirtualBox/debian $codename contrib" >>  /etc/apt/sources.list
-            curl https://www.VirtualBox.org/download/oracle_vbox_2016.asc | sudo apt-key add -y -
+            echo "deb http://download.VirtualBox.org/VirtualBox/debian $codename contrib" |  sudo tee -a /etc/apt/sources.list
+            curl https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo apt-key add -
             sudo apt-get update
-            sudo apt-get install -y virtualbox-5.1
+            sudo apt-get install -y virtualbox
             ;;
         yum)
             case $os in
@@ -160,6 +164,7 @@ then
     esac
 fi
 
+
 #Install the vbox-guest vagrant plugin
 plugin_version=$(vagrant plugin list  | grep vagrant-vbguest)
 if [[ -z $plugin_version ]];
@@ -168,6 +173,7 @@ then
 else
     echo "Found a version of the vbguest Vagrant plugin... Skipping plugin installation."
 fi
+
 
 #Finally download the latest vagrant box
 echo "Pulling the latest Kubos development environment"
