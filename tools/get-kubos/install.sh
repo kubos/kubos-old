@@ -22,27 +22,24 @@ install_list=()
 
 set_platform() {
     platform=$(uname)
-    if [[ $platform == "Darwin" ]];
-    then
+    if [[ $platform == "Darwin" ]]; then
         os="macos"
         pm="brew"
         programs+=( "brew" )
-    elif [[ $platform == "Linux" ]];
-    then
+    elif [[ $platform == "Linux" ]]; then
         dist_info=$(cat /etc/*-release)
-        if [[ $dist_info =~ .*CentOS.* ]];
-        then
+        if [[ $dist_info =~ .*CentOS.* ]]; then
             os="centos"
-            pm="yum" #yum should proxy to dnf?
-        elif [[ $dist_info =~ .*Fedora.* ]]; #Fedora and CentOS do things differently
-        then
+            pm="yum" #yum should proxy to dnf
+        #Fedora and CentOS do things differently
+        elif [[ $dist_info =~ .*Fedora.* ]]; then
             os="fedora"
             pm="yum" #yum should proxy to dnf on more modern distros
-        elif [[ $dist_info =~ .*ubuntu.* ||  $dist_info =~ .*debian.*  ]];
-        then
+        elif [[ $dist_info =~ .*ubuntu.* ||  $dist_info =~ .*debian.*  ]]; then
             os="ubuntu"
             pm="apt-get"
-            codename=$(lsb_release -a | grep Codename | tail -n 1 | awk '{ print $2 }') #needed for adding the appropriate .deb repo
+            #needed for adding the appropriate .deb repo
+            codename=$(lsb_release -a | grep Codename | tail -n 1 | awk '{ print $2 }')
         else
             os="unknown"
         fi
@@ -53,8 +50,7 @@ set_platform() {
 
 
 test_installed () {
-    if command -v $1 > /dev/null
-    then
+    if command -v $1 > /dev/null; then
         printf "${green}dependency $1 => found\n"
     else
         printf "${red}dependency $1 => not found\n" >&2
@@ -68,8 +64,7 @@ test_installed () {
 
 set_platform
 
-if [[ $os == "unknown" ]];
-then
+if [[ $os == "unknown" ]]; then
     echo "Your operating system type is not supported at this time. For more information see the docs <kubos_doc_link here>"
     exit 1
 fi
@@ -81,8 +76,7 @@ do
 done
 
 
-if [[ " ${install_list[*]} " =~ brew ]];
-then
+if [[ " ${install_list[*]} " =~ brew ]]; then
     echo "Installing Homebrew"
     #this installs the xCode command line tools if they're not already
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -90,26 +84,29 @@ fi
 
 
 # Do the VirtualBox installation things
-if [[ " ${install_list[*]} " =~ virtualbox ]];
-then
+if [[ " ${install_list[*]} " =~ virtualbox ]]; then
     echo "Installing VirtualBox"
     case $pm in
         brew)
             brew cask install virtualbox
             ;;
         apt-get)
-            echo "deb http://download.VirtualBox.org/VirtualBox/debian $codename contrib" |  sudo tee -a /etc/apt/sources.list
-            curl https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo apt-key add -
+            echo "deb http://download.VirtualBox.org/VirtualBox/debian $codename contrib" \
+                |  sudo tee -a /etc/apt/sources.list
+            curl https://www.virtualbox.org/download/oracle_vbox_2016.asc \
+                | sudo apt-key add -
             sudo apt-get update
             sudo apt-get install -y virtualbox
             ;;
         yum)
             case $os in
                 centos)
-                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.VirtualBox.org/virtualbox/rpm/rhel/virtualbox.repo
+                    sudo curl -o /etc/yum.repos.d/vagrant.repo \
+                        http://download.VirtualBox.org/virtualbox/rpm/rhel/virtualbox.repo
                     ;;
                 fedora)
-                    sudo curl -o /etc/yum.repos.d/vagrant.repo http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
+                    sudo curl -o /etc/yum.repos.d/vagrant.repo \
+                        http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
                     ;;
             esac
             sudo yum update -y
@@ -127,20 +124,19 @@ vbox_version=$(vboxmanage -v)
 maj_version=$(echo $vbox_version | cut -d 'r' -f 1)
 build_no=$(echo $vbox_version | cut -d 'r' -f 2)
 
-if [[ -z $ext_version ]] && [[ "$ext_version" == "$maj_version" ]];
-then
+if [[ -z $ext_version ]] && [[ "$ext_version" == "$maj_version" ]]; then
     echo "Found a matching VirtualBox and VirtualBox extension pack installation"
 else
     file="Oracle_VM_VirtualBox_Extension_Pack-$maj_version-$build_no.vbox-extpack"
     curl http://download.virtualbox.org/virtualbox/$maj_version/$file -o $file
-    sudo vboxmanage extpack install "$file" --replace --accept-license=715c7246dc0f779ceab39446812362b2f9bf64a55ed5d3a905f053cfab36da9e
+    sudo vboxmanage extpack install "$file" --replace \
+        --accept-license=715c7246dc0f779ceab39446812362b2f9bf64a55ed5d3a905f053cfab36da9e
     rm $file
 fi
 
 
 #INSTALL VAGRANT
-if [[ " ${install_list[*]} " =~ " vagrant " ]];
-then
+if [[ " ${install_list[*]} " =~ " vagrant " ]]; then
     echo "Installing Vagrant"
     case $pm in
         brew)
@@ -167,8 +163,7 @@ fi
 
 #Install the vbox-guest vagrant plugin
 plugin_version=$(vagrant plugin list  | grep vagrant-vbguest)
-if [[ -z $plugin_version ]];
-then
+if [[ -z $plugin_version ]]; then
     vagrant plugin install vagrant-vbguest
 else
     echo "Found a version of the vbguest Vagrant plugin... Skipping plugin installation."
@@ -178,8 +173,7 @@ fi
 #Finally download the latest vagrant box
 echo "Pulling the latest Kubos development environment"
 boxes=$(vagrant box list | grep kubostech/kubos-dev)
-if [[ -z $boxes ]];
-then
+if [[ -z $boxes ]]; then
     echo "Adding new box kubostech/kubos-dev"
     vagrant box add kubostech/kubos-dev
 else
