@@ -44,6 +44,11 @@
       "bash",
       "$PWD/yotta_targets/kubos-linux-isis-gcc/minicom/flash.sh",
       "$program"
+    ],
+    "debug": [
+      "python",
+      "$PWD/yotta_targets/kubos-linux-isis-gcc/scripts/run.py",
+      "$program"
     ]
   }
 }
