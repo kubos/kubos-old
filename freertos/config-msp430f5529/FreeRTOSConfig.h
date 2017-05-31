@@ -90,7 +90,7 @@
 #define configCPU_CLOCK_HZ			( ( unsigned long ) 7995392 ) /* Clock setup from main.c in the demo application. */
 #define configTICK_RATE_HZ			( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES		( 4 )
-#define configMINIMAL_STACK_SIZE	( ( unsigned short ) 200 )
+#define configMINIMAL_STACK_SIZE	( ( unsigned short ) 100 ) // NOTE: this is measured in words (not bytes!)
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 1024 ) )
 #define configMAX_TASK_NAME_LEN		( 8 )
 #define configUSE_TRACE_FACILITY	1
