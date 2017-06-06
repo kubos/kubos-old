@@ -31,15 +31,20 @@ set_platform() {
         if [[ $dist_info =~ .*CentOS.* ]]; then
             os="centos"
             pm="yum" #yum should proxy to dnf
-        #Fedora and CentOS do things differently
+            #Fedora and CentOS do things differently
         elif [[ $dist_info =~ .*Fedora.* ]]; then
             os="fedora"
             pm="yum" #yum should proxy to dnf on more modern distros
-        elif [[ $dist_info =~ .*ubuntu.* ||  $dist_info =~ .*debian.*  ]]; then
+        elif [[ $dist_info =~ .*Ubuntu.* ]]; then
             os="ubuntu"
             pm="apt-get"
             #needed for adding the appropriate .deb repo
-            codename=$(lsb_release -a | grep Codename | tail -n 1 | awk '{ print $2 }')
+            codename=$(lsb_release -a | grep -i "codename" | tail -n 1 | awk '{ print $2 }')
+        elif [[ $dist_info =~ .*debian.* ]]; then
+            os="debian"
+            pm="apt-get"
+            #needed for adding the appropriate .deb repo
+            codename=$(lsb_release -a | grep -i "codename" | tail -n 1 | awk '{ print $2 }')
         else
             os="unknown"
         fi
@@ -91,7 +96,7 @@ if [[ " ${install_list[*]} " =~ virtualbox ]]; then
             brew cask install virtualbox
             ;;
         apt-get)
-            echo "deb http://download.VirtualBox.org/VirtualBox/debian $codename contrib" \
+            echo "deb http://download.VirtualBox.org/VirtualBox/$os $codename contrib" \
                 |  sudo tee -a /etc/apt/sources.list
             curl https://www.virtualbox.org/download/oracle_vbox_2016.asc \
                 | sudo apt-key add -
@@ -121,6 +126,13 @@ fi
 #Do the VirtualBox extension installation things
 ext_version=$(vboxmanage list extpacks | grep Version | awk '{ print $2 }')
 vbox_version=$(vboxmanage -v)
+
+if [[ $vbox_version =~ _Ubuntu ]]; then
+    # An ubuntu .deb of virtualbox has a werid string in the version. This removes it
+    vbox_version=$(echo "$vbox_version" | sed 's/_Ubuntu//')
+    echo "Vboxversion modified: ${vbox_version}"
+fi
+
 maj_version=$(echo $vbox_version | cut -d 'r' -f 1)
 build_no=$(echo $vbox_version | cut -d 'r' -f 2)
 
@@ -133,7 +145,6 @@ else
         --accept-license=715c7246dc0f779ceab39446812362b2f9bf64a55ed5d3a905f053cfab36da9e
     rm $file
 fi
-
 
 #INSTALL VAGRANT
 if [[ " ${install_list[*]} " =~ " vagrant " ]]; then
