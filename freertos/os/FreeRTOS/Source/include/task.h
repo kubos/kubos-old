@@ -69,6 +69,10 @@
 
 /**
  * \defgroup TaskUtils
+ * \defgroup SchedulerControl
+ * \defgroup TaskCtrl
+ * \defgroup Tasks
+ * \defgroup TaskNotifications
  */
 
 #ifndef INC_TASK_H
@@ -1267,7 +1271,6 @@ BaseType_t xTaskResumeAll( void ) PRIVILEGED_FUNCTION;
  *----------------------------------------------------------*/
 
 /**
- * task. h
  * <PRE>TickType_t xTaskGetTickCount( void );</PRE>
  *
  * @return The count of ticks since vTaskStartScheduler was called.
@@ -1278,7 +1281,6 @@ BaseType_t xTaskResumeAll( void ) PRIVILEGED_FUNCTION;
 TickType_t xTaskGetTickCount( void ) PRIVILEGED_FUNCTION;
 
 /**
- * task. h
  * <PRE>TickType_t xTaskGetTickCountFromISR( void );</PRE>
  *
  * @return The count of ticks since vTaskStartScheduler was called.
@@ -1294,7 +1296,6 @@ TickType_t xTaskGetTickCount( void ) PRIVILEGED_FUNCTION;
 TickType_t xTaskGetTickCountFromISR( void ) PRIVILEGED_FUNCTION;
 
 /**
- * task. h
  * <PRE>uint16_t uxTaskGetNumberOfTasks( void );</PRE>
  *
  * @return The number of tasks that the real time kernel is currently managing.
@@ -1308,7 +1309,6 @@ TickType_t xTaskGetTickCountFromISR( void ) PRIVILEGED_FUNCTION;
 UBaseType_t uxTaskGetNumberOfTasks( void ) PRIVILEGED_FUNCTION;
 
 /**
- * task. h
  * <PRE>char *pcTaskGetName( TaskHandle_t xTaskToQuery );</PRE>
  *
  * @return The text (human readable) name of the task referenced by the handle
@@ -1321,7 +1321,6 @@ UBaseType_t uxTaskGetNumberOfTasks( void ) PRIVILEGED_FUNCTION;
 char *pcTaskGetName( TaskHandle_t xTaskToQuery ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /**
- * task. h
  * <PRE>TaskHandle_t xTaskGetTaskHandle( const char *pcNameToQuery );</PRE>
  *
  * NOTE:  This function takes a relatively long time to complete and should be
@@ -1519,7 +1518,6 @@ TaskHandle_t xTaskGetIdleTaskHandle( void ) PRIVILEGED_FUNCTION;
 UBaseType_t uxTaskGetSystemState( TaskStatus_t * const pxTaskStatusArray, const UBaseType_t uxArraySize, uint32_t * const pulTotalRunTime ) PRIVILEGED_FUNCTION;
 
 /**
- * task. h
  * <PRE>void vTaskList( char *pcWriteBuffer );</PRE>
  *
  * configUSE_TRACE_FACILITY and configUSE_STATS_FORMATTING_FUNCTIONS must
@@ -1566,7 +1564,6 @@ UBaseType_t uxTaskGetSystemState( TaskStatus_t * const pxTaskStatusArray, const 
 void vTaskList( char * pcWriteBuffer ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /**
- * task. h
  * <PRE>void vTaskGetRunTimeStats( char *pcWriteBuffer );</PRE>
  *
  * configGENERATE_RUN_TIME_STATS and configUSE_STATS_FORMATTING_FUNCTIONS

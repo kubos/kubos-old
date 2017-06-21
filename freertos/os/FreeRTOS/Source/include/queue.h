@@ -67,6 +67,10 @@
     1 tab == 4 spaces!
 */
 
+/**
+ * \defgroup QueueManagement
+ */
+
 
 #ifndef QUEUE_H
 #define QUEUE_H
