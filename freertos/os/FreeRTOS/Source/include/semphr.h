@@ -67,6 +67,10 @@
     1 tab == 4 spaces!
 */
 
+/**
+ * \defgroup Semaphores Semaphores
+ */
+
 #ifndef SEMAPHORE_H
 #define SEMAPHORE_H
 
