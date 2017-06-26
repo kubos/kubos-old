@@ -88,8 +88,8 @@ typedef QueueHandle_t SemaphoreHandle_t;
 
 
 /**
- * semphr. h
- * <pre>vSemaphoreCreateBinary( SemaphoreHandle_t xSemaphore )</pre>
+ * semphr.h
+ *
  *
  * In many usage scenarios it is faster and more memory efficient to use a
  * direct to task notification in place of a binary semaphore!
@@ -117,7 +117,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * @param xSemaphore Handle to the created semaphore.  Should be of type SemaphoreHandle_t.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore = NULL;
 
  void vATask( void * pvParameters )
@@ -132,9 +132,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
         // The semaphore can now be used.
     }
  }
- </pre>
- * \defgroup vSemaphoreCreateBinary vSemaphoreCreateBinary
- * \ingroup Semaphores
+ \endcode
  */
 #if( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 	#define vSemaphoreCreateBinary( xSemaphore )																							\
@@ -148,8 +146,8 @@ typedef QueueHandle_t SemaphoreHandle_t;
 #endif
 
 /**
- * semphr. h
- * <pre>SemaphoreHandle_t xSemaphoreCreateBinary( void )</pre>
+ * semphr.h
+ *
  *
  * Creates a new binary semaphore instance, and returns a handle by which the
  * new semaphore can be referenced.
@@ -185,7 +183,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * hold the semaphore's data structures could not be allocated.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore = NULL;
 
  void vATask( void * pvParameters )
@@ -200,17 +198,15 @@ typedef QueueHandle_t SemaphoreHandle_t;
         // The semaphore can now be used.
     }
  }
- </pre>
- * \defgroup xSemaphoreCreateBinary xSemaphoreCreateBinary
- * \ingroup Semaphores
+ \endcode
  */
 #if( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 	#define xSemaphoreCreateBinary() xQueueGenericCreate( ( UBaseType_t ) 1, semSEMAPHORE_QUEUE_ITEM_LENGTH, queueQUEUE_TYPE_BINARY_SEMAPHORE )
 #endif
 
 /**
- * semphr. h
- * <pre>SemaphoreHandle_t xSemaphoreCreateBinaryStatic( StaticSemaphore_t *pxSemaphoreBuffer )</pre>
+ * semphr.h
+ *
  *
  * Creates a new binary semaphore instance, and returns a handle by which the
  * new semaphore can be referenced.
@@ -243,7 +239,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * returned.  If pxSemaphoreBuffer is NULL then NULL is returned.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore = NULL;
  StaticSemaphore_t xSemaphoreBuffer;
 
@@ -259,20 +255,15 @@ typedef QueueHandle_t SemaphoreHandle_t;
 
     // Rest of task code goes here.
  }
- </pre>
- * \defgroup xSemaphoreCreateBinaryStatic xSemaphoreCreateBinaryStatic
- * \ingroup Semaphores
+ \endcode
  */
 #if( configSUPPORT_STATIC_ALLOCATION == 1 )
 	#define xSemaphoreCreateBinaryStatic( pxStaticSemaphore ) xQueueGenericCreateStatic( ( UBaseType_t ) 1, semSEMAPHORE_QUEUE_ITEM_LENGTH, NULL, pxStaticSemaphore, queueQUEUE_TYPE_BINARY_SEMAPHORE )
 #endif /* configSUPPORT_STATIC_ALLOCATION */
 
 /**
- * semphr. h
- * <pre>xSemaphoreTake(
- *                   SemaphoreHandle_t xSemaphore,
- *                   TickType_t xBlockTime
- *               )</pre>
+ * semphr.h
+ *
  *
  * <i>Macro</i> to obtain a semaphore.  The semaphore must have previously been
  * created with a call to xSemaphoreCreateBinary(), xSemaphoreCreateMutex() or
@@ -291,7 +282,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * if xBlockTime expired without the semaphore becoming available.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore = NULL;
 
  // A task that creates a semaphore.
@@ -328,18 +319,13 @@ typedef QueueHandle_t SemaphoreHandle_t;
         }
     }
  }
- </pre>
- * \defgroup xSemaphoreTake xSemaphoreTake
- * \ingroup Semaphores
+ \endcode
  */
 #define xSemaphoreTake( xSemaphore, xBlockTime )		xQueueGenericReceive( ( QueueHandle_t ) ( xSemaphore ), NULL, ( xBlockTime ), pdFALSE )
 
 /**
- * semphr. h
- * xSemaphoreTakeRecursive(
- *                          SemaphoreHandle_t xMutex,
- *                          TickType_t xBlockTime
- *                        )
+ * semphr.h
+ *
  *
  * <i>Macro</i> to recursively obtain, or 'take', a mutex type semaphore.
  * The mutex must have previously been created using a call to
@@ -370,7 +356,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * expired without the semaphore becoming available.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xMutex = NULL;
 
  // A task that creates a mutex.
@@ -421,15 +407,13 @@ typedef QueueHandle_t SemaphoreHandle_t;
         }
     }
  }
- </pre>
- * \defgroup xSemaphoreTakeRecursive xSemaphoreTakeRecursive
- * \ingroup Semaphores
+ \endcode
  */
 #define xSemaphoreTakeRecursive( xMutex, xBlockTime )	xQueueTakeMutexRecursive( ( xMutex ), ( xBlockTime ) )
 
 /**
- * semphr. h
- * <pre>xSemaphoreGive( SemaphoreHandle_t xSemaphore )</pre>
+ * semphr.h
+ *
  *
  * <i>Macro</i> to release a semaphore.  The semaphore must have previously been
  * created with a call to xSemaphoreCreateBinary(), xSemaphoreCreateMutex() or
@@ -450,7 +434,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * semaphore was not first obtained correctly.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore = NULL;
 
  void vATask( void * pvParameters )
@@ -484,15 +468,13 @@ typedef QueueHandle_t SemaphoreHandle_t;
         }
     }
  }
- </pre>
- * \defgroup xSemaphoreGive xSemaphoreGive
- * \ingroup Semaphores
+ \endcode
  */
 #define xSemaphoreGive( xSemaphore )		xQueueGenericSend( ( QueueHandle_t ) ( xSemaphore ), NULL, semGIVE_BLOCK_TIME, queueSEND_TO_BACK )
 
 /**
- * semphr. h
- * <pre>xSemaphoreGiveRecursive( SemaphoreHandle_t xMutex )</pre>
+ * semphr.h
+ *
  *
  * <i>Macro</i> to recursively release, or 'give', a mutex type semaphore.
  * The mutex must have previously been created using a call to
@@ -516,7 +498,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * @return pdTRUE if the semaphore was given.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xMutex = NULL;
 
  // A task that creates a mutex.
@@ -568,19 +550,13 @@ typedef QueueHandle_t SemaphoreHandle_t;
         }
     }
  }
- </pre>
- * \defgroup xSemaphoreGiveRecursive xSemaphoreGiveRecursive
- * \ingroup Semaphores
+ \endcode
  */
 #define xSemaphoreGiveRecursive( xMutex )	xQueueGiveMutexRecursive( ( xMutex ) )
 
 /**
- * semphr. h
- * <pre>
- xSemaphoreGiveFromISR(
-                          SemaphoreHandle_t xSemaphore,
-                          BaseType_t *pxHigherPriorityTaskWoken
-                      )</pre>
+ * semphr.h
+ *
  *
  * <i>Macro</i> to  release a semaphore.  The semaphore must have previously been
  * created with a call to xSemaphoreCreateBinary() or xSemaphoreCreateCounting().
@@ -602,7 +578,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * @return pdTRUE if the semaphore was successfully given, otherwise errQUEUE_FULL.
  *
  * Example usage:
- <pre>
+ \code{.c}
  \#define LONG_TIME 0xffff
  \#define TICKS_TO_WAIT	10
  SemaphoreHandle_t xSemaphore = NULL;
@@ -659,19 +635,13 @@ typedef QueueHandle_t SemaphoreHandle_t;
         // to find the syntax required.
     }
  }
- </pre>
- * \defgroup xSemaphoreGiveFromISR xSemaphoreGiveFromISR
- * \ingroup Semaphores
+ \endcode
  */
 #define xSemaphoreGiveFromISR( xSemaphore, pxHigherPriorityTaskWoken )	xQueueGiveFromISR( ( QueueHandle_t ) ( xSemaphore ), ( pxHigherPriorityTaskWoken ) )
 
 /**
- * semphr. h
- * <pre>
- xSemaphoreTakeFromISR(
-                          SemaphoreHandle_t xSemaphore,
-                          BaseType_t *pxHigherPriorityTaskWoken
-                      )</pre>
+ * semphr.h
+ *
  *
  * <i>Macro</i> to  take a semaphore from an ISR.  The semaphore must have
  * previously been created with a call to xSemaphoreCreateBinary() or
@@ -700,8 +670,8 @@ typedef QueueHandle_t SemaphoreHandle_t;
 #define xSemaphoreTakeFromISR( xSemaphore, pxHigherPriorityTaskWoken )	xQueueReceiveFromISR( ( QueueHandle_t ) ( xSemaphore ), NULL, ( pxHigherPriorityTaskWoken ) )
 
 /**
- * semphr. h
- * <pre>SemaphoreHandle_t xSemaphoreCreateMutex( void )</pre>
+ * semphr.h
+ *
  *
  * Creates a new mutex type semaphore instance, and returns a handle by which
  * the new mutex can be referenced.
@@ -735,7 +705,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * data structures then NULL is returned.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore;
 
  void vATask( void * pvParameters )
@@ -750,17 +720,15 @@ typedef QueueHandle_t SemaphoreHandle_t;
         // The semaphore can now be used.
     }
  }
- </pre>
- * \defgroup xSemaphoreCreateMutex xSemaphoreCreateMutex
- * \ingroup Semaphores
+ \endcode
  */
 #if( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 	#define xSemaphoreCreateMutex() xQueueCreateMutex( queueQUEUE_TYPE_MUTEX )
 #endif
 
 /**
- * semphr. h
- * <pre>SemaphoreHandle_t xSemaphoreCreateMutexStatic( StaticSemaphore_t *pxMutexBuffer )</pre>
+ * semphr.h
+ *
  *
  * Creates a new mutex type semaphore instance, and returns a handle by which
  * the new mutex can be referenced.
@@ -797,7 +765,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * mutex is returned.  If pxMutexBuffer was NULL then NULL is returned.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore;
  StaticSemaphore_t xMutexBuffer;
 
@@ -811,9 +779,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
     // As no dynamic memory allocation was performed, xSemaphore cannot be NULL,
     // so there is no need to check it.
  }
- </pre>
- * \defgroup xSemaphoreCreateMutexStatic xSemaphoreCreateMutexStatic
- * \ingroup Semaphores
+ \endcode
  */
  #if( configSUPPORT_STATIC_ALLOCATION == 1 )
 	#define xSemaphoreCreateMutexStatic( pxMutexBuffer ) xQueueCreateMutexStatic( queueQUEUE_TYPE_MUTEX, ( pxMutexBuffer ) )
@@ -821,8 +787,8 @@ typedef QueueHandle_t SemaphoreHandle_t;
 
 
 /**
- * semphr. h
- * <pre>SemaphoreHandle_t xSemaphoreCreateRecursiveMutex( void )</pre>
+ * semphr.h
+ *
  *
  * Creates a new recursive mutex type semaphore instance, and returns a handle
  * by which the new recursive mutex can be referenced.
@@ -864,7 +830,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * SemaphoreHandle_t.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore;
 
  void vATask( void * pvParameters )
@@ -879,17 +845,15 @@ typedef QueueHandle_t SemaphoreHandle_t;
         // The semaphore can now be used.
     }
  }
- </pre>
- * \defgroup xSemaphoreCreateRecursiveMutex xSemaphoreCreateRecursiveMutex
- * \ingroup Semaphores
+ \endcode
  */
 #if( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 	#define xSemaphoreCreateRecursiveMutex() xQueueCreateMutex( queueQUEUE_TYPE_RECURSIVE_MUTEX )
 #endif
 
 /**
- * semphr. h
- * <pre>SemaphoreHandle_t xSemaphoreCreateRecursiveMutexStatic( StaticSemaphore_t *pxMutexBuffer )</pre>
+ * semphr.h
+ *
  *
  * Creates a new recursive mutex type semaphore instance, and returns a handle
  * by which the new recursive mutex can be referenced.
@@ -936,7 +900,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * returned.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore;
  StaticSemaphore_t xMutexBuffer;
 
@@ -952,17 +916,15 @@ typedef QueueHandle_t SemaphoreHandle_t;
     // As no dynamic memory allocation was performed, xSemaphore cannot be NULL,
     // so there is no need to check it.
  }
- </pre>
- * \defgroup xSemaphoreCreateRecursiveMutexStatic xSemaphoreCreateRecursiveMutexStatic
- * \ingroup Semaphores
+ \endcode
  */
 #if( configSUPPORT_STATIC_ALLOCATION == 1 )
 	#define xSemaphoreCreateRecursiveMutexStatic( pxStaticSemaphore ) xQueueCreateMutexStatic( queueQUEUE_TYPE_RECURSIVE_MUTEX, pxStaticSemaphore )
 #endif /* configSUPPORT_STATIC_ALLOCATION */
 
 /**
- * semphr. h
- * <pre>SemaphoreHandle_t xSemaphoreCreateCounting( UBaseType_t uxMaxCount, UBaseType_t uxInitialCount )</pre>
+ * semphr.h
+ *
  *
  * Creates a new counting semaphore instance, and returns a handle by which the
  * new counting semaphore can be referenced.
@@ -1014,7 +976,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  *         created.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore;
 
  void vATask( void * pvParameters )
@@ -1032,17 +994,15 @@ typedef QueueHandle_t SemaphoreHandle_t;
         // The semaphore can now be used.
     }
  }
- </pre>
- * \defgroup xSemaphoreCreateCounting xSemaphoreCreateCounting
- * \ingroup Semaphores
+ \endcode
  */
 #if( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 	#define xSemaphoreCreateCounting( uxMaxCount, uxInitialCount ) xQueueCreateCountingSemaphore( ( uxMaxCount ), ( uxInitialCount ) )
 #endif
 
 /**
- * semphr. h
- * <pre>SemaphoreHandle_t xSemaphoreCreateCountingStatic( UBaseType_t uxMaxCount, UBaseType_t uxInitialCount, StaticSemaphore_t *pxSemaphoreBuffer )</pre>
+ * semphr.h
+ *
  *
  * Creates a new counting semaphore instance, and returns a handle by which the
  * new counting semaphore can be referenced.
@@ -1098,7 +1058,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
  * then NULL is returned.
  *
  * Example usage:
- <pre>
+ \code{.c}
  SemaphoreHandle_t xSemaphore;
  StaticSemaphore_t xSemaphoreBuffer;
 
@@ -1117,31 +1077,27 @@ typedef QueueHandle_t SemaphoreHandle_t;
     // No memory allocation was attempted so xSemaphore cannot be NULL, so there
     // is no need to check its value.
  }
- </pre>
- * \defgroup xSemaphoreCreateCountingStatic xSemaphoreCreateCountingStatic
- * \ingroup Semaphores
+ \endcode
  */
 #if( configSUPPORT_STATIC_ALLOCATION == 1 )
 	#define xSemaphoreCreateCountingStatic( uxMaxCount, uxInitialCount, pxSemaphoreBuffer ) xQueueCreateCountingSemaphoreStatic( ( uxMaxCount ), ( uxInitialCount ), ( pxSemaphoreBuffer ) )
 #endif /* configSUPPORT_STATIC_ALLOCATION */
 
 /**
- * semphr. h
- * <pre>void vSemaphoreDelete( SemaphoreHandle_t xSemaphore );</pre>
+ * semphr.h
+ *
  *
  * Delete a semaphore.  This function must be used with care.  For example,
  * do not delete a mutex type semaphore if the mutex is held by a task.
  *
  * @param xSemaphore A handle to the semaphore to be deleted.
  *
- * \defgroup vSemaphoreDelete vSemaphoreDelete
- * \ingroup Semaphores
  */
 #define vSemaphoreDelete( xSemaphore ) vQueueDelete( ( QueueHandle_t ) ( xSemaphore ) )
 
 /**
  * semphr.h
- * <pre>TaskHandle_t xSemaphoreGetMutexHolder( SemaphoreHandle_t xMutex );</pre>
+ *
  *
  * If xMutex is indeed a mutex type semaphore, return the current mutex holder.
  * If xMutex is not a mutex type semaphore, or the mutex is available (not held
@@ -1156,7 +1112,7 @@ typedef QueueHandle_t SemaphoreHandle_t;
 
 /**
  * semphr.h
- * <pre>UBaseType_t uxSemaphoreGetCount( SemaphoreHandle_t xMutex );</pre>
+ *
  *
  * If the semaphore is a counting semaphore then uxSemaphoreGetCount() returns
  * its current count value.  If the semaphore is a binary semaphore then
