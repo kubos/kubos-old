@@ -129,12 +129,6 @@ typedef void (*TimerCallbackFunction_t)( TimerHandle_t xTimer );
 typedef void (*PendedFunction_t)( void *, uint32_t );
 
 /**
- * TimerHandle_t xTimerCreate( 	const char * const pcTimerName,
- * 								TickType_t xTimerPeriodInTicks,
- * 								UBaseType_t uxAutoReload,
- * 								void * pvTimerID,
- * 								TimerCallbackFunction_t pxCallbackFunction );
- *
  * Creates a new software timer instance, and returns a handle by which the
  * created software timer can be referenced.
  *
@@ -184,99 +178,92 @@ typedef void (*PendedFunction_t)( void *, uint32_t );
  * structures, or the timer period was set to 0) then NULL is returned.
  *
  * Example usage:
- * @verbatim
- * #define NUM_TIMERS 5
- *
- * // An array to hold handles to the created timers.
- * TimerHandle_t xTimers[ NUM_TIMERS ];
- *
- * // An array to hold a count of the number of times each timer expires.
- * int32_t lExpireCounters[ NUM_TIMERS ] = { 0 };
- *
- * // Define a callback function that will be used by multiple timer instances.
- * // The callback function does nothing but count the number of times the
- * // associated timer expires, and stop the timer once the timer has expired
- * // 10 times.
- * void vTimerCallback( TimerHandle_t pxTimer )
- * {
- * int32_t lArrayIndex;
- * const int32_t xMaxExpiryCountBeforeStopping = 10;
- *
- * 	   // Optionally do something if the pxTimer parameter is NULL.
- * 	   configASSERT( pxTimer );
- *
- *     // Which timer expired?
- *     lArrayIndex = ( int32_t ) pvTimerGetTimerID( pxTimer );
- *
- *     // Increment the number of times that pxTimer has expired.
- *     lExpireCounters[ lArrayIndex ] += 1;
- *
- *     // If the timer has expired 10 times then stop it from running.
- *     if( lExpireCounters[ lArrayIndex ] == xMaxExpiryCountBeforeStopping )
- *     {
- *         // Do not use a block time if calling a timer API function from a
- *         // timer callback function, as doing so could cause a deadlock!
- *         xTimerStop( pxTimer, 0 );
- *     }
- * }
- *
- * void main( void )
- * {
- * int32_t x;
- *
- *     // Create then start some timers.  Starting the timers before the scheduler
- *     // has been started means the timers will start running immediately that
- *     // the scheduler starts.
- *     for( x = 0; x < NUM_TIMERS; x++ )
- *     {
- *         xTimers[ x ] = xTimerCreate(    "Timer",       // Just a text name, not used by the kernel.
- *                                         ( 100 * x ),   // The timer period in ticks.
- *                                         pdTRUE,        // The timers will auto-reload themselves when they expire.
- *                                         ( void * ) x,  // Assign each timer a unique id equal to its array index.
- *                                         vTimerCallback // Each timer calls the same callback when it expires.
- *                                     );
- *
- *         if( xTimers[ x ] == NULL )
- *         {
- *             // The timer was not created.
- *         }
- *         else
- *         {
- *             // Start the timer.  No block time is specified, and even if one was
- *             // it would be ignored because the scheduler has not yet been
- *             // started.
- *             if( xTimerStart( xTimers[ x ], 0 ) != pdPASS )
- *             {
- *                 // The timer could not be set into the Active state.
- *             }
- *         }
- *     }
- *
- *     // ...
- *     // Create tasks here.
- *     // ...
- *
- *     // Starting the scheduler will start the timers running as they have already
- *     // been set into the active state.
- *     xTaskStartScheduler();
- *
- *     // Should not reach here.
- *     for( ;; );
- * }
- * @endverbatim
+ * \code{.c}
+  #define NUM_TIMERS 5
+ 
+  // An array to hold handles to the created timers.
+  TimerHandle_t xTimers[ NUM_TIMERS ];
+ 
+  // An array to hold a count of the number of times each timer expires.
+  int32_t lExpireCounters[ NUM_TIMERS ] = { 0 };
+ 
+  // Define a callback function that will be used by multiple timer instances.
+  // The callback function does nothing but count the number of times the
+  // associated timer expires, and stop the timer once the timer has expired
+  // 10 times.
+  void vTimerCallback( TimerHandle_t pxTimer )
+  {
+  int32_t lArrayIndex;
+  const int32_t xMaxExpiryCountBeforeStopping = 10;
+ 
+  	   // Optionally do something if the pxTimer parameter is NULL.
+  	   configASSERT( pxTimer );
+ 
+      // Which timer expired?
+      lArrayIndex = ( int32_t ) pvTimerGetTimerID( pxTimer );
+ 
+      // Increment the number of times that pxTimer has expired.
+      lExpireCounters[ lArrayIndex ] += 1;
+ 
+      // If the timer has expired 10 times then stop it from running.
+      if( lExpireCounters[ lArrayIndex ] == xMaxExpiryCountBeforeStopping )
+      {
+          // Do not use a block time if calling a timer API function from a
+          // timer callback function, as doing so could cause a deadlock!
+          xTimerStop( pxTimer, 0 );
+      }
+  }
+ 
+  void main( void )
+  {
+  int32_t x;
+ 
+      // Create then start some timers.  Starting the timers before the scheduler
+      // has been started means the timers will start running immediately that
+      // the scheduler starts.
+      for( x = 0; x < NUM_TIMERS; x++ )
+      {
+          xTimers[ x ] = xTimerCreate(    "Timer",       // Just a text name, not used by the kernel.
+                                          ( 100 * x ),   // The timer period in ticks.
+                                          pdTRUE,        // The timers will auto-reload themselves when they expire.
+                                          ( void * ) x,  // Assign each timer a unique id equal to its array index.
+                                          vTimerCallback // Each timer calls the same callback when it expires.
+                                      );
+ 
+          if( xTimers[ x ] == NULL )
+          {
+              // The timer was not created.
+          }
+          else
+          {
+              // Start the timer.  No block time is specified, and even if one was
+              // it would be ignored because the scheduler has not yet been
+              // started.
+              if( xTimerStart( xTimers[ x ], 0 ) != pdPASS )
+              {
+                  // The timer could not be set into the Active state.
+              }
+          }
+      }
+ 
+      // ...
+      // Create tasks here.
+      // ...
+ 
+      // Starting the scheduler will start the timers running as they have already
+      // been set into the active state.
+      xTaskStartScheduler();
+ 
+      // Should not reach here.
+      for( ;; );
+  }
+ \endcode
  */
 #if( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
 	TimerHandle_t xTimerCreate( const char * const pcTimerName, const TickType_t xTimerPeriodInTicks, const UBaseType_t uxAutoReload, void * const pvTimerID, TimerCallbackFunction_t pxCallbackFunction ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 #endif
 
 /**
- * TimerHandle_t xTimerCreateStatic(const char * const pcTimerName,
- * 									TickType_t xTimerPeriodInTicks,
- * 									UBaseType_t uxAutoReload,
- * 									void * pvTimerID,
- * 									TimerCallbackFunction_t pxCallbackFunction,
- *									StaticTimer_t *pxTimerBuffer );
- *
  * Creates a new software timer instance, and returns a handle by which the
  * created software timer can be referenced.
  *
@@ -328,7 +315,7 @@ typedef void (*PendedFunction_t)( void *, uint32_t );
  * returned.  If pxTimerBuffer was NULL then NULL is returned.
  *
  * Example usage:
- * @verbatim
+ * \code{.c}
  *
  * // The buffer used to hold the software timer's data structure.
  * static StaticTimer_t xTimerBuffer;
@@ -389,15 +376,13 @@ typedef void (*PendedFunction_t)( void *, uint32_t );
  *     // Should not reach here.
  *     for( ;; );
  * }
- * @endverbatim
+ * \endcode
  */
 #if( configSUPPORT_STATIC_ALLOCATION == 1 )
 	TimerHandle_t xTimerCreateStatic( const char * const pcTimerName, const TickType_t xTimerPeriodInTicks, const UBaseType_t uxAutoReload, void * const pvTimerID, TimerCallbackFunction_t pxCallbackFunction, StaticTimer_t *pxTimerBuffer ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 #endif /* configSUPPORT_STATIC_ALLOCATION */
 
 /**
- * void *pvTimerGetTimerID( TimerHandle_t xTimer );
- *
  * Returns the ID assigned to the timer.
  *
  * IDs are assigned to timers using the pvTimerID parameter of the call to
@@ -439,7 +424,6 @@ void *pvTimerGetTimerID( const TimerHandle_t xTimer ) PRIVILEGED_FUNCTION;
 void vTimerSetTimerID( TimerHandle_t xTimer, void *pvNewID ) PRIVILEGED_FUNCTION;
 
 /**
- * BaseType_t xTimerIsTimerActive( TimerHandle_t xTimer );
  *
  * Queries a timer to see if it is active or dormant.
  *
@@ -458,20 +442,20 @@ void vTimerSetTimerID( TimerHandle_t xTimer, void *pvNewID ) PRIVILEGED_FUNCTION
  * pdFALSE will be returned if the timer is active.
  *
  * Example usage:
- * @verbatim
- * // This function assumes xTimer has already been created.
- * void vAFunction( TimerHandle_t xTimer )
- * {
- *     if( xTimerIsTimerActive( xTimer ) != pdFALSE ) // or more simply and equivalently "if( xTimerIsTimerActive( xTimer ) )"
- *     {
- *         // xTimer is active, do something.
- *     }
- *     else
- *     {
- *         // xTimer is not active, do something else.
- *     }
- * }
- * @endverbatim
+ \code{.c}
+  // This function assumes xTimer has already been created.
+  void vAFunction( TimerHandle_t xTimer )
+  {
+      if( xTimerIsTimerActive( xTimer ) != pdFALSE ) // or more simply and equivalently "if( xTimerIsTimerActive( xTimer ) )"
+      {
+          // xTimer is active, do something.
+      }
+      else
+      {
+          // xTimer is not active, do something else.
+      }
+  }
+ \endcode
  */
 BaseType_t xTimerIsTimerActive( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION;
 
@@ -578,9 +562,6 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
 #define xTimerStop( xTimer, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_STOP, 0U, NULL, ( xTicksToWait ) )
 
 /**
- * BaseType_t xTimerChangePeriod( 	TimerHandle_t xTimer,
- *										TickType_t xNewPeriod,
- *										TickType_t xTicksToWait );
  *
  * Timer functionality is provided by a timer service/daemon task.  Many of the
  * public FreeRTOS timer API functions send commands to the timer service task
@@ -623,37 +604,37 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  * configTIMER_TASK_PRIORITY configuration constant.
  *
  * Example usage:
- * @verbatim
- * // This function assumes xTimer has already been created.  If the timer
- * // referenced by xTimer is already active when it is called, then the timer
- * // is deleted.  If the timer referenced by xTimer is not active when it is
- * // called, then the period of the timer is set to 500ms and the timer is
- * // started.
- * void vAFunction( TimerHandle_t xTimer )
- * {
- *     if( xTimerIsTimerActive( xTimer ) != pdFALSE ) // or more simply and equivalently "if( xTimerIsTimerActive( xTimer ) )"
- *     {
- *         // xTimer is already active - delete it.
- *         xTimerDelete( xTimer );
- *     }
- *     else
- *     {
- *         // xTimer is not active, change its period to 500ms.  This will also
- *         // cause the timer to start.  Block for a maximum of 100 ticks if the
- *         // change period command cannot immediately be sent to the timer
- *         // command queue.
- *         if( xTimerChangePeriod( xTimer, 500 / portTICK_PERIOD_MS, 100 ) == pdPASS )
- *         {
- *             // The command was successfully sent.
- *         }
- *         else
- *         {
- *             // The command could not be sent, even after waiting for 100 ticks
- *             // to pass.  Take appropriate action here.
- *         }
- *     }
- * }
- * @endverbatim
+ * \code{.c}
+  // This function assumes xTimer has already been created.  If the timer
+  // referenced by xTimer is already active when it is called, then the timer
+  // is deleted.  If the timer referenced by xTimer is not active when it is
+  // called, then the period of the timer is set to 500ms and the timer is
+  // started.
+  void vAFunction( TimerHandle_t xTimer )
+  {
+      if( xTimerIsTimerActive( xTimer ) != pdFALSE ) // or more simply and equivalently "if( xTimerIsTimerActive( xTimer ) )"
+      {
+          // xTimer is already active - delete it.
+          xTimerDelete( xTimer );
+      }
+      else
+      {
+          // xTimer is not active, change its period to 500ms.  This will also
+          // cause the timer to start.  Block for a maximum of 100 ticks if the
+          // change period command cannot immediately be sent to the timer
+          // command queue.
+          if( xTimerChangePeriod( xTimer, 500 / portTICK_PERIOD_MS, 100 ) == pdPASS )
+          {
+              // The command was successfully sent.
+          }
+          else
+          {
+              // The command could not be sent, even after waiting for 100 ticks
+              // to pass.  Take appropriate action here.
+          }
+      }
+  }
+ \endcode
  */
  #define xTimerChangePeriod( xTimer, xNewPeriod, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_CHANGE_PERIOD, ( xNewPeriod ), NULL, ( xTicksToWait ) )
 
@@ -696,7 +677,6 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
 #define xTimerDelete( xTimer, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_DELETE, 0U, NULL, ( xTicksToWait ) )
 
 /**
- * BaseType_t xTimerReset( TimerHandle_t xTimer, TickType_t xTicksToWait );
  *
  * Timer functionality is provided by a timer service/daemon task.  Many of the
  * public FreeRTOS timer API functions send commands to the timer service task
@@ -743,86 +723,83 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  * configuration constant.
  *
  * Example usage:
- * @verbatim
- * // When a key is pressed, an LCD back-light is switched on.  If 5 seconds pass
- * // without a key being pressed, then the LCD back-light is switched off.  In
- * // this case, the timer is a one-shot timer.
- *
- * TimerHandle_t xBacklightTimer = NULL;
- *
- * // The callback function assigned to the one-shot timer.  In this case the
- * // parameter is not used.
- * void vBacklightTimerCallback( TimerHandle_t pxTimer )
- * {
- *     // The timer expired, therefore 5 seconds must have passed since a key
- *     // was pressed.  Switch off the LCD back-light.
- *     vSetBacklightState( BACKLIGHT_OFF );
- * }
- *
- * // The key press event handler.
- * void vKeyPressEventHandler( char cKey )
- * {
- *     // Ensure the LCD back-light is on, then reset the timer that is
- *     // responsible for turning the back-light off after 5 seconds of
- *     // key inactivity.  Wait 10 ticks for the command to be successfully sent
- *     // if it cannot be sent immediately.
- *     vSetBacklightState( BACKLIGHT_ON );
- *     if( xTimerReset( xBacklightTimer, 100 ) != pdPASS )
- *     {
- *         // The reset command was not executed successfully.  Take appropriate
- *         // action here.
- *     }
- *
- *     // Perform the rest of the key processing here.
- * }
- *
- * void main( void )
- * {
- * int32_t x;
- *
- *     // Create then start the one-shot timer that is responsible for turning
- *     // the back-light off if no keys are pressed within a 5 second period.
- *     xBacklightTimer = xTimerCreate( "BacklightTimer",           // Just a text name, not used by the kernel.
- *                                     ( 5000 / portTICK_PERIOD_MS), // The timer period in ticks.
- *                                     pdFALSE,                    // The timer is a one-shot timer.
- *                                     0,                          // The id is not used by the callback so can take any value.
- *                                     vBacklightTimerCallback     // The callback function that switches the LCD back-light off.
- *                                   );
- *
- *     if( xBacklightTimer == NULL )
- *     {
- *         // The timer was not created.
- *     }
- *     else
- *     {
- *         // Start the timer.  No block time is specified, and even if one was
- *         // it would be ignored because the scheduler has not yet been
- *         // started.
- *         if( xTimerStart( xBacklightTimer, 0 ) != pdPASS )
- *         {
- *             // The timer could not be set into the Active state.
- *         }
- *     }
- *
- *     // ...
- *     // Create tasks here.
- *     // ...
- *
- *     // Starting the scheduler will start the timer running as it has already
- *     // been set into the active state.
- *     xTaskStartScheduler();
- *
- *     // Should not reach here.
- *     for( ;; );
- * }
- * @endverbatim
+ \code{.c}
+  // When a key is pressed, an LCD back-light is switched on.  If 5 seconds pass
+  // without a key being pressed, then the LCD back-light is switched off.  In
+  // this case, the timer is a one-shot timer.
+ 
+  TimerHandle_t xBacklightTimer = NULL;
+ 
+  // The callback function assigned to the one-shot timer.  In this case the
+  // parameter is not used.
+  void vBacklightTimerCallback( TimerHandle_t pxTimer )
+  {
+      // The timer expired, therefore 5 seconds must have passed since a key
+      // was pressed.  Switch off the LCD back-light.
+      vSetBacklightState( BACKLIGHT_OFF );
+  }
+ 
+  // The key press event handler.
+  void vKeyPressEventHandler( char cKey )
+  {
+      // Ensure the LCD back-light is on, then reset the timer that is
+      // responsible for turning the back-light off after 5 seconds of
+      // key inactivity.  Wait 10 ticks for the command to be successfully sent
+      // if it cannot be sent immediately.
+      vSetBacklightState( BACKLIGHT_ON );
+      if( xTimerReset( xBacklightTimer, 100 ) != pdPASS )
+      {
+          // The reset command was not executed successfully.  Take appropriate
+          // action here.
+      }
+ 
+      // Perform the rest of the key processing here.
+  }
+ 
+  void main( void )
+  {
+  int32_t x;
+ 
+      // Create then start the one-shot timer that is responsible for turning
+      // the back-light off if no keys are pressed within a 5 second period.
+      xBacklightTimer = xTimerCreate( "BacklightTimer",           // Just a text name, not used by the kernel.
+                                      ( 5000 / portTICK_PERIOD_MS), // The timer period in ticks.
+                                      pdFALSE,                    // The timer is a one-shot timer.
+                                      0,                          // The id is not used by the callback so can take any value.
+                                      vBacklightTimerCallback     // The callback function that switches the LCD back-light off.
+                                    );
+ 
+      if( xBacklightTimer == NULL )
+      {
+          // The timer was not created.
+      }
+      else
+      {
+          // Start the timer.  No block time is specified, and even if one was
+          // it would be ignored because the scheduler has not yet been
+          // started.
+          if( xTimerStart( xBacklightTimer, 0 ) != pdPASS )
+          {
+              // The timer could not be set into the Active state.
+          }
+      }
+ 
+      // ...
+      // Create tasks here.
+      // ...
+ 
+      // Starting the scheduler will start the timer running as it has already
+      // been set into the active state.
+      xTaskStartScheduler();
+ 
+      // Should not reach here.
+      for( ;; );
+  }
+ \endcode
  */
 #define xTimerReset( xTimer, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_RESET, ( xTaskGetTickCount() ), NULL, ( xTicksToWait ) )
 
 /**
- * BaseType_t xTimerStartFromISR( 	TimerHandle_t xTimer,
- *									BaseType_t *pxHigherPriorityTaskWoken );
- *
  * A version of xTimerStart() that can be called from an interrupt service
  * routine.
  *
@@ -850,7 +827,7 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  * configuration constant.
  *
  * Example usage:
- * @verbatim
+ * \code{.c}
  * // This scenario assumes xBacklightTimer has already been created.  When a
  * // key is pressed, an LCD back-light is switched on.  If 5 seconds pass
  * // without a key being pressed, then the LCD back-light is switched off.  In
@@ -901,14 +878,11 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  *         // depends on the FreeRTOS port being used).
  *     }
  * }
- * @endverbatim
+ * \endcode
  */
 #define xTimerStartFromISR( xTimer, pxHigherPriorityTaskWoken ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_START_FROM_ISR, ( xTaskGetTickCountFromISR() ), ( pxHigherPriorityTaskWoken ), 0U )
 
 /**
- * BaseType_t xTimerStopFromISR( 	TimerHandle_t xTimer,
- *									BaseType_t *pxHigherPriorityTaskWoken );
- *
  * A version of xTimerStop() that can be called from an interrupt service
  * routine.
  *
@@ -934,7 +908,7 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  * priority is set by the configTIMER_TASK_PRIORITY configuration constant.
  *
  * Example usage:
- * @verbatim
+ * \code{.c}
  * // This scenario assumes xTimer has already been created and started.  When
  * // an interrupt occurs, the timer should be simply stopped.
  *
@@ -964,15 +938,11 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  *         // depends on the FreeRTOS port being used).
  *     }
  * }
- * @endverbatim
+ * \endcode
  */
 #define xTimerStopFromISR( xTimer, pxHigherPriorityTaskWoken ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_STOP_FROM_ISR, 0, ( pxHigherPriorityTaskWoken ), 0U )
 
 /**
- * BaseType_t xTimerChangePeriodFromISR( TimerHandle_t xTimer,
- *										 TickType_t xNewPeriod,
- *										 BaseType_t *pxHigherPriorityTaskWoken );
- *
  * A version of xTimerChangePeriod() that can be called from an interrupt
  * service routine.
  *
@@ -1007,7 +977,7 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  * priority is set by the configTIMER_TASK_PRIORITY configuration constant.
  *
  * Example usage:
- * @verbatim
+ * \code{.c}
  * // This scenario assumes xTimer has already been created and started.  When
  * // an interrupt occurs, the period of xTimer should be changed to 500ms.
  *
@@ -1037,13 +1007,11 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  *         // depends on the FreeRTOS port being used).
  *     }
  * }
- * @endverbatim
+ * \endcode
  */
 #define xTimerChangePeriodFromISR( xTimer, xNewPeriod, pxHigherPriorityTaskWoken ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_CHANGE_PERIOD_FROM_ISR, ( xNewPeriod ), ( pxHigherPriorityTaskWoken ), 0U )
 
 /**
- * BaseType_t xTimerResetFromISR( 	TimerHandle_t xTimer,
- *									BaseType_t *pxHigherPriorityTaskWoken );
  *
  * A version of xTimerReset() that can be called from an interrupt service
  * routine.
@@ -1072,69 +1040,63 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  * task priority is set by the configTIMER_TASK_PRIORITY configuration constant.
  *
  * Example usage:
- * @verbatim
- * // This scenario assumes xBacklightTimer has already been created.  When a
- * // key is pressed, an LCD back-light is switched on.  If 5 seconds pass
- * // without a key being pressed, then the LCD back-light is switched off.  In
- * // this case, the timer is a one-shot timer, and unlike the example given for
- * // the xTimerReset() function, the key press event handler is an interrupt
- * // service routine.
- *
- * // The callback function assigned to the one-shot timer.  In this case the
- * // parameter is not used.
- * void vBacklightTimerCallback( TimerHandle_t pxTimer )
- * {
- *     // The timer expired, therefore 5 seconds must have passed since a key
- *     // was pressed.  Switch off the LCD back-light.
- *     vSetBacklightState( BACKLIGHT_OFF );
- * }
- *
- * // The key press interrupt service routine.
- * void vKeyPressEventInterruptHandler( void )
- * {
- * BaseType_t xHigherPriorityTaskWoken = pdFALSE;
- *
- *     // Ensure the LCD back-light is on, then reset the timer that is
- *     // responsible for turning the back-light off after 5 seconds of
- *     // key inactivity.  This is an interrupt service routine so can only
- *     // call FreeRTOS API functions that end in "FromISR".
- *     vSetBacklightState( BACKLIGHT_ON );
- *
- *     // xTimerStartFromISR() or xTimerResetFromISR() could be called here
- *     // as both cause the timer to re-calculate its expiry time.
- *     // xHigherPriorityTaskWoken was initialised to pdFALSE when it was
- *     // declared (in this function).
- *     if( xTimerResetFromISR( xBacklightTimer, &xHigherPriorityTaskWoken ) != pdPASS )
- *     {
- *         // The reset command was not executed successfully.  Take appropriate
- *         // action here.
- *     }
- *
- *     // Perform the rest of the key processing here.
- *
- *     // If xHigherPriorityTaskWoken equals pdTRUE, then a context switch
- *     // should be performed.  The syntax required to perform a context switch
- *     // from inside an ISR varies from port to port, and from compiler to
- *     // compiler.  Inspect the demos for the port you are using to find the
- *     // actual syntax required.
- *     if( xHigherPriorityTaskWoken != pdFALSE )
- *     {
- *         // Call the interrupt safe yield function here (actual function
- *         // depends on the FreeRTOS port being used).
- *     }
- * }
- * @endverbatim
+ \code{.c}
+  // This scenario assumes xBacklightTimer has already been created.  When a
+  // key is pressed, an LCD back-light is switched on.  If 5 seconds pass
+  // without a key being pressed, then the LCD back-light is switched off.  In
+  // this case, the timer is a one-shot timer, and unlike the example given for
+  // the xTimerReset() function, the key press event handler is an interrupt
+  // service routine.
+ 
+  // The callback function assigned to the one-shot timer.  In this case the
+  // parameter is not used.
+  void vBacklightTimerCallback( TimerHandle_t pxTimer )
+  {
+      // The timer expired, therefore 5 seconds must have passed since a key
+      // was pressed.  Switch off the LCD back-light.
+      vSetBacklightState( BACKLIGHT_OFF );
+  }
+ 
+  // The key press interrupt service routine.
+  void vKeyPressEventInterruptHandler( void )
+  {
+  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+ 
+      // Ensure the LCD back-light is on, then reset the timer that is
+      // responsible for turning the back-light off after 5 seconds of
+      // key inactivity.  This is an interrupt service routine so can only
+      // call FreeRTOS API functions that end in "FromISR".
+      vSetBacklightState( BACKLIGHT_ON );
+ 
+      // xTimerStartFromISR() or xTimerResetFromISR() could be called here
+      // as both cause the timer to re-calculate its expiry time.
+      // xHigherPriorityTaskWoken was initialised to pdFALSE when it was
+      // declared (in this function).
+      if( xTimerResetFromISR( xBacklightTimer, &xHigherPriorityTaskWoken ) != pdPASS )
+      {
+          // The reset command was not executed successfully.  Take appropriate
+          // action here.
+      }
+ 
+      // Perform the rest of the key processing here.
+ 
+      // If xHigherPriorityTaskWoken equals pdTRUE, then a context switch
+      // should be performed.  The syntax required to perform a context switch
+      // from inside an ISR varies from port to port, and from compiler to
+      // compiler.  Inspect the demos for the port you are using to find the
+      // actual syntax required.
+      if( xHigherPriorityTaskWoken != pdFALSE )
+      {
+          // Call the interrupt safe yield function here (actual function
+          // depends on the FreeRTOS port being used).
+      }
+  }
+ \endcode
  */
 #define xTimerResetFromISR( xTimer, pxHigherPriorityTaskWoken ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_RESET_FROM_ISR, ( xTaskGetTickCountFromISR() ), ( pxHigherPriorityTaskWoken ), 0U )
 
 
 /**
- * BaseType_t xTimerPendFunctionCallFromISR( PendedFunction_t xFunctionToPend,
- *                                          void *pvParameter1,
- *                                          uint32_t ulParameter2,
- *                                          BaseType_t *pxHigherPriorityTaskWoken );
- *
- *
  * Used from application interrupt service routines to defer the execution of a
  * function to the RTOS daemon task (the timer service task, hence this function
  * is implemented in timers.c and is prefixed with 'Timer').
@@ -1176,7 +1138,7 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  * timer daemon task, otherwise pdFALSE is returned.
  *
  * Example usage:
- * @verbatim
+ * \code{.c}
  *
  *	// The callback function that will execute in the context of the daemon task.
  *  // Note callback functions must all use this same prototype.
@@ -1214,17 +1176,11 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  *		portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
  *
  *	}
- * @endverbatim
+ * \endcode
  */
 BaseType_t xTimerPendFunctionCallFromISR( PendedFunction_t xFunctionToPend, void *pvParameter1, uint32_t ulParameter2, BaseType_t *pxHigherPriorityTaskWoken ) PRIVILEGED_FUNCTION;
 
  /**
-  * BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend,
-  *                                    void *pvParameter1,
-  *                                    uint32_t ulParameter2,
-  *                                    TickType_t xTicksToWait );
-  *
-  *
   * Used to defer the execution of a function to the RTOS daemon task (the timer
   * service task, hence this function is implemented in timers.c and is prefixed
   * with 'Timer').
@@ -1253,8 +1209,6 @@ BaseType_t xTimerPendFunctionCallFromISR( PendedFunction_t xFunctionToPend, void
 BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend, void *pvParameter1, uint32_t ulParameter2, TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
 
 /**
- * const char * const pcTimerGetName( TimerHandle_t xTimer );
- *
  * Returns the name that was assigned to a timer when the timer was created.
  *
  * @param xTimer The handle of the timer being queried.
@@ -1264,8 +1218,6 @@ BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend, void *pvPar
 const char * pcTimerGetName( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /**
- * TickType_t xTimerGetPeriod( TimerHandle_t xTimer );
- *
  * Returns the period of a timer.
  *
  * @param xTimer The handle of the timer being queried.
@@ -1275,8 +1227,6 @@ const char * pcTimerGetName( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION; /*lint 
 TickType_t xTimerGetPeriod( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION;
 
 /**
-* TickType_t xTimerGetExpiryTime( TimerHandle_t xTimer );
-*
 * Returns the time in ticks at which the timer will expire.  If this is less
 * than the current tick count then the expiry time has overflowed from the
 * current time.
