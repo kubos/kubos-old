@@ -75,7 +75,7 @@
 
 /* Standard includes. */
 #include <stdlib.h>
-#include <signal.h>
+#include <legacymsp430.h>
 
 /* Scheduler includes. */
 #include "FreeRTOS.h"
