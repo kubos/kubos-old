@@ -180,90 +180,81 @@ static void print_to_console(telemetry_packet packet)
 }
 
 
-/**
-* @brief log formatted data with klog.
-* @param filename_buf_ptr a pointer to the filename
-* @param data_buf_ptr a pointer to the data to be logged
-* @param filename_len the filename length 
-* @retval bool true if successful, otherwise false
-*/
-static bool send_to_klog(char *filename_buf_ptr, char *data_buf_ptr, uint16_t filename_len)
-{
-    bool ret = false;
-    klog_handle telemetry_log_handle = { .config.file_path = filename_buf_ptr, \
-                                         .config.file_path_len = filename_len, \
-                                         .config.part_size = DATA_PART_SIZE, \
-                                         .config.max_parts = DATA_MAX_PARTS, \
-                                         .config.klog_console_level = LOG_NONE, \
-                                         .config.klog_file_level = LOG_TELEMETRY, \
-                                         .config.klog_file_logging = true };
-
-    /* klog_init returns 0 for success */
-    if (!klog_init_file(&telemetry_log_handle))
-    {
-        KLOG_TELEMETRY(&telemetry_log_handle, "", data_buf_ptr);
-        klog_cleanup(&telemetry_log_handle);
-        ret = true;
-    }
-    return ret;
-}
-
-
 bool telemetry_store(telemetry_packet packet)
 {
     static char filename_buffer[FILE_NAME_BUFFER_SIZE];
     static char *filename_buf_ptr;
     static char data_buffer[DATA_BUFFER_SIZE];
     static char *data_buf_ptr;
-    bool ret = false;
-
+    int init_ret = 0;
+    
     uint16_t data_len;
     uint16_t filename_len;
 
     filename_buf_ptr = filename_buffer;
     data_buf_ptr = data_buffer;
-
-    switch (DATA_OUTPUT_FORMAT)
-    {
-    case FORMAT_TYPE_CSV_DATA_ONLY:
-
+    
+    if(DATA_OUTPUT_FORMAT == FORMAT_TYPE_CSV)
+    { 
         filename_len = create_filename(filename_buf_ptr, packet.source.topic_id, packet.source.subsystem_id, FILE_EXTENSION_NONE);
         data_len = format_log_entry_csv(data_buf_ptr, packet);
-
-        /* Save CSV data only format log entry */
-        if (filename_len > 0 && data_len > 0)
+        
+        /* Save CSV format log entry */
+        if(filename_len > 0 && data_len > 0)
         {
-            ret = send_to_klog(filename_buf_ptr, data_buf_ptr, filename_len);
+            klog_handle telemetry_log_handle = { .config.file_path = filename_buf_ptr, \
+                                                 .config.file_path_len = filename_len, \
+                                                 .config.part_size = DATA_PART_SIZE, \
+                                                 .config.max_parts = DATA_MAX_PARTS, \
+                                                 .config.klog_console_level = LOG_NONE, \
+                                                 .config.klog_file_level = LOG_TELEMETRY, \
+                                                 .config.klog_file_logging = true };
+                                                
+            init_ret = klog_init_file(&telemetry_log_handle);
+            if(init_ret == 0)
+            {
+                KLOG_TELEMETRY(&telemetry_log_handle, "", data_buf_ptr);
+                klog_cleanup(&telemetry_log_handle);
+                return true;
+            }
         }
-        else
+        else 
         {
             printf("Error decoding telemetry packet. Log entry or filename is blank \r\n");
         }
-        break;
-    case FORMAT_TYPE_CSV:
-        /* Placeholder for the entire telemetry packet in CSV format */
-        break;
-    case FORMAT_TYPE_HEX_DATA_ONLY:
-        /* Placeholder for the telemetry packet data only in hexidecimal format */
-        break;
-    case FORMAT_TYPE_HEX:
-
+    }
+    else if(DATA_OUTPUT_FORMAT == FORMAT_TYPE_HEX)
+    {
         filename_len = create_filename(filename_buf_ptr, packet.source.topic_id, packet.source.subsystem_id, FILE_EXTENSION_NONE);
         data_len = format_log_entry_hex(data_buf_ptr, packet);
-
+        
         /* Save HEX format log entry */
-        if (filename_len > 0 && data_len > 0)
+        if(filename_len > 0 && data_len > 0)
         {
-            ret = send_to_klog(filename_buf_ptr, data_buf_ptr, filename_len);
+            klog_handle telemetry_log_handle = { .config.file_path = filename_buf_ptr, \
+                                                 .config.file_path_len = filename_len, \
+                                                 .config.part_size = DATA_PART_SIZE, \
+                                                 .config.max_parts = DATA_MAX_PARTS, \
+                                                 .config.klog_console_level = LOG_NONE, \
+                                                 .config.klog_file_level = LOG_TELEMETRY, \
+                                                 .config.klog_file_logging = true };
+                                                
+            init_ret = klog_init_file(&telemetry_log_handle);
+            if(init_ret == 0)
+            {
+                KLOG_TELEMETRY(&telemetry_log_handle, "", data_buf_ptr);
+                klog_cleanup(&telemetry_log_handle);
+                return true;
+            }
         }
-        else
+        else 
         {
             printf("Error decoding telemetry packet. Log entry or filename is blank \r\n");
         }
-        break;
-    default:
-        printf("Telemetry storage format type not found\r\n");
-        break;
     }
-    return ret;
+    else
+    {
+        printf("Telemetry storage format type not found\r\n");
+    }
+    return false;
 }

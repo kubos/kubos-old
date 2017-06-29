@@ -38,13 +38,9 @@
  */
 typedef enum 
 {
-    /*! CSV file storing telemetry packet data only */
-    FORMAT_TYPE_CSV_DATA_ONLY = 0,
-    /*! CSV file storing the entire telemetry packet */
-    FORMAT_TYPE_CSV,
-    /*! Hex file storing the telemetry packet data only */
-    FORMAT_TYPE_HEX_DATA_ONLY,
-    /*! Hex file storing the entire telemetry packet */
+    /*! CSV File */
+    FORMAT_TYPE_CSV = 0,
+    /*! Hex File */
     FORMAT_TYPE_HEX
 } output_data_format;
 
