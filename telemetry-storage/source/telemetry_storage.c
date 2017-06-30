@@ -67,12 +67,12 @@ void telemetry_storage_init(void)
  */
 static uint16_t create_filename(char *filename_buf_ptr, uint8_t topic_id, unsigned int address, const char *file_extension)
 {
-    int len;
-
     if (filename_buf_ptr == NULL || file_extension == NULL) 
     {
         return 0;
     }
+
+    int len;
 
     len = snprintf(filename_buf_ptr, FILE_NAME_BUFFER_SIZE, "%u%u%s", topic_id, address, file_extension);
 
@@ -93,12 +93,12 @@ static uint16_t create_filename(char *filename_buf_ptr, uint8_t topic_id, unsign
  */
 static uint16_t format_log_entry_csv(char *data_buf_ptr, telemetry_packet packet) 
 {
-    int len = 0;
-
     if (data_buf_ptr == NULL) 
     {
         return 0;
     }
+
+    int len = 0;
 
     if(packet.source.data_type == TELEMETRY_TYPE_INT) 
     {
@@ -140,13 +140,14 @@ static int length_added(int result_of_snprintf)
  */
 static uint16_t format_log_entry_hex(char *data_buf_ptr, telemetry_packet packet) 
 {
-    int len = 0;
-    const unsigned char *byte_array = (unsigned char*)&packet;
-
     if (data_buf_ptr == NULL) 
     {
         return 0;
     }
+
+    int len = 0;
+    const unsigned char *byte_array = (unsigned char*)&packet;
+
     
     for(int i = 0; i < sizeof(telemetry_packet); i++)
     {
