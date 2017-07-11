@@ -21,6 +21,13 @@
 #include <stdbool.h>
 
 /**
+ * Maximum length of service/source/application keys
+ */
+#define MAX_NAME_LEN 256
+
+char APP_KEY[MAX_NAME_LEN];
+
+/**
  * Function pointer typedef for event callbacks
  *
  * @param buffer optional cbor encoded data
@@ -75,11 +82,12 @@ typedef struct
  * - Sends message to broker for event registration/subscription
  * - Registers internal mechanism for catching return message
  *
+ * @param request_key character string key identifying requester
  * @param event_key character string key identifying event
  * @param cb function to be called when event triggers
  * @param buffer cbor encoded parameter for  event trigger
  */
-void request_event(char * event_key, event_callback cb, const uint8_t * buffer);
+void request_event(const char * event_key, event_callback cb, const uint8_t * buffer);
 
 /**
  * Creates a thread to listen for new message responses
@@ -115,5 +123,15 @@ void register_event(char * source_key, char * event_key);
  * @return bool true if event is found, false if there is a problem
  */
 bool fetch_event(char * source_key, event_req_t * event);
+
+bool receive_event(event_pub_t * event);
+
+void app_start_event_loop(void);
+
+void app_handle_event(event_pub_t event);
+
+bool app_init_events(const char * app_key);
+
+void app_request_event(const char * event_key, event_callback cb, const uint8_t * buffer);
 
 #endif

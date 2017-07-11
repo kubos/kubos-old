@@ -38,11 +38,11 @@
 /**
  * EPS Event - Triggered when power level hits set threshold
  */
-void onPowerLevel(uint32_t power_level, event_callback callback);
+void on_power_level(uint32_t power_level, event_callback callback);
 
 /**
  * EPS Event - Triggered on each power level reading
  */
-void onPowerReading(event_callback callback);
+void on_power_reading(event_callback callback);
 
 #endif

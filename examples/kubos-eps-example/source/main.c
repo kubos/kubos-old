@@ -21,12 +21,12 @@
 #include <stdio.h>
 #include <eps-events/events.h>
 
-void runOnLowPower(const uint8_t * buffer)
+void run_on_power_level(const uint8_t * buffer)
 {
     printf("Low power detected!");
 }
 
-void runOnPowerReading(const uint8_t * buffer)
+void run_on_power_reading(const uint8_t * buffer)
 {
     uint8_t power_reading;
     
@@ -37,15 +37,15 @@ void runOnPowerReading(const uint8_t * buffer)
 
 int main(void)
 {
-    printf("Starting EPS Event Example\n");
+    printf("Starting EPS Example\n");
 
-    onPowerLevel(30, &runOnLowPower);
-    onPowerReading(runOnPowerReading);
+    app_init_events("eps_application");
 
-    while (1)
-    {
-        sleep(1);
-    }
+    on_power_level(30, &run_on_power_level);
+    on_power_reading(run_on_power_reading);
 
+    app_start_event_loop();
+
+    printf("Exiting EPS Example\n");
     return 0;
 }

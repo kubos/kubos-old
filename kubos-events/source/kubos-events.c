@@ -19,7 +19,7 @@
 
 #include "kubos-events/kubos-events.h"
 
-void request_event(char * event_key, event_callback cb, const uint8_t * buffer)
+void request_event(const char * event_key, event_callback cb, const uint8_t * buffer)
 {
     /**
      * - Create and send event listen request message to ??
@@ -49,24 +49,6 @@ void event_loop_thread(void * param)
     }
 }
 
-void event_fire_thread(void * param)
-{
-    event_resp_t resp;
-    if (param != NULL)
-    {
-        memcpy(&resp, param, sizeof(event_resp_t));
-        resp.cb(resp.data);
-    }
-}
-
-void add_event_listener(char * event_key, event_callback cb)
-{
-    /**
-     * - Adds callback to internal structure of event/cb
-     *   list[event_key] = cb;
-     */
-}
-
 void register_event(char * source_key, char * event_key)
 {
     /**
@@ -78,4 +60,13 @@ void register_event(char * source_key, char * event_key)
 bool fetch_event(char * source_key, event_req_t * event)
 {
     
+}
+
+bool receive_event(event_pub_t * event)
+{
+    /**
+     * - Read in data blob from event broker
+     * - Attempt to decode blob into event_pub_t
+     */
+    return false;
 }

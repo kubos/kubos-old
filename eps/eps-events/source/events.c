@@ -26,7 +26,7 @@
  * - Sends registration message to message broker
  *   - Spawns thread waiting on event response
  */
-void onPowerLevel(uint32_t power_level, event_callback callback)
+void on_power_level(uint32_t power_level, event_callback callback)
 {
     uint8_t data_buffer[100];
 
@@ -40,7 +40,7 @@ void onPowerLevel(uint32_t power_level, event_callback callback)
  * - Sends registration message to message broker
  *   - Spawns thread waiting on event response
  */
-void onPowerReading(event_callback callback)
+void on_power_reading(event_callback callback)
 {
     request_event(EVENT_EPS_ON_POWER_LEVEL, callback, NULL);
 }
