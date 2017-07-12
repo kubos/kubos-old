@@ -26,6 +26,7 @@
 #define MAX_NAME_LEN 256
 
 char APP_KEY[MAX_NAME_LEN];
+char SERVICE_KEY[MAX_NAME_LEN];
 
 /**
  * Function pointer typedef for event callbacks

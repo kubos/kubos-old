@@ -87,21 +87,23 @@ void power_level_process_thread(void)
  */
 int main(void)
 {
-    register_event(EVENT_EPS, EVENT_EPS_ON_POWER_LEVEL);
-    register_event(EVENT_EPS, EVENT_EPS_ON_POWER_READING);
+    init_event_service(EVENT_EPS);
+
+    service_register_event(EVENT_EPS_ON_POWER_LEVEL);
+    service_register_event(EVENT_EPS_ON_POWER_READING);
 
     event_req_t event;
 
-    while (fetch_event(EVENT_EPS, &event))
+    while (service_fetch_event(&event))
     {
-        if (!strcmp(event.key, EVENT_EPS_ON_POWER_LEVEL))
+        if (!strcmp(event.event_key, EVENT_EPS_ON_POWER_LEVEL))
         {
             /**
              * - Add new trigger for eps power level
              *   - Needs to carry over event parameter
              */
         }
-        if (!strcmp(event.key, EVENT_EPS_ON_POWER_READING))
+        if (!strcmp(event.event_key, EVENT_EPS_ON_POWER_READING))
         {
             /**
              * - Add new trigger for eps power reading
