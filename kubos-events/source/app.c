@@ -113,23 +113,6 @@ void app_start_event_loop(void)
 }
 
 /**
- * This function sends a request for an event to the event broker
- *
- * - Create and send event request message to broker
- *   - Request contains event_key and buffer (parameters)
- * - Call add_event_listener with event_key and cb
- */
-bool app_request_event(const char * event_key, event_callback cb,
-                       const uint8_t * buffer)
-{
-    /**
-     * - Create and send event listen request message to ??
-     *   - Request should have event_key and buffer
-     * - Call add_event_listener with event_key and cb
-     */
-}
-
-/**
  * This function does the actual handling of received event messages
  *
  * - Check for callback/handler for event

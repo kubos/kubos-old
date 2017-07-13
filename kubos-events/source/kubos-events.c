@@ -40,6 +40,23 @@ void event_loop_thread(void * param)
     }
 }
 
+/**
+ * This function sends a request for an event to the event broker
+ *
+ * - Create and send event request message to broker
+ *   - Request contains event_key and buffer (parameters)
+ * - Call add_event_listener with event_key and cb
+ */
+bool register_handler(const char * event_key, event_callback cb,
+                       const uint8_t * buffer)
+{
+    /**
+     * - Create and send event listen request message to ??
+     *   - Request should have event_key and buffer
+     * - Call add_event_listener with event_key and cb
+     */
+}
+
 void register_event(const char * source_key, const char * event_key)
 {
     /**

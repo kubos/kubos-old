@@ -13,6 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Implementation for each event handler registration function.
+ *
+ * - Each function should
+ *  - Perform any data serialization needed for event-specific parameters
+ *  - Call register_handler to register with event broker
+ */
 
 #include "eps-events/events.h"
 #include <kubos-events/kubos-events.h>
@@ -30,7 +37,9 @@ void on_power_level(uint32_t power_level, event_callback callback)
 {
     uint8_t data_buffer[100];
 
-    request_event(EVENT_EPS_ON_POWER_LEVEL, callback, data_buffer);
+    // Serialize power_level into data_buffer
+    // cbor_store_uint(power_level, data_buffer);
+    register_handler(EVENT_EPS_ON_POWER_LEVEL, callback, data_buffer);
 }
 
 /**
@@ -42,5 +51,5 @@ void on_power_level(uint32_t power_level, event_callback callback)
  */
 void on_power_reading(event_callback callback)
 {
-    request_event(EVENT_EPS_ON_POWER_LEVEL, callback, NULL);
+    register_handler(EVENT_EPS_ON_POWER_LEVEL, callback, NULL);
 }

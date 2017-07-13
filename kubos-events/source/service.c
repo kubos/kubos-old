@@ -48,3 +48,9 @@ void service_handle_event_request(event_req_t event)
 {
 
 }
+
+
+void service_fire_event(const char * event_key, const char * app_key, const uint8_t * data)
+{
+    
+}

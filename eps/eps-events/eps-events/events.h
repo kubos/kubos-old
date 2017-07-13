@@ -13,6 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * This header represents the application interface into events
+ * exposed by the EPS service.
+ *
+ * It contains -
+ * - A source key used to identify all events from the eps service
+ * - For each event -
+ *   - An event key
+ *   - A function for registering an event handler
+ */
 
 #ifndef EPS_EVENTS_H
 #define EPS_EVENTS_H
@@ -33,7 +43,7 @@
 /**
  * Event key for events tied to all power level readings
  */
-#define EVENT_EPS_ON_POWER_READING  "EVENT_EPS_ON_POWER_READING"
+#define EVENT_EPS_ON_POWER_READING "EVENT_EPS_ON_POWER_READING"
 
 /**
  * EPS Event - Triggered when power level hits set threshold

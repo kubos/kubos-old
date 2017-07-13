@@ -87,7 +87,7 @@ typedef struct
  * @param cb function to be called when event triggers
  * @param buffer cbor encoded parameter for  event trigger
  */
-bool request_event(const char * event_key, event_callback cb, const uint8_t * buffer);
+bool register_handler(const char * event_key, event_callback cb, const uint8_t * buffer);
 
 /**
  * Creates a thread to listen for new message responses
@@ -113,6 +113,8 @@ void add_event_listener(char * event_key, event_callback cb);
  * Registers new source/key key pair with event message broker.
  */
 void register_event(const char * source_key, const char * event_key);
+
+void service_fire_event(const char * event_key, const char * app_key, const uint8_t * data);
 
 /**
  * Fetches an event relevant to the supplied source key
