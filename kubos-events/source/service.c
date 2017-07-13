@@ -44,7 +44,7 @@ void service_fetch_event(event_req_t * event)
  * Places event request into internal queue for event
  * handlers to access
  */
-void service_handle_event_request(event_req_t)
+void service_handle_event_request(event_req_t event)
 {
 
 }

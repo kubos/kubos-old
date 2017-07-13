@@ -19,15 +19,6 @@
 
 #include "kubos-events/kubos-events.h"
 
-void request_event(const char * event_key, event_callback cb, const uint8_t * buffer)
-{
-    /**
-     * - Create and send event listen request message to ??
-     *   - Request should have event_key and buffer
-     * - Call add_event_listener with event_key and cb
-     */
-}
-
 void start_event_loop(void)
 {
     /**
@@ -49,7 +40,7 @@ void event_loop_thread(void * param)
     }
 }
 
-void register_event(char * source_key, char * event_key)
+void register_event(const char * source_key, const char * event_key)
 {
     /**
      * - Creates and sends event registration message to event broker

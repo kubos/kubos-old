@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
+#include <kubos-core/utlist.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
 #include "kubos-events/kubos-events.h"
-#include <kubos-core/utlist.h>
 
 typedef struct event_cb_pair_t
 {
-    char event_key[MAX_NAME_LEN];
-    event_callback cb;
+    /**
+     * Why does this function pointer get clobbered
+     * if is declared underneath the event_key array???
+     */
+    event_callback           cb;
+    char                     event_key[MAX_NAME_LEN];
     struct event_cb_pair_t * next;
 } event_cb_pair_t;
 
@@ -30,14 +35,54 @@ static event_cb_pair_t * event_cb_list = NULL;
 
 static bool app_running = true;
 
+static int event_cb_pair_cmp(event_cb_pair_t * a, event_cb_pair_t * b)
+{
+    return strcmp(a->event_key, b->event_key);
+}
+
+static void clear_event_cb_list(void)
+{
+    event_cb_pair_t *temp, *next;
+    LL_FOREACH_SAFE(event_cb_list, temp, next)
+    {
+        LL_DELETE(event_cb_list, temp);
+    }
+}
+
+static event_callback get_event_callback(const char * event_key)
+{
+    event_cb_pair_t * elt;
+    event_cb_pair_t   temp;
+
+    strcpy(temp.event_key, event_key);
+    LL_SEARCH(event_cb_list, elt, &temp, event_cb_pair_cmp);
+
+    if (elt)
+    {
+        return (elt->cb);
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
 /**
  * Performs internal setup
  *
  * - Sets internal APP_KEY
  */
-bool app_init_events(const char * app_key)
+void app_init_events(const char * app_key)
 {
     strncpy(APP_KEY, app_key, MAX_NAME_LEN);
+}
+
+/**
+ * Performs internal cleanup
+ */
+void app_cleanup_events()
+{
+    clear_event_cb_list();
 }
 
 /**
@@ -68,20 +113,51 @@ void app_start_event_loop(void)
 }
 
 /**
+ * This function sends a request for an event to the event broker
+ *
+ * - Create and send event request message to broker
+ *   - Request contains event_key and buffer (parameters)
+ * - Call add_event_listener with event_key and cb
+ */
+bool app_request_event(const char * event_key, event_callback cb,
+                       const uint8_t * buffer)
+{
+    /**
+     * - Create and send event listen request message to ??
+     *   - Request should have event_key and buffer
+     * - Call add_event_listener with event_key and cb
+     */
+}
+
+/**
  * This function does the actual handling of received event messages
  *
  * - Check for callback/handler for event
- * - Spawn one-shot thread for callback
+ * - Spawn one-shot thread for callback?
+ * - Note! This currently only supports one handler per event_key
  */
-void app_handle_event(event_pub_t event)
+bool app_handle_event(event_pub_t event)
 {
     event_callback cb;
-    event_resp_t event_resp;
-    
-    // Look up cb for event
-    // event_resp.cb = get_event_callback(event);
-    // memcpy(event_resp.data, event.data, sizeof(event.data));
-    // start_thread(app_fire_event_thread, &event_resp);
+    event_resp_t   event_resp;
+
+    cb = get_event_callback(event.event_key);
+    if (cb == NULL)
+    {
+        return false;
+    }
+    else
+    {
+        /**
+         * For now we are calling the callback directly
+         * Possible threading in the future
+         */
+        event_resp.cb = cb;
+        cb(event.data);
+        // memcpy(event_resp.data, event.data, sizeof(event.data));
+        // start_thread(app_fire_event_thread((void*)&event_resp));
+        return true;
+    }
 }
 
 /**
@@ -98,7 +174,6 @@ void app_fire_event_thread(void * param)
     }
 }
 
-
 /**
  * This function adds the event_key and callback to an internal
  * list for usage by the event response listener
@@ -108,8 +183,8 @@ void app_fire_event_thread(void * param)
 void app_add_event_listener(char * event_key, event_callback cb)
 {
     event_cb_pair_t new_event_cb;
-    memcpy(new_event_cb.event_key, event_key, MAX_NAME_LEN);
-    memcpy(new_event_cb.cb, cb, sizeof(event_callback));
+    strncpy(new_event_cb.event_key, event_key, MAX_NAME_LEN);
+    new_event_cb.cb = cb;
 
     LL_APPEND(event_cb_list, &new_event_cb);
 }

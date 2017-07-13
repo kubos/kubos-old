@@ -43,7 +43,7 @@ typedef struct
     /* Callback for event */
     event_callback cb;
     /* Data to send into callback */
-    const uint8_t * data;
+    uint8_t * data;
 } event_resp_t;
 
 /**
@@ -83,12 +83,11 @@ typedef struct
  * - Sends message to broker for event registration/subscription
  * - Registers internal mechanism for catching return message
  *
- * @param request_key character string key identifying requester
  * @param event_key character string key identifying event
  * @param cb function to be called when event triggers
  * @param buffer cbor encoded parameter for  event trigger
  */
-void request_event(const char * event_key, event_callback cb, const uint8_t * buffer);
+bool request_event(const char * event_key, event_callback cb, const uint8_t * buffer);
 
 /**
  * Creates a thread to listen for new message responses
@@ -113,7 +112,7 @@ void add_event_listener(char * event_key, event_callback cb);
 /**
  * Registers new source/key key pair with event message broker.
  */
-void register_event(char * source_key, char * event_key);
+void register_event(const char * source_key, const char * event_key);
 
 /**
  * Fetches an event relevant to the supplied source key
@@ -129,10 +128,12 @@ bool receive_event(event_pub_t * event);
 
 void app_start_event_loop(void);
 
-void app_handle_event(event_pub_t event);
+bool app_handle_event(event_pub_t event);
 
-bool app_init_events(const char * app_key);
+void app_init_events(const char * app_key);
 
-void app_request_event(const char * event_key, event_callback cb, const uint8_t * buffer);
+void app_cleanup_events(void);
+
+void app_add_event_listener(char * event_key, event_callback cb);
 
 #endif
