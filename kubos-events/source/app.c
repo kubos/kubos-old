@@ -70,11 +70,11 @@ static event_callback get_event_callback(const char * event_key)
 /**
  * Performs internal setup
  *
- * - Sets internal APP_KEY
+ * - Sets internal MY_KEY
  */
 void app_init_events(const char * app_key)
 {
-    strncpy(APP_KEY, app_key, MAX_NAME_LEN);
+    strncpy(MY_KEY, app_key, MAX_NAME_LEN);
 }
 
 /**
@@ -98,10 +98,10 @@ void app_cleanup_events()
 void app_start_event_loop(void)
 {
     event_pub_t event;
-    printf("Starting %s event loop\n", APP_KEY);
+    printf("Starting %s event loop\n", MY_KEY);
     while (app_running)
     {
-        if (receive_event(&event))
+        if (receive_event(MY_KEY, &event))
         {
             app_handle_event(event);
         }

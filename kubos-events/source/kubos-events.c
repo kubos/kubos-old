@@ -19,62 +19,47 @@
 
 #include "kubos-events/kubos-events.h"
 
-void start_event_loop(void)
-{
-    /**
-     * - Spawn off event_loop_thread
-     */
-}
-
-void event_loop_thread(void * param)
-{
-    while (1)
-    {
-        /**
-         * - Wait for an event response
-         * - Process event response
-         *   - Look at event type
-         *   - Find callback associated with event
-         *   - Spawn one-shot thread to fire callback
-         */
-    }
-}
-
 /**
- * This function sends a request for an event to the event broker
- *
- * - Create and send event request message to broker
- *   - Request contains event_key and buffer (parameters)
- * - Call add_event_listener with event_key and cb
+ * Performs internal setup for events interface
  */
-bool register_handler(const char * event_key, event_callback cb,
-                       const uint8_t * buffer)
+void init_events(const char * my_key)
+{
+    strncpy(MY_KEY, my_key, MAX_NAME_LEN);
+}
+
+bool register_handler(const char * event_key, event_callback cb)
 {
     /**
-     * - Create and send event listen request message to ??
-     *   - Request should have event_key and buffer
+     * - Create event listen request message
+     *   - Request should have event_key and my_key
+     * - Send request to event broker
      * - Call add_event_listener with event_key and cb
      */
+     return false;
 }
 
-void register_event(const char * source_key, const char * event_key)
+void register_event(const char * event_key)
 {
     /**
-     * - Creates and sends event registration message to event broker
-         - Needs to send source_key and event_key pair
+     * - Creates event registration message with MY_KEY and event_key pair
+     * - Send ipc message to event broker
     */
 }
 
-bool fetch_event(char * source_key, event_req_t * event)
-{
-    
-}
-
-bool receive_event(event_pub_t * event)
+bool receive_event(const char * app_key, event_pub_t * event)
 {
     /**
      * - Read in data blob from event broker
      * - Attempt to decode blob into event_pub_t
      */
     return false;
+}
+
+
+void fire_event(const char * event_key, const uint8_t * data)
+{
+    /**
+     * - Package up ipc message
+     * - Send ipc message to event broker
+     */
 }

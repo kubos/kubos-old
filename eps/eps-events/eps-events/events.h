@@ -36,19 +36,9 @@
 #define EVENT_EPS "EVENT_EPS"
 
 /**
- * Event key for events tied to a specific power level reading
- */
-#define EVENT_EPS_ON_POWER_LEVEL "EVENT_EPS_ON_POWER_LEVEL"
-
-/**
  * Event key for events tied to all power level readings
  */
 #define EVENT_EPS_ON_POWER_READING "EVENT_EPS_ON_POWER_READING"
-
-/**
- * EPS Event - Triggered when power level hits set threshold
- */
-void on_power_level(uint32_t power_level, event_callback callback);
 
 /**
  * EPS Event - Triggered on each power level reading

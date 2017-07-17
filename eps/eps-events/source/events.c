@@ -17,7 +17,6 @@
  * Implementation for each event handler registration function.
  *
  * - Each function should
- *  - Perform any data serialization needed for event-specific parameters
  *  - Call register_handler to register with event broker
  */
 
@@ -25,22 +24,6 @@
 #include <kubos-events/kubos-events.h>
 #include <stddef.h>
 #include <stdint.h>
-
-/**
- * EPS Event - Triggered when power level hits set threshold
- *
- * - Performs registration for specified event + encoded data parameter
- * - Sends registration message to message broker
- *   - Spawns thread waiting on event response
- */
-void on_power_level(uint32_t power_level, event_callback callback)
-{
-    uint8_t data_buffer[100];
-
-    // Serialize power_level into data_buffer
-    // cbor_store_uint(power_level, data_buffer);
-    register_handler(EVENT_EPS_ON_POWER_LEVEL, callback, data_buffer);
-}
 
 /**
  * EPS Event - Triggered on each power level reading
@@ -51,5 +34,5 @@ void on_power_level(uint32_t power_level, event_callback callback)
  */
 void on_power_reading(event_callback callback)
 {
-    register_handler(EVENT_EPS_ON_POWER_LEVEL, callback, NULL);
+    register_handler(EVENT_EPS_ON_POWER_READING, callback);
 }

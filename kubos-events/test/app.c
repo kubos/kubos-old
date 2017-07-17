@@ -17,7 +17,7 @@
 #include <cmocka.h>
 #include <kubos-events/kubos-events.h>
 
-#define APP_KEY "TEST_APP"
+#define MY_KEY "TEST_APP"
 #define EVENT_KEY "TEST_EVENT"
 
 static int test_int = 0;
@@ -33,7 +33,7 @@ void callback(const uint8_t * buffer)
 static void test_event_response_no_request(void ** arg)
 {
     event_pub_t event_pub = {
-        .app_key = APP_KEY,
+        .app_key = MY_KEY,
         .event_key = EVENT_KEY,
         .data = NULL
     };
@@ -44,7 +44,7 @@ static void test_event_response_no_request(void ** arg)
 static void test_event_request_response(void ** arg)
 {
     event_pub_t event_pub = {
-        .app_key = APP_KEY,
+        .app_key = MY_KEY,
         .event_key = EVENT_KEY,
         .data = NULL
     };
@@ -62,7 +62,7 @@ static void test_event_request_response_callback(void ** arg)
 {
     int new_int = 5;
     event_pub_t event_pub = {
-        .app_key = APP_KEY,
+        .app_key = MY_KEY,
         .event_key = EVENT_KEY,
         .data = (const uint8_t*)&new_int
     };

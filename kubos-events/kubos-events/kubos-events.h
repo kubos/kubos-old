@@ -19,64 +19,18 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "kubos-events/types.h"
 
 /**
  * Maximum length of service/source/application keys
  */
 #define MAX_NAME_LEN 256
 
-char APP_KEY[MAX_NAME_LEN];
-char SERVICE_KEY[MAX_NAME_LEN];
-
 /**
- * Function pointer typedef for event callbacks
- *
- * @param buffer optional cbor encoded data
+ * Unique string identifying current process
+ * in the event system
  */
-typedef void (*event_callback)(const uint8_t * buffer);
-
-/**
- * Structure used in event firing thread
- */
-typedef struct
-{
-    /* Callback for event */
-    event_callback cb;
-    /* Data to send into callback */
-    uint8_t * data;
-} event_resp_t;
-
-/**
- * Structure sent to event source as part of
- * event request mechanism
- */
-typedef struct
-{
-    const char * app_key;
-    const char * event_key;
-    const uint8_t * data;
-} event_req_t;
-
-/**
- * Structure sent to event broker as part of
- * event registration process
- */
-typedef struct
-{
-    const char * source_key;
-    const char * event_key;
-} event_reg_t;
-
-/**
- * Structure sent to event broker as part of
- * event publishing process
- */
-typedef struct
-{
-    const char * app_key;
-    const char * event_key;
-    const uint8_t * data;
-} event_pub_t;
+char MY_KEY[MAX_NAME_LEN];
 
 /**
  * Internal function for handling event interest registration.
@@ -87,22 +41,7 @@ typedef struct
  * @param cb function to be called when event triggers
  * @param buffer cbor encoded parameter for  event trigger
  */
-bool register_handler(const char * event_key, event_callback cb, const uint8_t * buffer);
-
-/**
- * Creates a thread to listen for new message responses
- */
-void start_event_loop(void);
-
-/**
- * Event response listening thread
- */
-void event_loop_thread(void * param);
-
-/**
- * One-shot event firing thread
- */
-void event_fire_thread(void* param);
+bool register_handler(const char * event_key, event_callback cb);
 
 /**
  * Adds event to internal listener/callback structure
@@ -112,27 +51,32 @@ void add_event_listener(char * event_key, event_callback cb);
 /**
  * Registers new source/key key pair with event message broker.
  */
-void register_event(const char * source_key, const char * event_key);
-
-void service_fire_event(const char * event_key, const char * app_key, const uint8_t * data);
+void register_event(const char * event_key);
 
 /**
- * Fetches an event relevant to the supplied source key
- * **Blocking Call**
+ * Sends IPC message to event broker
  *
- * @param source_key key tied to source/group of events
- * @param event event request structure
- * @return bool true if event is found, false if there is a problem
+ * - Message has
+ *   - source_key identifying source?
+ *   - event_key identifying event
+ *   - data event payload
  */
-bool fetch_event(char * source_key, event_req_t * event);
+void fire_event(const char * event_key, const uint8_t * data);
 
-bool receive_event(event_pub_t * event);
+/**
+ * Blocking read of event from event broker
+ *
+ * - Reads in data blog via IPC from broker
+ * - Attempts to deserialize event_pub_t from blob
+ * - Verifies it is for me?
+ */
+bool receive_event(const char * app_key, event_pub_t * event);
 
 void app_start_event_loop(void);
 
 bool app_handle_event(event_pub_t event);
 
-void app_init_events(const char * app_key);
+void init_events(const char * app_key);
 
 void app_cleanup_events(void);
 
