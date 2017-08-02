@@ -10,7 +10,17 @@
         "publishers": {
             "iobc_uptime": 100,
             "supervisor_uptime" : 101,
-            "iobc_reset_count" : 102
+            "iobc_reset_count" : 102,
+            "iobc_adc_data_0" : 103,
+            "iobc_adc_data_1" : 104,
+            "iobc_adc_data_2" : 105,
+            "iobc_adc_data_3" : 106,
+            "iobc_adc_data_4" : 107,
+            "iobc_adc_data_5" : 108,
+            "iobc_adc_data_6" : 109,
+            "iobc_adc_data_7" : 110,
+            "iobc_adc_data_8" : 111,
+            "iobc_adc_data_9" : 112
         }
     },
     "csp": {

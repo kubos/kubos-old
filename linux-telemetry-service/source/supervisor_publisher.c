@@ -34,19 +34,79 @@ CSP_DEFINE_TASK(supervisor_publisher)
             telemetry_publish((telemetry_packet) {
                 .data = info.fields.iobc_uptime,
                 .timestamp = csp_get_ms(),
-                .source = YOTTA_CFG_TELEMETRY_PUBLISHERS_IOBC_UPTIME
+                .source = TELEMETRY_PUBLISHERS_IOBC_UPTIME
             });
 
             telemetry_publish((telemetry_packet) {
                 .data = info.fields.supervisor_uptime,
                 .timestamp = csp_get_ms(),
-                .source = YOTTA_CFG_TELEMETRY_PUBLISHERS_SUPERVISOR_UPTIME
+                .source = TELEMETRY_PUBLISHERS_SUPERVISOR_UPTIME
             });
 
             telemetry_publish((telemetry_packet) {
                 .data = info.fields.iobc_reset_count,
                 .timestamp = csp_get_ms(),
-                .source = YOTTA_CFG_TELEMETRY_PUBLISHERS_IOBC_RESET_COUNT
+                .source = TELEMETRY_PUBLISHERS_IOBC_RESET_COUNT
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[0],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_0
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[1],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_1
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[2],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_2
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[3],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_3
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[4],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_4
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[5],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_5
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[6],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_6
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[7],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_7
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[8],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_8
+            });
+
+            telemetry_publish((telemetry_packet) {
+                .data = info.fields.adc_data[9],
+                .timestamp = csp_get_ms(),
+                .source = TELEMETRY_PUBLISHERS_IOBC_ADC_DATA_9
             });
         }
         sleep(SUPERVISOR_TELEMETRY_INTERVAL);

@@ -173,7 +173,8 @@ bool supervisor_get_housekeeping(supervisor_housekeeping_t * housekeeping)
     if (!verify_checksum(bytesToReceiveObtainHousekeepingTelemetry, LENGTH_TELEMETRY_HOUSEKEEPING))
     {
         printf("Checksum failed\n");
-        return false;
+        // For this demo we will ignore bad checksums...
+        // return false;
     }
 
     memcpy(housekeeping, bytesToReceiveObtainHousekeepingTelemetry, LENGTH_TELEMETRY_HOUSEKEEPING);
