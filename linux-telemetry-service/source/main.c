@@ -49,6 +49,7 @@ CSP_DEFINE_TASK(main_thread)
         subscriber_list_item * sub = kprv_subscriber_init(conn);
         if (sub != NULL)
         {
+            printf("spawning sub thread %d\n", sub->id);
             csp_thread_create(client_handler, NULL, 1000, sub, 0, &(sub->rx_thread));
             kprv_subscriber_add(sub);
         }
@@ -69,10 +70,10 @@ int main(int argc, char ** argv)
 
     csp_thread_create(main_thread, NULL, 1000, NULL, 0, &thread_handle);
 
-    #ifdef TARGET_LIKE_ISIS
+    // #ifdef TARGET_LIKE_ISIS
     csp_thread_handle_t supervisor_handle;
     csp_thread_create(supervisor_publisher, NULL, 1000, NULL, 0, &supervisor_handle);
-    #endif
+    // #endif
 
     while (running)
     {
@@ -81,9 +82,9 @@ int main(int argc, char ** argv)
 
     csp_thread_kill(&thread_handle);
     
-    #ifdef TARGET_LIKE_ISIS
+    // #ifdef TARGET_LIKE_ISIS
     csp_thread_kill(&supervisor_handle);
-    #endif
+    // #endif
 
     telemetry_server_cleanup();
 
