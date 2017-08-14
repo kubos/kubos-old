@@ -1,0 +1,16 @@
+{
+    "license":"Apache-2.0",
+    "name":"kubos-events",
+    "repository":{
+        "url":"git://github.com/kubostech/kubos-events",
+        "type":"git"
+    },
+    "version":"0.1.0",
+    "homepage":"https://github.com/kubostech/kubos-events",
+    "dependencies":{
+        "kubos-core":"kubostech/kubos-core~0.1.0"
+    },
+    "testDependencies": {
+        "cmocka": "kubostech/cmocka"
+    }
+}

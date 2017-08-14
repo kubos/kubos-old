@@ -1,0 +1,13 @@
+{
+    "license":"Apache-2.0",
+    "name":"eps-events",
+    "repository":{
+        "url":"git://github.com/kubostech/kubos",
+        "type":"git"
+    },
+    "version":"0.1.0",
+    "homepage":"https://github.com/kubostech/kubos",
+    "dependencies": {
+        "kubos-events": "kubostech/kubos-events#~0.1.0"
+    }
+}
