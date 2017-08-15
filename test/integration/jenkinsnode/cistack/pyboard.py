@@ -17,10 +17,17 @@ class Pyboard(Target):
         self.cpu = "stm32f405"
         self.binfiletype = "BIN"
         self.pins = {
-            'rst' : Pin(name = 'rst', number = 17),
-            'pwr' : Pin(name = 'pwr', number = 27),
-            'prg' : Pin(name = 'prg', number = 18),
-            'opt' : Pin(name = 'opt', number = 22)
+            'rst' : Pin(name = 'rst', number = 17, pinput = False, poutput = True),
+            'pwr' : Pin(name = 'pwr', number = 27, pinput = False, poutput = True),
+            'prg' : Pin(name = 'prg', number = 18, pinput = False, poutput = True),
+            'opt' : Pin(name = 'opt', number = 22, pinput = False, poutput = True),
+            'ptt' : Pin(name = 'ptt', number = 5,  pinput = False, poutput = True),
+            'rts' : Pin(name = 'rts', number = 23, pinput = False, poutput = True),
+            'opto1' : Pin(name = 'opto1', number = 6, pinput = False, poutput = True),
+            'modemreset' : Pin(name = 'modemreset', number = 25, pinput = False, poutput = True), # active LOW
+            'cd'  : Pin(name = 'cd', number = 24, pinput = True, poutput = False) # must be set to INPUT
+
+
         } 
 
     def progmode(self):

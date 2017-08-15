@@ -10,21 +10,27 @@ from time import sleep
 import RPi.GPIO as GPIO
 
 
+global errstr
 errstr = "*** ERROR (functions):"
 
 def supportedBoards():
-    """Return a list of the supported boards."""
+    """
+    Return a list of the supported boards.
+    """
     supportedboards = [
     'pyboard-gcc',
     'stm32f407-disco-gcc',
     'msp430f5529-gcc', 
-    'na-satbus-3c0-gcc'
+    'na-satbus-3c0-gcc',
+    'none'
     ]
     return supportedboards
 
 
 def boardList():
-    """Return a nicely formatted string of the supported boards."""
+    """
+    Return a nicely formatted string of the supported boards.
+    """
     boards = supportedBoards()
     boardlist = str("")
     for i in boards:
@@ -43,7 +49,8 @@ def requiredUtils():
     'kubos',
     'lsusb',
     'gdb',
-    'uname'
+    'uname',
+    'bossac'
     ]
     return requiredutils
 
@@ -74,6 +81,7 @@ def getTarget(target):
     from pyboard import Pyboard
     from stm32f407discovery import STM32F407Discovery
     from msp430f5529 import MSP430
+    from none import NoBoard
 
 #     log = logging.getLogger('logfoo') 
 
@@ -96,6 +104,10 @@ def getTarget(target):
         logging.debug("Matched STM32F405 NanoAvionics SatBus 3c0")
         return NAsatbus()
 
+    elif target == "none":
+        logging.debug("Matched an unspecified board with only power commands available.")
+        return NoBoard()
+
     else:
         logging.error("Unsupported board -- no 'Target' class available.")
         return None
@@ -104,7 +116,9 @@ def getTarget(target):
 
 
 def getBoardConfigs(boards):
-    """Ensure that the board identifier is supported."""
+    """
+    Ensure that the board identifier is supported.
+    """
 #    log = logging.getLogger('logfoo') 
     for i in boards:
         try:
@@ -142,6 +156,8 @@ def parseBoardIdentifier(lsusbpattern):
             True, 'USE dfu-util!', '***'], 
         '0451:2046': ['TI MSP430F5529 Launchpad', 
             True, 'USE mspdebug!', '***'],
+        '1366:0101':['Atmel SEGGER programmer', 
+            False, 'NOT SUPPORTED', 'bossac'],
         '0451:f432': ['TI MSP430G2553 Launchpad', 
             False, 'NOT SUPPORTED', '/usr/bin/sleep 1']
     }
@@ -179,6 +195,9 @@ def whichUSBboard():
 
 
 def findBin(command):
+    """
+    Search for the argument in the system PATH.
+    """
 #    log = logging.getLogger('logfoo')
     cmd = str("/usr/bin/which %s" % command)
     logging.debug("Looking for %s in system binary PATHs." % command)
@@ -210,7 +229,9 @@ def checkRoot():
 
 
 def readOpts():
-    """Read command line arguments and return Namespace object."""
+    """
+    Read command line arguments and return Namespace object.
+    """
     parser = argparse.ArgumentParser(description = helpstring)
 
     parser.add_argument("-r", "--root", action = 'store', \
@@ -227,7 +248,7 @@ Therefore, you can set this to True, but we don't advise it.", \
     parser.add_argument("-f", "--file", action = 'store', \
         dest = "inputbinary", default="kubos-rt-example", \
         help = "provide a filename for the compiled binary file to \
-upload", metavar = "FILE", required = True)
+upload", metavar = "FILE", required = False)
 
     parser.add_argument("-v", "--verbose", \
         action = 'store_true', dest = "verbose",
@@ -275,6 +296,18 @@ unnecessary.", required = False)
         - 'lib' imports the file as a library; \n\
         - 'checks' runs tests on each of the flags and options.\n",\
         metavar = "COMMAND", required = False)
+
+    parser.add_argument("--powerup", action = 'store_true', \
+        dest = 'powerup', default = False, \
+        help = "Power up the target board and exit.",
+        required = False)
+
+    parser.add_argument("--powerdown", \
+        action = 'store_true', dest = 'powerdown', default = False, \
+        help = "Power down the target board and exit.",
+        required = False)
+
+
 
     arguments = parser.parse_args()
 
@@ -327,7 +360,6 @@ def startupChecks(args):
     """
 #    log = logging.getLogger('logfoo') 
     
-
     logging.debug("Command line arguments are: %s " % str(args))
     if not args:
         logging.error("Command line arguments returned None. Exiting.")

@@ -47,6 +47,10 @@ def main():
     logging.debug("Script started %s." % str(NOW))
     logging.info("Arguments have been parsed.")
 
+#    sofile=open('/tmp/stdoutfile.txt', 'w')
+#    sys.stdout = sofile
+#    logging.debug("Redirecting stdout to a separate log file.")
+
     args = ci.readOpts()
     logging.debug("Command line arguments are: %s " % str(args))
     
@@ -66,6 +70,31 @@ def main():
         GPIO.setwarnings(False)
 
 # the "get to work" part of the function
+
+# set up the GPIO pins as requested
+    target.setupboard()
+    sleep(1)
+
+# create a dict of Pin objects:
+    pins = target.getpins()
+    logging.debug(str(pins))
+
+    if args.powerup is True:
+        target.powerup()
+        sys.exit("Board has been powered on. Exiting.")
+
+    if args.powerdown is True:
+        target.powerdown()
+        ci.cleanUp(target, args)
+
+    if args.command == "powerup":
+        target.powerup()
+        sys.exit("Board has been powered on. Exiting.")
+
+    if args.command == "powerdown":
+        target.powerdown()
+        ci.cleanUp(target, args)
+
     if args.command == "flash":
 
 # make a Binfile class object:
@@ -78,13 +107,6 @@ def main():
             ci.cleanUp(target, args)
         b.getInfo()
 
-# set up the GPIO pins as requested
-        target.setupboard()
-        sleep(1)
-
-# create a dict of Pin objects:
-        pins = target.getpins()
-        logging.debug(str(pins))
 
         target.powerup()
         sleep(0.5)
@@ -97,8 +119,10 @@ def main():
 
         if (target.flash(b) is True):
             logging.info("Program flash completed. Reports success.")
+            print("Reports success. Done.")
         else:
             logging.error("Program flash may have failed.")
+            print("Error reported. Halting.")
             ci.cleanUp(target, args)
 
         target.reset()
@@ -113,6 +137,9 @@ def main():
 
     else:
         pass
+
+#   sys.stdout=sys.__stdout__
+#   sofile.close()
 
 if __name__ == '__main__':
    main()
