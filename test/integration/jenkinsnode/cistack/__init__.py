@@ -7,7 +7,7 @@ from msp430f5529 import MSP430
 from stm32f407discovery import STM32F407Discovery
 from basicbinfile import Basicbinfile
 from nasatbus import NAsatbus
-from none import NoBoard
+from noboard import NoBoard
 from utils import *
 
 

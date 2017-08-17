@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Flash files to ISIS OBC board
+# Flash files to ISIS iOBC board
 #
 
 # What's the minimum allowable number of parameters?
@@ -44,7 +44,7 @@ ${THISFILE} /path/to/file/named/something.txt
 # check for arguments:
 if [ ${MINPARAMS} -eq 1 ]
 then
-    PLURAL="argument"   # English majors write scripts, too...
+    PLURAL="argument"
 else
     PLURAL="arguments"
 fi

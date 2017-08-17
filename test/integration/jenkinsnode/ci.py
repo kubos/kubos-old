@@ -87,14 +87,6 @@ def main():
         target.powerdown()
         ci.cleanUp(target, args)
 
-    if args.command == "powerup":
-        target.powerup()
-        sys.exit("Board has been powered on. Exiting.")
-
-    if args.command == "powerdown":
-        target.powerdown()
-        ci.cleanUp(target, args)
-
     if args.command == "flash":
 
 # make a Binfile class object:

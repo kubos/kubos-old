@@ -12,16 +12,14 @@ from pin import Pin
 
 class NoBoard(Target):
     def __init__(self):
-        self.board = "none"
-        self.arch = "none"
-        self.cpu = "none"
-        self.binfiletype = "NONE"
+        self.board = "noboard"
+        self.arch = "noarch"
+        self.cpu = "nocpu"
+        self.binfiletype = "nobinfile"
         self.pins = {
             'rst' : Pin(name = 'rst', number = 17),
             'pwr' : Pin(name = 'pwr', number = 27),
             'opt' : Pin(name = 'opt', number = 22)
         }
-
-
 
 
