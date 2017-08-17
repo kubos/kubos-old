@@ -52,8 +52,11 @@
 #define ECP_M_EPS_BAT_STAT_REQ 0x0003000C
 #define ECP_M_EPS_BAT_STAT_RES 0x0003000D
 #define ECP_M_EPS_BAT_LVL_REQ  0x0003000E
-#define ECP_M_EPS_BAT_LVL_REQ  0x0003000F
+#define ECP_M_EPS_BAT_LVL_RES  0x0003000F
 #define ECP_M_EPS_BAT_LVL_ALRM 0x00030011
+
+/* File Includes */
+#include <stdint.h>
 
 /* Typedefs, Structs, etc. */
 typedef int tECP_Error;
@@ -65,26 +68,26 @@ typedef struct {
 } tECP_Message_Null;
 
 typedef struct {
-  uint32 response;
+  uint32_t response;
 } tECP_Message_Ack;
 
 typedef struct {
-  uint32 major;
-  uint32 minor;
-  uint32 patch;
+  uint32_t major;
+  uint32_t minor;
+  uint32_t patch;
 } tECP_Message_Info;
 
 typedef struct {
-  uint32 temp;
+  uint32_t temp;
 } tECP_Message_Temp;
 
 typedef struct {
-  int32 voltage[8];
-  int32 current[8];
+  int32_t voltage[8];
+  int32_t current[8];
 } tECP_Message_EPS;
 
 typedef struct {
-  int32 line;
+  int32_t line;
 } tECP_Message_EPS_Line;
 
 typedef struct {
@@ -92,22 +95,22 @@ typedef struct {
 } tECP_Message_Filespec;
 
 typedef struct {
-  uint32 id;
-  union content {
+  uint32_t id;
+  union {
     tECP_Message_Null null;
     tECP_Message_Ack ack;
     tECP_Message_Info info;
     tECP_Message_Temp temp;
     tECP_Message_EPS eps;
     tECP_Message_Filespec filename;
-    tECP_Message_Line line;
-  };
+    tECP_Message_EPS_Line line;
+  } content;
 } tECP_Message;
 
 /* Function Prototypes */
 
 tECP_Error ECP_Init( tECP_Context * context );
-tECP_Error ECP_Listen( tECP_Context * context, uint16 channel, tECP_Context (*callback)() );
-tECP_Error ECP_Broadcast( tECP_Context * context, uint16 channel, tECP_Message * message );
+tECP_Error ECP_Listen( tECP_Context * context, uint16_t channel, tECP_Context (*callback)() );
+tECP_Error ECP_Broadcast( tECP_Context * context, uint16_t channel, tECP_Message * message );
 tECP_Error ECP_Loop( tECP_Context * context, unsigned int timeout );
 tECP_Error ECP_Destroy( tECP_Context * context );
