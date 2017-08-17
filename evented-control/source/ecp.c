@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "evented_control/ecp.h"
+#include "evented-control/ecp.h"
 #include <unistd.h>
 
 /**

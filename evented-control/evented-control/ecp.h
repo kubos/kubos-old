@@ -25,7 +25,13 @@
 #define ECP_R_SUCCESS          0x00000000
 #define ECP_R_ERROR            0x80000000
 
+/* Channel IDs */
+#define ECP_C_SYS              0x00001000
+
 /* Message IDs used as tECP_Message id's */
+#define ECP_M_SYS              "SYS"
+#define ECP_M_SYS_BEGIN        0x00010000
+
 #define ECP_M_RIO              "RIO"
 #define ECP_M_RIO_INFO_REQ     0x00020000
 #define ECP_M_RIO_INFO_RES     0x00020001
@@ -72,6 +78,10 @@ typedef struct {
 /* Empty Message */
 typedef struct {
 } tECP_Message_Null;
+
+/* Empty Channel */
+typedef struct {
+} tECP_Channel;
 
 /* Used for responses to some requests. response *should* be set to one of the ECP_R_* values */
 typedef struct {
