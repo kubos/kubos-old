@@ -17,12 +17,16 @@
 #pragma once
 
 /* Macro Definitions */
+
+/* Error Codes for ECP_*() calls */
 #define ECP_E_NOERR 0
 
+/* Response Codes found in the tECP_Message_Ack message */
 #define ECP_R_SUCCESS          0x00000000
 #define ECP_R_ERROR            0x80000000
 
-#define ECP_M_RIO              0x0002
+/* Message IDs used as tECP_Message id's */
+#define ECP_M_RIO              "RIO"
 #define ECP_M_RIO_INFO_REQ     0x00020000
 #define ECP_M_RIO_INFO_RES     0x00020001
 #define ECP_M_RIO_ON           0x00020002
@@ -36,7 +40,7 @@
 #define ECP_M_RIO_TEMP_SET_ACK 0x0002000B
 #define ECP_M_RIO_TEMP         0x0002000D
 
-#define ECP_M_EPS              0x0003
+#define ECP_M_EPS              "EPS"
 #define ECP_M_EPS_INFO_REQ     0x00030000
 #define ECP_M_EPS_INFO_RES     0x00030001
 #define ECP_M_EPS_STAT_REQ     0x00030002
@@ -61,39 +65,48 @@
 /* Typedefs, Structs, etc. */
 typedef int tECP_Error;
 
+/* TODO: Make this real */
 typedef struct {
 } tECP_Context;
 
+/* Empty Message */
 typedef struct {
 } tECP_Message_Null;
 
+/* Used for responses to some requests. response *should* be set to one of the ECP_R_* values */
 typedef struct {
   uint32_t response;
 } tECP_Message_Ack;
 
+/* Response message for INFO queries */
 typedef struct {
   uint32_t major;
   uint32_t minor;
   uint32_t patch;
 } tECP_Message_Info;
 
+/* A message format holding a single temperature value */
 typedef struct {
   uint32_t temp;
 } tECP_Message_Temp;
 
+/* Response message for ECP_M_EPS_STAT_RES containing voltages & current on 8 different power rails */
 typedef struct {
   int32_t voltage[8];
   int32_t current[8];
 } tECP_Message_EPS;
 
+/* Response message for ECP_M_EPS_BAT_STAT_RES */
 typedef struct {
   int32_t line;
 } tECP_Message_EPS_Line;
 
+/* Response message for ECP_M_RIO_RECV or request for ECP_M_RIO_XMIT. Contains the full path to a file */
 typedef struct {
   unsigned char path[ 128 ];
 } tECP_Message_Filespec;
 
+/* A message is a message ID + message ID specific content */
 typedef struct {
   uint32_t id;
   union {
