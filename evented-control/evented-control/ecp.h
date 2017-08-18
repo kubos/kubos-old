@@ -20,6 +20,7 @@
 
 /* Error Codes for ECP_*() calls */
 #define ECP_E_NOERR 0
+#define ECP_E_GENERIC 1
 
 /* Response Codes found in the tECP_Message_Ack message */
 #define ECP_R_SUCCESS          0x00000000
@@ -27,6 +28,7 @@
 
 /* Channel IDs */
 #define ECP_C_SYS              0x00001000
+#define ECP_C_EPS              0x00001001
 
 /* Message IDs used as tECP_Message id's */
 #define ECP_M_SYS              "SYS"
@@ -80,8 +82,7 @@ typedef struct {
 } tECP_Message_Null;
 
 /* Empty Channel */
-typedef struct {
-} tECP_Channel;
+typedef uint32_t tECP_Channel;
 
 /* Used for responses to some requests. response *should* be set to one of the ECP_R_* values */
 typedef struct {

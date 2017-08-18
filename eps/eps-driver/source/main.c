@@ -15,8 +15,9 @@
  */
 #include <stdio.h>
 #include "evented-control/ecp.h"
+#include "gom-eps-api/eps.h"
 
-tECP_Error func(tECP_Context * context, tECP_Channel channel,
+tECP_Error handle_eps_commands(tECP_Context * context, tECP_Channel channel,
                 tECP_Message * message);
 
 int main()
@@ -37,23 +38,13 @@ int main()
 
         initialized = 1;
 
-        /* Send a message before calling loop. perfectly acceptable */
-        msg.id = ECP_M_SYS_BEGIN;
-        // msg.begin.id  = 0xCAFEB0EF;
-
-        if (ECP_E_NOERR != (err = ECP_Broadcast(&context, ECP_C_SYS, &msg)))
-        {
-            printf("Error %d calling ECP_Broadcast()\n", err);
-            break;
-        }
-
-        if (ECP_E_NOERR != (err = ECP_Listen(&context, ECP_C_SYS, func)))
+        if (ECP_E_NOERR != (err = ECP_Listen(&context, ECP_C_EPS, handle_eps_commands)))
         {
             printf("Error %d calling ECP_Listen()\n", err);
             break;
         }
 
-        /* Now loop for (at most) 15 seconds, looking for a heartbeat */
+        /* Now loop for (at most) 15 seconds, looking for a message */
         for (i = 0; (i < 15) && (err == ECP_E_NOERR); i++)
         {
             err = ECP_Loop(&context, 1000);
@@ -84,31 +75,43 @@ int main()
     }
 }
 
-tECP_Error func(tECP_Context * context, tECP_Channel channel,
+tECP_Error handle_eps_commands(tECP_Context * context, tECP_Channel channel,
                 tECP_Message * message)
 {
     tECP_Error   err = ECP_E_NOERR;
     tECP_Message msg;
+    tECP_Message_EPS_Line eps_line;
 
-    // if (ECP_C_SYS != channel)
-    // {
-    //     printf("That's weird, we received a message on channel %d\n",
-    //     channel);
-    //     err = TCP_E_GENERIC;
-    // }
-    // else
-    // {
-    //     switch (message.messageid)
-    //     {
-    //         case ECP_M_SYS_HEARTBEAT:
-    //             printf("Listen to my heartbeat\n");
+    if (ECP_C_EPS != channel)
+    {
+        printf("Non-EPS message received\n");
+        err = ECP_E_GENERIC;
+    }
+    else
+    {
+        switch (message->id)
+        {
+            case ECP_M_EPS_ON:
+                printf("Turning EPS power line on\n");
+                eps_line = message->content.line;
 
-    //             /* You can send a message from w/i a message handler */
-    //             msg.messageid = ECP_M_SYS_NULL;
-    //             err           = ECP_Broadcast(&context, ECP_C_SYS, &msg);
-    //             break;
-    //     }
-    // }
+                eps_enable_power_line(eps_line.line);
+
+                msg.id = ECP_M_EPS_ON_ACK;
+                err = ECP_Broadcast(&context, ECP_C_EPS, &msg);
+                break;
+
+            case ECP_M_EPS_OFF:
+                printf("Turning EPS power line off\n");
+                eps_line = message->content.line;
+
+                eps_disable_power_line(eps_line.line);
+
+                msg.id = ECP_M_EPS_OFF_ACK;
+                err = ECP_Broadcast(&context, ECP_C_EPS, &msg);
+                break;
+        }
+    }
 
     return (err);
 }

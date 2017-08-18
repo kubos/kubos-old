@@ -9,6 +9,7 @@
     "version":"0.1.0",
     "homepage":"https://github.com/kubostech/eps-driver",
     "dependencies":{
-        "evented-control":"kubostech/evented-control#~0.1.0"
+        "evented-control":"kubostech/evented-control#~0.1.0",
+        "gom-eps-api":"kubostech/gom-eps-api#~0.1.0"
     }
 }
