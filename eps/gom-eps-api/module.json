@@ -6,5 +6,8 @@
         "type":"git"
     },
     "version":"0.1.0",
-    "homepage":"https://github.com/kubostech/gom-eps-api"
+    "homepage":"https://github.com/kubostech/gom-eps-api",
+    "dependencies":{
+        "eps-api":"kubostech/eps-api#~0.1.0"
+    }
 }

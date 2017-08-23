@@ -22,18 +22,4 @@ typedef enum {
     EPS_NO_ERR = 0,
 } eps_err;
 
-typedef struct {
-    uint16_t line_1;
-} eps_power_state;
-
-typedef struct {
-    float voltage;
-} eps_battery_state;
-
 eps_err eps_enable_power_line(uint16_t line);
-
-eps_err eps_disable_power_line(uint16_t line);
-
-eps_err eps_get_power_status(eps_power_state * state);
-
-eps_err eps_get_battery_state(eps_battery_state * state);

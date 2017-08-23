@@ -15,7 +15,7 @@
  */
 #include <stdio.h>
 #include "evented-control/ecp.h"
-#include "gom-eps-api/eps.h"
+#include "eps-api/eps.h"
 
 tECP_Error handle_eps_commands(tECP_Context * context, tECP_Channel channel,
                 tECP_Message * message);
@@ -98,17 +98,7 @@ tECP_Error handle_eps_commands(tECP_Context * context, tECP_Channel channel,
                 eps_enable_power_line(eps_line.line);
 
                 msg.id = ECP_M_EPS_ON_ACK;
-                err = ECP_Broadcast(&context, ECP_C_EPS, &msg);
-                break;
-
-            case ECP_M_EPS_OFF:
-                printf("Turning EPS power line off\n");
-                eps_line = message->content.line;
-
-                eps_disable_power_line(eps_line.line);
-
-                msg.id = ECP_M_EPS_OFF_ACK;
-                err = ECP_Broadcast(&context, ECP_C_EPS, &msg);
+                err = ECP_Broadcast(context, ECP_C_EPS, &msg);
                 break;
         }
     }
