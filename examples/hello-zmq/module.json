@@ -1,0 +1,14 @@
+{
+    "bin":"./source",
+    "license":"LGPL",
+    "name":"hello-zmq",
+    "repository":{
+        "url":"git://github.com/kubostech/hello-zmq",
+        "type":"git"
+    },
+    "version":"4.2.2",
+    "homepage":"https://github.com/kubostech/hello-zmq",
+    "dependencies":{
+        "libzmq" : "kubostech/libzmq"
+    }
+}
