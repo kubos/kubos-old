@@ -18,6 +18,9 @@
 
 /* Macro Definitions */
 
+/* File Includes */
+#include <stdint.h>
+
 /* Error Codes for ECP_*() calls */
 #define ECP_E_NOERR 0
 #define ECP_E_GENERIC 1
@@ -134,7 +137,7 @@ typedef struct {
 /* Function Prototypes */
 
 tECP_Error ECP_Init( tECP_Context * context );
-tECP_Error ECP_Listen( tECP_Context * context, uint16_t channel, tECP_Context (*callback)() );
+tECP_Error ECP_Listen( tECP_Context * context, uint16_t channel, void *state, tECP_Error (*callback)( tECP_Context * context, void * state) );
 tECP_Error ECP_Broadcast( tECP_Context * context, uint16_t channel, tECP_Message * message );
 tECP_Error ECP_Loop( tECP_Context * context, unsigned int timeout );
 tECP_Error ECP_Destroy( tECP_Context * context );
