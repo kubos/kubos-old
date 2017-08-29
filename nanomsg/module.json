@@ -1,0 +1,13 @@
+{
+    "source":"./nanomsg",
+    "license":"MIT",
+    "name":"nanomsg",
+    "repository":{
+        "url":"git://github.com/kubostech/nanomsg",
+        "type":"git"
+    },
+    "version":"4.2.2",
+    "homepage":"https://github.com/kubostech/nanomsg",
+    "dependencies":{
+    }
+}

@@ -1,0 +1,1045 @@
+Avoid ctest truncation of output: CTEST_FULL_OUTPUT
+========================================================
+=== MAIN VARIABLES
+========================================================
+CMAKE_STATIC_LIBRARY_PREFIX == "lib"
+CMAKE_STATIC_LIBRARY_SUFFIX == ".a"
+CMAKE_SHARED_LIBRARY_PREFIX == "lib"
+CMAKE_SHARED_LIBRARY_SUFFIX == ".so"
+CMAKE_SHARED_MODULE_PREFIX == "lib"
+CMAKE_SHARED_MODULE_SUFFIX == ".so"
+
+
+CMAKE_DL_LIBS == "dl"
+CMAKE_LIBRARY_PATH_FLAG == "-L"
+CMAKE_LINK_LIBRARY_FLAG == "-l"
+CMAKE_SKIP_RPATH == "NO"
+CMAKE_SYSTEM_INFO_FILE == "Platform/Linux"
+CMAKE_SYSTEM_NAME == "Linux"
+CMAKE_SYSTEM == "Linux-4.4.0-92-generic"
+CMAKE_CXX_COMPILER == "/usr/bin/c++"
+CMAKE_C_COMPILER == "/usr/bin/cc"
+CMAKE_COMPILER_IS_GNUCC == "1"
+CMAKE_COMPILER_IS_GNUCXX == "1"
+
+// C shared library flag
+CMAKE_SHARED_LIBRARY_C_FLAGS == "-fPIC"
+CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS == "-shared"
+CMAKE_SHARED_LIBRARY_LINK_FLAGS == ""
+CMAKE_SHARED_LIBRARY_RUNTIME_FLAG == ""
+CMAKE_SHARED_LIBRARY_RUNTIME_FLAG_SEP == ""
+CMAKE_SHARED_LIBRARY_LINK_STATIC_C_FLAGS == "-Wl,-Bstatic"
+CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_C_FLAGS == "-Wl,-Bdynamic"
+
+// C shared module flags
+CMAKE_SHARED_MODULE_C_FLAGS  == "-fPIC"
+CMAKE_SHARED_MODULE_CREATE_C_FLAGS == "-shared"
+CMAKE_SHARED_MODULE_LINK_STATIC_C_FLAGS == "-Wl,-Bstatic"
+CMAKE_SHARED_MODULE_LINK_DYNAMIC_C_FLAGS == "-Wl,-Bdynamic"
+
+// C exe flags
+CMAKE_EXE_LINK_STATIC_C_FLAGS == "-Wl,-Bstatic"
+CMAKE_EXE_LINK_DYNAMIC_C_FLAGS == "-Wl,-Bdynamic"
+
+// CXX shared library flags
+CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS == "-shared"
+CMAKE_SHARED_LIBRARY_CXX_FLAGS == "-fPIC"
+CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS == "-rdynamic"
+CMAKE_SHARED_LIBRARY_RUNTIME_CXX_FLAG == "-Wl,-rpath,"
+CMAKE_SHARED_LIBRARY_RUNTIME_CXX_FLAG_SEP == ":"
+CMAKE_SHARED_LIBRARY_LINK_STATIC_CXX_FLAGS == "-Wl,-Bstatic"
+CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_CXX_FLAGS == "-Wl,-Bdynamic"
+
+// CXX shared module flags
+CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS == "-shared"
+CMAKE_SHARED_MODULE_CXX_FLAGS == "-fPIC"
+CMAKE_SHARED_MODULE_LINK_STATIC_CXX_FLAGS == "-Wl,-Bstatic"
+CMAKE_SHARED_MODULE_LINK_DYNAMIC_CXX_FLAGS == "-Wl,-Bdynamic"
+
+// CXX exe flags
+CMAKE_EXE_LINK_STATIC_CXX_FLAGS == "-Wl,-Bstatic"
+CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS == "-Wl,-Bdynamic"
+
+CMAKE_USER_MAKE_RULES_OVERRIDE == ""
+CMAKE_VERBOSE_MAKEFILE == "FALSE"
+CMAKE_BUILD_TYPE == ""
+CMAKE_CXX_FLAGS == ""
+CMAKE_CXX_FLAGS_DEBUG == "-g"
+CMAKE_CXX_FLAGS_MINSIZEREL == "-Os -DNDEBUG"
+CMAKE_CXX_FLAGS_RELEASE == "-O3 -DNDEBUG"
+CMAKE_CXX_FLAGS_RELWITHDEBINFO == "-O2 -g -DNDEBUG"
+
+CMAKE_C_FLAGS == ""
+CMAKE_C_FLAGS_DEBUG == "-g"
+CMAKE_C_FLAGS_MINSIZEREL == "-Os -DNDEBUG"
+CMAKE_C_FLAGS_RELEASE == "-O3 -DNDEBUG"
+CMAKE_C_FLAGS_RELWITHDEBINFO == "-O2 -g -DNDEBUG"
+
+// build rules
+CMAKE_CXX_CREATE_SHARED_LIBRARY == "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"
+CMAKE_CXX_CREATE_SHARED_MODULE == "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"
+CMAKE_C_CREATE_SHARED_LIBRARY == "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"
+CMAKE_C_CREATE_SHARED_MODULE == "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"
+CMAKE_CXX_CREATE_STATIC_LIBRARY == ""
+CMAKE_C_CREATE_STATIC_LIBRARY == ""
+CMAKE_CXX_COMPILE_OBJECT == "<CMAKE_CXX_COMPILER>  <DEFINES> <INCLUDES> <FLAGS> -o <OBJECT> -c <SOURCE>"
+CMAKE_C_COMPILE_OBJECT == "<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -o <OBJECT>   -c <SOURCE>"
+CMAKE_C_LINK_EXECUTABLE == "<CMAKE_C_COMPILER> <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>"
+CMAKE_CXX_LINK_EXECUTABLE == "<CMAKE_CXX_COMPILER>  <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>"
+
+=================================================================
+=== VARIABLES
+=================================================================
+CMAKE_AR "/usr/bin/ar"
+CMAKE_AR "/usr/bin/ar"
+CMAKE_BASE_NAME "g++"
+CMAKE_BINARY_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+CMAKE_BUILD_TOOL "/usr/bin/make"
+CMAKE_BUILD_TYPE ""
+CMAKE_C11_COMPILE_FEATURES "c_static_assert"
+CMAKE_C11_EXTENSION_COMPILE_OPTION "-std=gnu11"
+CMAKE_C11_STANDARD_COMPILE_OPTION "-std=c11"
+CMAKE_C90_COMPILE_FEATURES "c_function_prototypes"
+CMAKE_C90_EXTENSION_COMPILE_OPTION "-std=gnu90"
+CMAKE_C90_STANDARD_COMPILE_OPTION "-std=c90"
+CMAKE_C99_COMPILE_FEATURES "c_restrict;c_variadic_macros"
+CMAKE_C99_EXTENSION_COMPILE_OPTION "-std=gnu99"
+CMAKE_C99_STANDARD_COMPILE_OPTION "-std=c99"
+CMAKE_CFG_INTDIR "."
+CMAKE_COLOR_MAKEFILE "ON"
+CMAKE_COMMAND "/usr/bin/cmake"
+CMAKE_COMPILER_IS_GNUCC "1"
+CMAKE_COMPILER_IS_GNUCXX "1"
+CMAKE_CPACK_COMMAND "/usr/bin/cpack"
+CMAKE_CROSSCOMPILING "FALSE"
+CMAKE_CTEST_COMMAND "/usr/bin/ctest"
+CMAKE_CURRENT_BINARY_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+CMAKE_CURRENT_LIST_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+CMAKE_CURRENT_LIST_FILE "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation/CMakeLists.txt"
+CMAKE_CURRENT_SOURCE_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+CMAKE_CXX11_COMPILE_FEATURES "cxx_alias_templates;cxx_alignas;cxx_alignof;cxx_attributes;cxx_auto_type;cxx_constexpr;cxx_decltype;cxx_decltype_incomplete_return_types;cxx_default_function_template_args;cxx_defaulted_functions;cxx_defaulted_move_initializers;cxx_delegating_constructors;cxx_deleted_functions;cxx_enum_forward_declarations;cxx_explicit_conversions;cxx_extended_friend_declarations;cxx_extern_templates;cxx_final;cxx_func_identifier;cxx_generalized_initializers;cxx_inheriting_constructors;cxx_inline_namespaces;cxx_lambdas;cxx_local_type_template_args;cxx_long_long_type;cxx_noexcept;cxx_nonstatic_member_init;cxx_nullptr;cxx_override;cxx_range_for;cxx_raw_string_literals;cxx_reference_qualified_functions;cxx_right_angle_brackets;cxx_rvalue_references;cxx_sizeof_member;cxx_static_assert;cxx_strong_enums;cxx_thread_local;cxx_trailing_return_types;cxx_unicode_literals;cxx_uniform_initialization;cxx_unrestricted_unions;cxx_user_literals;cxx_variadic_macros;cxx_variadic_templates"
+CMAKE_CXX11_EXTENSION_COMPILE_OPTION "-std=gnu++11"
+CMAKE_CXX11_STANDARD_COMPILE_OPTION "-std=c++11"
+CMAKE_CXX14_COMPILE_FEATURES "cxx_aggregate_default_initializers;cxx_attribute_deprecated;cxx_binary_literals;cxx_contextual_conversions;cxx_decltype_auto;cxx_digit_separators;cxx_generic_lambdas;cxx_lambda_init_captures;cxx_relaxed_constexpr;cxx_return_type_deduction;cxx_variable_templates"
+CMAKE_CXX14_EXTENSION_COMPILE_OPTION "-std=gnu++14"
+CMAKE_CXX14_STANDARD_COMPILE_OPTION "-std=c++14"
+CMAKE_CXX98_COMPILE_FEATURES "cxx_template_template_parameters"
+CMAKE_CXX98_EXTENSION_COMPILE_OPTION "-std=gnu++98"
+CMAKE_CXX98_STANDARD_COMPILE_OPTION "-std=c++98"
+CMAKE_CXX_ABI_COMPILED "TRUE"
+CMAKE_CXX_ARCHIVE_APPEND "<CMAKE_AR> q  <TARGET> <LINK_FLAGS> <OBJECTS>"
+CMAKE_CXX_ARCHIVE_CREATE "<CMAKE_AR> qc <TARGET> <LINK_FLAGS> <OBJECTS>"
+CMAKE_CXX_ARCHIVE_FINISH "<CMAKE_RANLIB> <TARGET>"
+CMAKE_CXX_CL_SHOWINCLUDES_PREFIX ""
+CMAKE_CXX_COMPILER "/usr/bin/c++"
+CMAKE_CXX_COMPILER "/usr/bin/c++"
+CMAKE_CXX_COMPILER_ABI "ELF"
+CMAKE_CXX_COMPILER_ARG1 ""
+CMAKE_CXX_COMPILER_ENV_VAR "CXX"
+CMAKE_CXX_COMPILER_ID "GNU"
+CMAKE_CXX_COMPILER_ID_PLATFORM_CONTENT "#define STRINGIFY_HELPER(X) #X
+#define STRINGIFY(X) STRINGIFY_HELPER(X)
+
+/* Identify known platforms by name.  */
+#if defined(__linux) || defined(__linux__) || defined(linux)
+# define PLATFORM_ID "Linux"
+
+#elif defined(__CYGWIN__)
+# define PLATFORM_ID "Cygwin"
+
+#elif defined(__MINGW32__)
+# define PLATFORM_ID "MinGW"
+
+#elif defined(__APPLE__)
+# define PLATFORM_ID "Darwin"
+
+#elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+# define PLATFORM_ID "Windows"
+
+#elif defined(__FreeBSD__) || defined(__FreeBSD)
+# define PLATFORM_ID "FreeBSD"
+
+#elif defined(__NetBSD__) || defined(__NetBSD)
+# define PLATFORM_ID "NetBSD"
+
+#elif defined(__OpenBSD__) || defined(__OPENBSD)
+# define PLATFORM_ID "OpenBSD"
+
+#elif defined(__sun) || defined(sun)
+# define PLATFORM_ID "SunOS"
+
+#elif defined(_AIX) || defined(__AIX) || defined(__AIX__) || defined(__aix) || defined(__aix__)
+# define PLATFORM_ID "AIX"
+
+#elif defined(__sgi) || defined(__sgi__) || defined(_SGI)
+# define PLATFORM_ID "IRIX"
+
+#elif defined(__hpux) || defined(__hpux__)
+# define PLATFORM_ID "HP-UX"
+
+#elif defined(__HAIKU__)
+# define PLATFORM_ID "Haiku"
+
+#elif defined(__BeOS) || defined(__BEOS__) || defined(_BEOS)
+# define PLATFORM_ID "BeOS"
+
+#elif defined(__QNX__) || defined(__QNXNTO__)
+# define PLATFORM_ID "QNX"
+
+#elif defined(__tru64) || defined(_tru64) || defined(__TRU64__)
+# define PLATFORM_ID "Tru64"
+
+#elif defined(__riscos) || defined(__riscos__)
+# define PLATFORM_ID "RISCos"
+
+#elif defined(__sinix) || defined(__sinix__) || defined(__SINIX__)
+# define PLATFORM_ID "SINIX"
+
+#elif defined(__UNIX_SV__)
+# define PLATFORM_ID "UNIX_SV"
+
+#elif defined(__bsdos__)
+# define PLATFORM_ID "BSDOS"
+
+#elif defined(_MPRAS) || defined(MPRAS)
+# define PLATFORM_ID "MP-RAS"
+
+#elif defined(__osf) || defined(__osf__)
+# define PLATFORM_ID "OSF1"
+
+#elif defined(_SCO_SV) || defined(SCO_SV) || defined(sco_sv)
+# define PLATFORM_ID "SCO_SV"
+
+#elif defined(__ultrix) || defined(__ultrix__) || defined(_ULTRIX)
+# define PLATFORM_ID "ULTRIX"
+
+#elif defined(__XENIX__) || defined(_XENIX) || defined(XENIX)
+# define PLATFORM_ID "Xenix"
+
+#elif defined(__WATCOMC__)
+# if defined(__LINUX__)
+#  define PLATFORM_ID "Linux"
+
+# elif defined(__DOS__)
+#  define PLATFORM_ID "DOS"
+
+# elif defined(__OS2__)
+#  define PLATFORM_ID "OS2"
+
+# elif defined(__WINDOWS__)
+#  define PLATFORM_ID "Windows3x"
+
+# else /* unknown platform */
+#  define PLATFORM_ID ""
+# endif
+
+#else /* unknown platform */
+# define PLATFORM_ID ""
+
+#endif
+
+/* For windows compilers MSVC and Intel we can determine
+   the architecture of the compiler being used.  This is because
+   the compilers do not have flags that can change the architecture,
+   but rather depend on which compiler is being used
+*/
+#if defined(_WIN32) && defined(_MSC_VER)
+# if defined(_M_IA64)
+#  define ARCHITECTURE_ID "IA64"
+
+# elif defined(_M_X64) || defined(_M_AMD64)
+#  define ARCHITECTURE_ID "x64"
+
+# elif defined(_M_IX86)
+#  define ARCHITECTURE_ID "X86"
+
+# elif defined(_M_ARM)
+#  if _M_ARM == 4
+#   define ARCHITECTURE_ID "ARMV4I"
+#  elif _M_ARM == 5
+#   define ARCHITECTURE_ID "ARMV5I"
+#  else
+#   define ARCHITECTURE_ID "ARMV" STRINGIFY(_M_ARM)
+#  endif
+
+# elif defined(_M_MIPS)
+#  define ARCHITECTURE_ID "MIPS"
+
+# elif defined(_M_SH)
+#  define ARCHITECTURE_ID "SHx"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+
+#elif defined(__WATCOMC__)
+# if defined(_M_I86)
+#  define ARCHITECTURE_ID "I86"
+
+# elif defined(_M_IX86)
+#  define ARCHITECTURE_ID "X86"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+
+#else
+#  define ARCHITECTURE_ID ""
+#endif
+
+/* Convert integer to decimal digit literals.  */
+#define DEC(n)                   \
+  ('0' + (((n) / 10000000)%10)), \
+  ('0' + (((n) / 1000000)%10)),  \
+  ('0' + (((n) / 100000)%10)),   \
+  ('0' + (((n) / 10000)%10)),    \
+  ('0' + (((n) / 1000)%10)),     \
+  ('0' + (((n) / 100)%10)),      \
+  ('0' + (((n) / 10)%10)),       \
+  ('0' +  ((n) % 10))
+
+/* Convert integer to hex digit literals.  */
+#define HEX(n)             \
+  ('0' + ((n)>>28 & 0xF)), \
+  ('0' + ((n)>>24 & 0xF)), \
+  ('0' + ((n)>>20 & 0xF)), \
+  ('0' + ((n)>>16 & 0xF)), \
+  ('0' + ((n)>>12 & 0xF)), \
+  ('0' + ((n)>>8  & 0xF)), \
+  ('0' + ((n)>>4  & 0xF)), \
+  ('0' + ((n)     & 0xF))
+
+/* Construct a string literal encoding the version number components. */
+#ifdef COMPILER_VERSION_MAJOR
+char const info_version[] = {
+  'I', 'N', 'F', 'O', ':',
+  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','[',
+  COMPILER_VERSION_MAJOR,
+# ifdef COMPILER_VERSION_MINOR
+  '.', COMPILER_VERSION_MINOR,
+#  ifdef COMPILER_VERSION_PATCH
+   '.', COMPILER_VERSION_PATCH,
+#   ifdef COMPILER_VERSION_TWEAK
+    '.', COMPILER_VERSION_TWEAK,
+#   endif
+#  endif
+# endif
+  ']','\0'};
+#endif
+
+/* Construct a string literal encoding the version number components. */
+#ifdef SIMULATE_VERSION_MAJOR
+char const info_simulate_version[] = {
+  'I', 'N', 'F', 'O', ':',
+  's','i','m','u','l','a','t','e','_','v','e','r','s','i','o','n','[',
+  SIMULATE_VERSION_MAJOR,
+# ifdef SIMULATE_VERSION_MINOR
+  '.', SIMULATE_VERSION_MINOR,
+#  ifdef SIMULATE_VERSION_PATCH
+   '.', SIMULATE_VERSION_PATCH,
+#   ifdef SIMULATE_VERSION_TWEAK
+    '.', SIMULATE_VERSION_TWEAK,
+#   endif
+#  endif
+# endif
+  ']','\0'};
+#endif
+
+/* Construct the string literal in pieces to prevent the source from
+   getting matched.  Store it in a pointer rather than an array
+   because some compilers will just produce instructions to fill the
+   array rather than assigning a pointer to a static array.  */
+char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";
+char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
+
+"
+CMAKE_CXX_COMPILER_ID_RUN "1"
+CMAKE_CXX_COMPILER_ID_TEST_FLAGS "-c"
+CMAKE_CXX_COMPILER_ID_TOOL_MATCH_INDEX "2"
+CMAKE_CXX_COMPILER_ID_TOOL_MATCH_REGEX "
+Ld[^
+]*(
+[ 	]+[^
+]*)*
+[ 	]+([^ 	
+]+)[^
+]*-o[^
+]*CompilerIdCXX/(\./)?(CompilerIdCXX.xctest/)?CompilerIdCXX[ 	
+\"]"
+CMAKE_CXX_COMPILER_ID_VENDORS "IAR"
+CMAKE_CXX_COMPILER_ID_VENDOR_REGEX_IAR "IAR .+ Compiler"
+CMAKE_CXX_COMPILER_INIT "NOTFOUND"
+CMAKE_CXX_COMPILER_LIST "c++;CC;g++;aCC;cl;bcc;xlC;clang++"
+CMAKE_CXX_COMPILER_LOADED "1"
+CMAKE_CXX_COMPILER_NAMES "c++"
+CMAKE_CXX_COMPILER_VERSION "5.4.0"
+CMAKE_CXX_COMPILER_WORKS "TRUE"
+CMAKE_CXX_COMPILER_WRAPPER ""
+CMAKE_CXX_COMPILE_FEATURES "cxx_template_template_parameters;cxx_alias_templates;cxx_alignas;cxx_alignof;cxx_attributes;cxx_auto_type;cxx_constexpr;cxx_decltype;cxx_decltype_incomplete_return_types;cxx_default_function_template_args;cxx_defaulted_functions;cxx_defaulted_move_initializers;cxx_delegating_constructors;cxx_deleted_functions;cxx_enum_forward_declarations;cxx_explicit_conversions;cxx_extended_friend_declarations;cxx_extern_templates;cxx_final;cxx_func_identifier;cxx_generalized_initializers;cxx_inheriting_constructors;cxx_inline_namespaces;cxx_lambdas;cxx_local_type_template_args;cxx_long_long_type;cxx_noexcept;cxx_nonstatic_member_init;cxx_nullptr;cxx_override;cxx_range_for;cxx_raw_string_literals;cxx_reference_qualified_functions;cxx_right_angle_brackets;cxx_rvalue_references;cxx_sizeof_member;cxx_static_assert;cxx_strong_enums;cxx_thread_local;cxx_trailing_return_types;cxx_unicode_literals;cxx_uniform_initialization;cxx_unrestricted_unions;cxx_user_literals;cxx_variadic_macros;cxx_variadic_templates;cxx_aggregate_default_initializers;cxx_attribute_deprecated;cxx_binary_literals;cxx_contextual_conversions;cxx_decltype_auto;cxx_digit_separators;cxx_generic_lambdas;cxx_lambda_init_captures;cxx_relaxed_constexpr;cxx_return_type_deduction;cxx_variable_templates"
+CMAKE_CXX_COMPILE_OBJECT "<CMAKE_CXX_COMPILER>  <DEFINES> <INCLUDES> <FLAGS> -o <OBJECT> -c <SOURCE>"
+CMAKE_CXX_COMPILE_OPTIONS_PIC "-fPIC"
+CMAKE_CXX_COMPILE_OPTIONS_PIE "-fPIE"
+CMAKE_CXX_COMPILE_OPTIONS_SYSROOT "--sysroot="
+CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY "-fvisibility="
+CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY_INLINES_HIDDEN "-fvisibility-inlines-hidden"
+CMAKE_CXX_CREATE_ASSEMBLY_SOURCE "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -S <SOURCE> -o <ASSEMBLY_SOURCE>"
+CMAKE_CXX_CREATE_PREPROCESSED_SOURCE "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -E <SOURCE> > <PREPROCESSED_SOURCE>"
+CMAKE_CXX_CREATE_SHARED_LIBRARY "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"
+CMAKE_CXX_CREATE_SHARED_MODULE "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"
+CMAKE_CXX_FLAGS ""
+CMAKE_CXX_FLAGS_DEBUG "-g"
+CMAKE_CXX_FLAGS_DEBUG_INIT "-g"
+CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG"
+CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG"
+CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG"
+CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DNDEBUG"
+CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG"
+CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DNDEBUG"
+CMAKE_CXX_IGNORE_EXTENSIONS "inl;h;hpp;HPP;H;o;O;obj;OBJ;def;DEF;rc;RC"
+CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "/usr/include"
+CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "/usr/lib/gcc/x86_64-linux-gnu/5;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib"
+CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES ""
+CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++;m;c"
+CMAKE_CXX_INFORMATION_LOADED "1"
+CMAKE_CXX_LIBRARY_ARCHITECTURE "x86_64-linux-gnu"
+CMAKE_CXX_LINKER_PREFERENCE "30"
+CMAKE_CXX_LINKER_PREFERENCE_PROPAGATES "1"
+CMAKE_CXX_LINK_EXECUTABLE "<CMAKE_CXX_COMPILER>  <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>"
+CMAKE_CXX_OUTPUT_EXTENSION ".o"
+CMAKE_CXX_PLATFORM_ID "Linux"
+CMAKE_CXX_SIMULATE_ID ""
+CMAKE_CXX_SIMULATE_VERSION ""
+CMAKE_CXX_SIZEOF_DATA_PTR "8"
+CMAKE_CXX_SOURCE_FILE_EXTENSIONS "C;M;c++;cc;cpp;cxx;mm;CPP"
+CMAKE_CXX_STANDARD_COMPUTED_DEFAULT "98"
+CMAKE_CXX_STANDARD_DEFAULT "98"
+CMAKE_CXX_VERBOSE_FLAG "-v"
+CMAKE_C_ABI_COMPILED "TRUE"
+CMAKE_C_ARCHIVE_APPEND "<CMAKE_AR> q  <TARGET> <LINK_FLAGS> <OBJECTS>"
+CMAKE_C_ARCHIVE_CREATE "<CMAKE_AR> qc <TARGET> <LINK_FLAGS> <OBJECTS>"
+CMAKE_C_ARCHIVE_FINISH "<CMAKE_RANLIB> <TARGET>"
+CMAKE_C_CL_SHOWINCLUDES_PREFIX ""
+CMAKE_C_COMPILER "/usr/bin/cc"
+CMAKE_C_COMPILER "/usr/bin/cc"
+CMAKE_C_COMPILER_ABI "ELF"
+CMAKE_C_COMPILER_ARG1 ""
+CMAKE_C_COMPILER_ENV_VAR "CC"
+CMAKE_C_COMPILER_ID "GNU"
+CMAKE_C_COMPILER_ID_PLATFORM_CONTENT "#define STRINGIFY_HELPER(X) #X
+#define STRINGIFY(X) STRINGIFY_HELPER(X)
+
+/* Identify known platforms by name.  */
+#if defined(__linux) || defined(__linux__) || defined(linux)
+# define PLATFORM_ID "Linux"
+
+#elif defined(__CYGWIN__)
+# define PLATFORM_ID "Cygwin"
+
+#elif defined(__MINGW32__)
+# define PLATFORM_ID "MinGW"
+
+#elif defined(__APPLE__)
+# define PLATFORM_ID "Darwin"
+
+#elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+# define PLATFORM_ID "Windows"
+
+#elif defined(__FreeBSD__) || defined(__FreeBSD)
+# define PLATFORM_ID "FreeBSD"
+
+#elif defined(__NetBSD__) || defined(__NetBSD)
+# define PLATFORM_ID "NetBSD"
+
+#elif defined(__OpenBSD__) || defined(__OPENBSD)
+# define PLATFORM_ID "OpenBSD"
+
+#elif defined(__sun) || defined(sun)
+# define PLATFORM_ID "SunOS"
+
+#elif defined(_AIX) || defined(__AIX) || defined(__AIX__) || defined(__aix) || defined(__aix__)
+# define PLATFORM_ID "AIX"
+
+#elif defined(__sgi) || defined(__sgi__) || defined(_SGI)
+# define PLATFORM_ID "IRIX"
+
+#elif defined(__hpux) || defined(__hpux__)
+# define PLATFORM_ID "HP-UX"
+
+#elif defined(__HAIKU__)
+# define PLATFORM_ID "Haiku"
+
+#elif defined(__BeOS) || defined(__BEOS__) || defined(_BEOS)
+# define PLATFORM_ID "BeOS"
+
+#elif defined(__QNX__) || defined(__QNXNTO__)
+# define PLATFORM_ID "QNX"
+
+#elif defined(__tru64) || defined(_tru64) || defined(__TRU64__)
+# define PLATFORM_ID "Tru64"
+
+#elif defined(__riscos) || defined(__riscos__)
+# define PLATFORM_ID "RISCos"
+
+#elif defined(__sinix) || defined(__sinix__) || defined(__SINIX__)
+# define PLATFORM_ID "SINIX"
+
+#elif defined(__UNIX_SV__)
+# define PLATFORM_ID "UNIX_SV"
+
+#elif defined(__bsdos__)
+# define PLATFORM_ID "BSDOS"
+
+#elif defined(_MPRAS) || defined(MPRAS)
+# define PLATFORM_ID "MP-RAS"
+
+#elif defined(__osf) || defined(__osf__)
+# define PLATFORM_ID "OSF1"
+
+#elif defined(_SCO_SV) || defined(SCO_SV) || defined(sco_sv)
+# define PLATFORM_ID "SCO_SV"
+
+#elif defined(__ultrix) || defined(__ultrix__) || defined(_ULTRIX)
+# define PLATFORM_ID "ULTRIX"
+
+#elif defined(__XENIX__) || defined(_XENIX) || defined(XENIX)
+# define PLATFORM_ID "Xenix"
+
+#elif defined(__WATCOMC__)
+# if defined(__LINUX__)
+#  define PLATFORM_ID "Linux"
+
+# elif defined(__DOS__)
+#  define PLATFORM_ID "DOS"
+
+# elif defined(__OS2__)
+#  define PLATFORM_ID "OS2"
+
+# elif defined(__WINDOWS__)
+#  define PLATFORM_ID "Windows3x"
+
+# else /* unknown platform */
+#  define PLATFORM_ID ""
+# endif
+
+#else /* unknown platform */
+# define PLATFORM_ID ""
+
+#endif
+
+/* For windows compilers MSVC and Intel we can determine
+   the architecture of the compiler being used.  This is because
+   the compilers do not have flags that can change the architecture,
+   but rather depend on which compiler is being used
+*/
+#if defined(_WIN32) && defined(_MSC_VER)
+# if defined(_M_IA64)
+#  define ARCHITECTURE_ID "IA64"
+
+# elif defined(_M_X64) || defined(_M_AMD64)
+#  define ARCHITECTURE_ID "x64"
+
+# elif defined(_M_IX86)
+#  define ARCHITECTURE_ID "X86"
+
+# elif defined(_M_ARM)
+#  if _M_ARM == 4
+#   define ARCHITECTURE_ID "ARMV4I"
+#  elif _M_ARM == 5
+#   define ARCHITECTURE_ID "ARMV5I"
+#  else
+#   define ARCHITECTURE_ID "ARMV" STRINGIFY(_M_ARM)
+#  endif
+
+# elif defined(_M_MIPS)
+#  define ARCHITECTURE_ID "MIPS"
+
+# elif defined(_M_SH)
+#  define ARCHITECTURE_ID "SHx"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+
+#elif defined(__WATCOMC__)
+# if defined(_M_I86)
+#  define ARCHITECTURE_ID "I86"
+
+# elif defined(_M_IX86)
+#  define ARCHITECTURE_ID "X86"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+
+#else
+#  define ARCHITECTURE_ID ""
+#endif
+
+/* Convert integer to decimal digit literals.  */
+#define DEC(n)                   \
+  ('0' + (((n) / 10000000)%10)), \
+  ('0' + (((n) / 1000000)%10)),  \
+  ('0' + (((n) / 100000)%10)),   \
+  ('0' + (((n) / 10000)%10)),    \
+  ('0' + (((n) / 1000)%10)),     \
+  ('0' + (((n) / 100)%10)),      \
+  ('0' + (((n) / 10)%10)),       \
+  ('0' +  ((n) % 10))
+
+/* Convert integer to hex digit literals.  */
+#define HEX(n)             \
+  ('0' + ((n)>>28 & 0xF)), \
+  ('0' + ((n)>>24 & 0xF)), \
+  ('0' + ((n)>>20 & 0xF)), \
+  ('0' + ((n)>>16 & 0xF)), \
+  ('0' + ((n)>>12 & 0xF)), \
+  ('0' + ((n)>>8  & 0xF)), \
+  ('0' + ((n)>>4  & 0xF)), \
+  ('0' + ((n)     & 0xF))
+
+/* Construct a string literal encoding the version number components. */
+#ifdef COMPILER_VERSION_MAJOR
+char const info_version[] = {
+  'I', 'N', 'F', 'O', ':',
+  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','[',
+  COMPILER_VERSION_MAJOR,
+# ifdef COMPILER_VERSION_MINOR
+  '.', COMPILER_VERSION_MINOR,
+#  ifdef COMPILER_VERSION_PATCH
+   '.', COMPILER_VERSION_PATCH,
+#   ifdef COMPILER_VERSION_TWEAK
+    '.', COMPILER_VERSION_TWEAK,
+#   endif
+#  endif
+# endif
+  ']','\0'};
+#endif
+
+/* Construct a string literal encoding the version number components. */
+#ifdef SIMULATE_VERSION_MAJOR
+char const info_simulate_version[] = {
+  'I', 'N', 'F', 'O', ':',
+  's','i','m','u','l','a','t','e','_','v','e','r','s','i','o','n','[',
+  SIMULATE_VERSION_MAJOR,
+# ifdef SIMULATE_VERSION_MINOR
+  '.', SIMULATE_VERSION_MINOR,
+#  ifdef SIMULATE_VERSION_PATCH
+   '.', SIMULATE_VERSION_PATCH,
+#   ifdef SIMULATE_VERSION_TWEAK
+    '.', SIMULATE_VERSION_TWEAK,
+#   endif
+#  endif
+# endif
+  ']','\0'};
+#endif
+
+/* Construct the string literal in pieces to prevent the source from
+   getting matched.  Store it in a pointer rather than an array
+   because some compilers will just produce instructions to fill the
+   array rather than assigning a pointer to a static array.  */
+char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";
+char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
+
+"
+CMAKE_C_COMPILER_ID_RUN "1"
+CMAKE_C_COMPILER_ID_TEST_FLAGS "-c;-Aa"
+CMAKE_C_COMPILER_ID_TOOL_MATCH_INDEX "2"
+CMAKE_C_COMPILER_ID_TOOL_MATCH_REGEX "
+Ld[^
+]*(
+[ 	]+[^
+]*)*
+[ 	]+([^ 	
+]+)[^
+]*-o[^
+]*CompilerIdC/(\./)?(CompilerIdC.xctest/)?CompilerIdC[ 	
+\"]"
+CMAKE_C_COMPILER_ID_VENDORS "IAR"
+CMAKE_C_COMPILER_ID_VENDOR_REGEX_IAR "IAR .+ Compiler"
+CMAKE_C_COMPILER_INIT "NOTFOUND"
+CMAKE_C_COMPILER_LIST "cc;gcc;cl;bcc;xlc;clang"
+CMAKE_C_COMPILER_LOADED "1"
+CMAKE_C_COMPILER_NAMES "cc"
+CMAKE_C_COMPILER_VERSION "5.4.0"
+CMAKE_C_COMPILER_WORKS "TRUE"
+CMAKE_C_COMPILER_WRAPPER ""
+CMAKE_C_COMPILE_FEATURES "c_function_prototypes;c_restrict;c_variadic_macros;c_static_assert"
+CMAKE_C_COMPILE_OBJECT "<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -o <OBJECT>   -c <SOURCE>"
+CMAKE_C_COMPILE_OPTIONS_PIC "-fPIC"
+CMAKE_C_COMPILE_OPTIONS_PIE "-fPIE"
+CMAKE_C_COMPILE_OPTIONS_SYSROOT "--sysroot="
+CMAKE_C_COMPILE_OPTIONS_VISIBILITY "-fvisibility="
+CMAKE_C_CREATE_ASSEMBLY_SOURCE "<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -S <SOURCE> -o <ASSEMBLY_SOURCE>"
+CMAKE_C_CREATE_PREPROCESSED_SOURCE "<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -E <SOURCE> > <PREPROCESSED_SOURCE>"
+CMAKE_C_CREATE_SHARED_LIBRARY "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"
+CMAKE_C_CREATE_SHARED_MODULE "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"
+CMAKE_C_FLAGS ""
+CMAKE_C_FLAGS_DEBUG "-g"
+CMAKE_C_FLAGS_DEBUG_INIT "-g"
+CMAKE_C_FLAGS_MINSIZEREL "-Os -DNDEBUG"
+CMAKE_C_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG"
+CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG"
+CMAKE_C_FLAGS_RELEASE_INIT "-O3 -DNDEBUG"
+CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG"
+CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DNDEBUG"
+CMAKE_C_IGNORE_EXTENSIONS "h;H;o;O;obj;OBJ;def;DEF;rc;RC"
+CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "/usr/include"
+CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/usr/lib/gcc/x86_64-linux-gnu/5;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib"
+CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES ""
+CMAKE_C_IMPLICIT_LINK_LIBRARIES "c"
+CMAKE_C_INFORMATION_LOADED "1"
+CMAKE_C_LIBRARY_ARCHITECTURE "x86_64-linux-gnu"
+CMAKE_C_LINKER_PREFERENCE "10"
+CMAKE_C_LINK_EXECUTABLE "<CMAKE_C_COMPILER> <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>"
+CMAKE_C_OUTPUT_EXTENSION ".o"
+CMAKE_C_PLATFORM_ID "Linux"
+CMAKE_C_SIMULATE_ID ""
+CMAKE_C_SIMULATE_VERSION ""
+CMAKE_C_SIZEOF_DATA_PTR "8"
+CMAKE_C_SOURCE_FILE_EXTENSIONS "c;m"
+CMAKE_C_STANDARD_COMPUTED_DEFAULT "11"
+CMAKE_C_STANDARD_DEFAULT "11"
+CMAKE_C_VERBOSE_FLAG "-v"
+CMAKE_DEPFILE_FLAGS_C "-MMD -MT <OBJECT> -MF <DEPFILE>"
+CMAKE_DEPFILE_FLAGS_CXX "-MMD -MT <OBJECT> -MF <DEPFILE>"
+CMAKE_DL_LIBS "dl"
+CMAKE_EXECUTABLE_FORMAT "ELF"
+CMAKE_EXECUTABLE_RPATH_LINK_CXX_FLAG "-Wl,-rpath-link,"
+CMAKE_EXECUTABLE_RPATH_LINK_C_FLAG "-Wl,-rpath-link,"
+CMAKE_EXECUTABLE_RUNTIME_CXX_FLAG "-Wl,-rpath,"
+CMAKE_EXECUTABLE_RUNTIME_CXX_FLAG_SEP ":"
+CMAKE_EXECUTABLE_RUNTIME_C_FLAG "-Wl,-rpath,"
+CMAKE_EXECUTABLE_RUNTIME_C_FLAG_SEP ":"
+CMAKE_EXECUTABLE_SUFFIX ""
+CMAKE_EXE_EXPORTS_CXX_FLAG "-Wl,--export-dynamic"
+CMAKE_EXE_EXPORTS_C_FLAG "-Wl,--export-dynamic"
+CMAKE_EXE_LINKER_FLAGS ""
+CMAKE_EXE_LINKER_FLAGS_DEBUG ""
+CMAKE_EXE_LINKER_FLAGS_MINSIZEREL ""
+CMAKE_EXE_LINKER_FLAGS_RELEASE ""
+CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO ""
+CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS "-Wl,-Bdynamic"
+CMAKE_EXE_LINK_DYNAMIC_C_FLAGS "-Wl,-Bdynamic"
+CMAKE_EXE_LINK_STATIC_CXX_FLAGS "-Wl,-Bstatic"
+CMAKE_EXE_LINK_STATIC_C_FLAGS "-Wl,-Bstatic"
+CMAKE_EXPORT_COMPILE_COMMANDS "OFF"
+CMAKE_EXTRA_GENERATOR ""
+CMAKE_FILES_DIRECTORY "/CMakeFiles"
+CMAKE_FIND_LIBRARY_PREFIXES "lib"
+CMAKE_FIND_LIBRARY_SUFFIXES ".so;.a"
+CMAKE_GENERATOR "Unix Makefiles"
+CMAKE_GENERATOR_PLATFORM ""
+CMAKE_GENERATOR_TOOLSET ""
+CMAKE_HOME_DIRECTORY "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+CMAKE_HOST_SYSTEM "Linux-4.4.0-92-generic"
+CMAKE_HOST_SYSTEM_NAME "Linux"
+CMAKE_HOST_SYSTEM_PROCESSOR "x86_64"
+CMAKE_HOST_SYSTEM_VERSION "4.4.0-92-generic"
+CMAKE_HOST_UNIX "1"
+CMAKE_INCLUDE_FLAG_C "-I"
+CMAKE_INCLUDE_FLAG_CXX "-I"
+CMAKE_INCLUDE_FLAG_C_SEP ""
+CMAKE_INCLUDE_SYSTEM_FLAG_C "-isystem "
+CMAKE_INCLUDE_SYSTEM_FLAG_CXX "-isystem "
+CMAKE_INSTALL_DEFAULT_COMPONENT_NAME "Unspecified"
+CMAKE_INSTALL_PREFIX "/usr/local"
+CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT "1"
+CMAKE_INSTALL_SO_NO_EXE "1"
+CMAKE_INTERNAL_PLATFORM_ABI "ELF"
+CMAKE_LIBRARY_ARCHITECTURE "x86_64-linux-gnu"
+CMAKE_LIBRARY_ARCHITECTURE_REGEX "[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*"
+CMAKE_LIBRARY_PATH_FLAG "-L"
+CMAKE_LIBRARY_PATH_TERMINATOR ""
+CMAKE_LINKER "/usr/bin/ld"
+CMAKE_LINKER "/usr/bin/ld"
+CMAKE_LINK_LIBRARY_FLAG "-l"
+CMAKE_LINK_LIBRARY_SUFFIX ""
+CMAKE_MAJOR_VERSION "3"
+CMAKE_MAKE_PROGRAM "/usr/bin/make"
+CMAKE_MATCH_0 ""
+CMAKE_MATCH_COUNT "0"
+CMAKE_MINIMUM_REQUIRED_VERSION "3.5.2"
+CMAKE_MINOR_VERSION "5"
+CMAKE_MODULE_LINKER_FLAGS ""
+CMAKE_MODULE_LINKER_FLAGS_DEBUG ""
+CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL ""
+CMAKE_MODULE_LINKER_FLAGS_RELEASE ""
+CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO ""
+CMAKE_NM "/usr/bin/nm"
+CMAKE_OBJCOPY "/usr/bin/objcopy"
+CMAKE_OBJDUMP "/usr/bin/objdump"
+CMAKE_PARENT_LIST_FILE "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation/CMakeLists.txt"
+CMAKE_PATCH_VERSION "2"
+CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "/lib;/lib32;/lib64;/usr/lib;/usr/lib32;/usr/lib64"
+CMAKE_PLATFORM_INFO_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation/CMakeFiles/3.5.2"
+CMAKE_PLATFORM_USES_PATH_WHEN_NO_SONAME "1"
+CMAKE_PROJECT_NAME "DumpInformation"
+CMAKE_RANLIB "/usr/bin/ranlib"
+CMAKE_RANLIB "/usr/bin/ranlib"
+CMAKE_ROOT "/usr/share/cmake-3.5"
+CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "-shared"
+CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS "-shared"
+CMAKE_SHARED_LIBRARY_CXX_FLAGS "-fPIC"
+CMAKE_SHARED_LIBRARY_C_FLAGS "-fPIC"
+CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "-rdynamic"
+CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "-rdynamic"
+CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_CXX_FLAGS "-Wl,-Bdynamic"
+CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_C_FLAGS "-Wl,-Bdynamic"
+CMAKE_SHARED_LIBRARY_LINK_STATIC_CXX_FLAGS "-Wl,-Bstatic"
+CMAKE_SHARED_LIBRARY_LINK_STATIC_C_FLAGS "-Wl,-Bstatic"
+CMAKE_SHARED_LIBRARY_PREFIX "lib"
+CMAKE_SHARED_LIBRARY_RPATH_LINK_CXX_FLAG "-Wl,-rpath-link,"
+CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG "-Wl,-rpath-link,"
+CMAKE_SHARED_LIBRARY_RUNTIME_CXX_FLAG "-Wl,-rpath,"
+CMAKE_SHARED_LIBRARY_RUNTIME_CXX_FLAG_SEP ":"
+CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG "-Wl,-rpath,"
+CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG_SEP ":"
+CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG "-Wl,-soname,"
+CMAKE_SHARED_LIBRARY_SONAME_C_FLAG "-Wl,-soname,"
+CMAKE_SHARED_LIBRARY_SUFFIX ".so"
+CMAKE_SHARED_LINKER_FLAGS ""
+CMAKE_SHARED_LINKER_FLAGS_DEBUG ""
+CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL ""
+CMAKE_SHARED_LINKER_FLAGS_RELEASE ""
+CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO ""
+CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS "-shared"
+CMAKE_SHARED_MODULE_CREATE_C_FLAGS "-shared"
+CMAKE_SHARED_MODULE_CXX_FLAGS "-fPIC"
+CMAKE_SHARED_MODULE_C_FLAGS "-fPIC"
+CMAKE_SHARED_MODULE_LINK_DYNAMIC_CXX_FLAGS "-Wl,-Bdynamic"
+CMAKE_SHARED_MODULE_LINK_DYNAMIC_C_FLAGS "-Wl,-Bdynamic"
+CMAKE_SHARED_MODULE_LINK_STATIC_CXX_FLAGS "-Wl,-Bstatic"
+CMAKE_SHARED_MODULE_LINK_STATIC_C_FLAGS "-Wl,-Bstatic"
+CMAKE_SHARED_MODULE_PREFIX "lib"
+CMAKE_SHARED_MODULE_SUFFIX ".so"
+CMAKE_SIZEOF_VOID_P "8"
+CMAKE_SKIP_INSTALL_RPATH "NO"
+CMAKE_SKIP_RPATH "NO"
+CMAKE_SOURCE_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+CMAKE_STATIC_LIBRARY_PREFIX "lib"
+CMAKE_STATIC_LIBRARY_SUFFIX ".a"
+CMAKE_STATIC_LINKER_FLAGS ""
+CMAKE_STATIC_LINKER_FLAGS_DEBUG ""
+CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL ""
+CMAKE_STATIC_LINKER_FLAGS_RELEASE ""
+CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO ""
+CMAKE_STRIP "/usr/bin/strip"
+CMAKE_SYSTEM "Linux-4.4.0-92-generic"
+CMAKE_SYSTEM_INCLUDE_PATH "/usr/include/w32api;/usr/X11R6/include;/usr/include/X11;/usr/pkg/include;/opt/csw/include;/opt/include;/usr/openwin/include"
+CMAKE_SYSTEM_INFO_FILE "Platform/Linux"
+CMAKE_SYSTEM_LIBRARY_PATH "/usr/lib/w32api;/usr/X11R6/lib;/usr/lib/X11;/usr/pkg/lib;/opt/csw/lib;/opt/lib;/usr/openwin/lib"
+CMAKE_SYSTEM_LOADED "1"
+CMAKE_SYSTEM_NAME "Linux"
+CMAKE_SYSTEM_PREFIX_PATH "/usr/local;/usr;/;/usr;/usr/local"
+CMAKE_SYSTEM_PROCESSOR "x86_64"
+CMAKE_SYSTEM_PROGRAM_PATH "/usr/pkg/bin"
+CMAKE_SYSTEM_SPECIFIC_INFORMATION_LOADED "1"
+CMAKE_SYSTEM_SPECIFIC_INITIALIZE_LOADED "1"
+CMAKE_SYSTEM_VERSION "4.4.0-92-generic"
+CMAKE_TWEAK_VERSION "0"
+CMAKE_UNAME "/bin/uname"
+CMAKE_VERBOSE_MAKEFILE "FALSE"
+CMAKE_VERSION "3.5.2"
+CXX_TEST_WAS_RUN "1"
+C_TEST_WAS_RUN "1"
+DumpInformation_BINARY_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+DumpInformation_SOURCE_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+MSVC_CXX_ARCHITECTURE_ID ""
+MSVC_C_ARCHITECTURE_ID ""
+PRESET_CMAKE_SYSTEM_NAME "FALSE"
+PROJECT_BINARY_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+PROJECT_NAME "DumpInformation"
+PROJECT_SOURCE_DIR "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation"
+RESULT_FILE "/vagrant/kubos_repos/kubos/nanomsg/halp"
+RUN_CONFIGURE "ON"
+UNIX "1"
+_CMAKE_INSTALL_DIR "/usr"
+_CMAKE_TOOLCHAIN_LOCATION "/usr/bin"
+_INCLUDED_FILE "/usr/share/cmake-3.5/Modules/Platform/Linux-GNU-CXX.cmake"
+_INCLUDED_MULTIARCH_TOOLCHAIN_FILE "/usr/share/cmake-3.5/Modules/MultiArchCross.cmake"
+_INCLUDED_SYSTEM_INFO_FILE "/usr/share/cmake-3.5/Modules/Platform/Linux.cmake"
+_IN_TC "0"
+__COMPILER_GNU "1"
+__LINUX_COMPILER_GNU "1"
+__UNIX_PATHS_INCLUDED "1"
+f ""
+incl "/vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation/This does not exists"
+l ""
+type ""
+val "0"
+
+=================================================================
+=== COMMANDS
+=================================================================
+___cmake_include_compiler_wrapper
+__cmake_find_compiler
+__cmake_find_compiler_path
+__cmake_include_compiler_wrapper
+__compiler_gnu
+__get_gcc_features
+__linux_compiler_gnu
+__readfile
+_cmake_determine_compile_features
+_cmake_determine_compiler_abi
+_cmake_determine_compiler_id
+_cmake_determine_compiler_id_build
+_cmake_determine_compiler_id_check
+_cmake_determine_compiler_id_match_vendor
+_cmake_determine_compiler_id_vendor
+_cmake_determine_compiler_id_write
+_cmake_determine_msvc_showincludes_prefix
+_cmake_find_compiler
+_cmake_find_compiler_path
+_cmake_parse_implicit_link_info
+_compiler_id_detection
+_get_gcc_features
+_printtestcompilerstatus
+_readfile
+_record_compiler_features
+add_compile_options
+add_custom_command
+add_custom_target
+add_definitions
+add_dependencies
+add_executable
+add_library
+add_subdirectory
+add_test
+adjust_cmake_system_variables
+aux_source_directory
+break
+build_command
+build_name
+cmake_determine_compile_features
+cmake_determine_compiler_abi
+cmake_determine_compiler_id
+cmake_determine_compiler_id_build
+cmake_determine_compiler_id_check
+cmake_determine_compiler_id_match_vendor
+cmake_determine_compiler_id_vendor
+cmake_determine_compiler_id_write
+cmake_determine_msvc_showincludes_prefix
+cmake_host_system_information
+cmake_minimum_required
+cmake_parse_arguments
+cmake_parse_implicit_link_info
+cmake_policy
+cmake_record_c_compile_features
+cmake_record_cxx_compile_features
+compiler_id_detection
+configure_file
+continue
+create_test_sourcelist
+define_property
+else
+elseif
+enable_language
+enable_testing
+endforeach
+endfunction
+endif
+endmacro
+endwhile
+exec_program
+execute_process
+export
+export_library_dependencies
+file
+find_file
+find_library
+find_package
+find_path
+find_program
+fltk_wrap_ui
+foreach
+function
+get_cmake_property
+get_directory_property
+get_filename_component
+get_property
+get_source_file_property
+get_target_property
+get_test_property
+getdefaultwindowsprefixbase
+if
+include
+include_directories
+include_external_msproject
+include_regular_expression
+install
+install_files
+install_programs
+install_targets
+link_directories
+link_libraries
+list
+load_cache
+load_command
+macro
+make_directory
+mark_as_advanced
+math
+message
+option
+output_required_files
+printtestcompilerstatus
+project
+qt_wrap_cpp
+qt_wrap_ui
+record_compiler_features
+remove
+remove_definitions
+return
+separate_arguments
+set
+set_directory_properties
+set_property
+set_source_files_properties
+set_target_properties
+set_tests_properties
+site_name
+source_group
+string
+subdir_depends
+subdirs
+target_compile_definitions
+target_compile_features
+target_compile_options
+target_include_directories
+target_link_libraries
+target_sources
+try_compile
+try_run
+unset
+use_mangled_mesa
+utility_source
+variable_requires
+variable_watch
+while
+write_file
+
+=================================================================
+=== MACROS
+=================================================================
+ADJUST_CMAKE_SYSTEM_VARIABLES
+_cmake_find_compiler
+_cmake_find_compiler_path
+_cmake_find_compiler
+_cmake_find_compiler_path
+__cmake_include_compiler_wrapper
+__compiler_gnu
+cmake_record_c_compile_features
+__linux_compiler_gnu
+record_compiler_features
+_get_gcc_features
+__cmake_include_compiler_wrapper
+cmake_record_cxx_compile_features
+record_compiler_features
+_get_gcc_features
+
+=================================================================
+=== OTHER
+=================================================================
+INCLUDE_DIRECTORY: /vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation
+INCLUDE_DIRECTORY: /vagrant/kubos_repos/kubos/nanomsg/__cmake_systeminformation
+INCLUDE_REGULAR_EXPRESSION: ^.*$
