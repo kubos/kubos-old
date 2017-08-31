@@ -18,9 +18,6 @@
 
 /* Macro Definitions */
 
-/* File Includes */
-#include <stdint.h>
-
 /* Error Codes for ECP_*() calls */
 #define ECP_E_NOERR 0
 #define ECP_E_GENERIC 1
@@ -76,16 +73,9 @@
 /* Typedefs, Structs, etc. */
 typedef int tECP_Error;
 
-/* TODO: Make this real */
-typedef struct {
-} tECP_Context;
-
 /* Empty Message */
 typedef struct {
 } tECP_Message_Null;
-
-/* Empty Channel */
-typedef uint32_t tECP_Channel;
 
 /* Used for responses to some requests. response *should* be set to one of the ECP_R_* values */
 typedef struct {
@@ -134,10 +124,30 @@ typedef struct {
   } content;
 } tECP_Message;
 
+/* Channel ID type */
+typedef uint16_t tECP_Channel;
+
+typedef struct _tECP_ChannelAction {
+  struct _tECP_ChannelAction *next;
+  tECP_Channel channel;
+  tECP_Error (*callback) ();
+} tECP_ChannelAction;
+
+typedef struct _tECP_Context {
+  int talk;
+  int listen;
+  int talk_id;
+  int listen_id;
+  tECP_ChannelAction * callbacks;
+} tECP_Context;
+
+/* Callback type for ECP_Listen callbacks */
+typedef tECP_Error (*tECP_Callback)( tECP_Context * context, tECP_Message * message );
+
 /* Function Prototypes */
 
 tECP_Error ECP_Init( tECP_Context * context );
-tECP_Error ECP_Listen( tECP_Context * context, uint16_t channel, void *state, tECP_Error (*callback)( tECP_Context * context, void * state) );
+tECP_Error ECP_Listen( tECP_Context * context, uint16_t channel, tECP_Callback callback );
 tECP_Error ECP_Broadcast( tECP_Context * context, uint16_t channel, tECP_Message * message );
 tECP_Error ECP_Loop( tECP_Context * context, unsigned int timeout );
 tECP_Error ECP_Destroy( tECP_Context * context );

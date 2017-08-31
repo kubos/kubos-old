@@ -25,10 +25,11 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <signal.h>
+#include <error.h>
 #include "evented-control/ecp.h"
 
 void _alarm_handler( int e );
-tECP_Error _sys_handler( tECP_Context * context, void * state );
+tECP_Error _sys_handler( tECP_Context * context, tECP_Message * message );
 
 int success = 0;
 int complete = 0;
@@ -48,9 +49,10 @@ int main( int argc, char * argv [] ) {
 
   if( 0 == pid ) { // Child
     printf( "01SR: Child\n" );
+    sleep( 5 );
     do {
       if( ECP_E_NOERR != ( err = ECP_Init( & context ) ) ) {
-	printf( "01SR: Child Error calling ECP_Init() %d\n", err );
+        printf( "01SR: Child Error calling ECP_Init() %d\n", err );
 	break;
       }
 
@@ -73,7 +75,7 @@ int main( int argc, char * argv [] ) {
 	break;
       }
 
-      if( ECP_E_NOERR != ( err = ECP_Listen( & context, ECP_C_SYS, NULL, _sys_handler ) ) ) {
+      if( ECP_E_NOERR != ( err = ECP_Listen( & context, ECP_C_SYS, _sys_handler ) ) ) {
 	printf( "01SR: Error calling ECP_Broadcast() %d\n", err );
 	break;
       }
@@ -109,7 +111,7 @@ int main( int argc, char * argv [] ) {
   return( err );
 }
 
-tECP_Error _sys_handler( tECP_Context * context, void * state ) {
+tECP_Error _sys_handler( tECP_Context * context, tECP_Message * message ) {
   success = 1;
   complete = 1;
   return( ECP_E_NOERR );

@@ -25,7 +25,7 @@
 #include "evented-control/ecp.h"
 
 /* This is a callback setup with the ECP_Listen() API call. */
-tECP_Error _sys_handler( tECP_Context * context, void * state );
+tECP_Error _sys_handler( tECP_Context * context, tECP_Message * message );
 
 int main( int argc, char *argv[] ) {
   /* Two data types you'll need to know about are tECP_Error and tECP_Context.
@@ -58,7 +58,7 @@ int main( int argc, char *argv[] ) {
     ** ECP_C_SYS channel.
     */
 
-    if( ECP_E_NOERR != ( err = ECP_Listen( & context, ECP_C_SYS, NULL, _sys_handler ) ) ) {
+    if( ECP_E_NOERR != ( err = ECP_Listen( & context, ECP_C_SYS, _sys_handler ) ) ) {
       printf( "00BASIC: Error calling ECP_Listen(): %d\n", err );
       break;
     }
@@ -95,6 +95,6 @@ int main( int argc, char *argv[] ) {
   return( err );
 }
 
-tECP_Error _sys_handler( tECP_Context * context, void * state ) {
+tECP_Error _sys_handler( tECP_Context * context, tECP_Message * message ) {
   return( ECP_E_NOERR );
 }
