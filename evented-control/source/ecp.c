@@ -19,6 +19,7 @@
 #include <error.h>
 #include <nanomsg/src/nn.h>
 #include <nanomsg/src/pubsub.h>
+#include <nanomsg/src/bus.h>
 #include "evented-control/ecp.h"
 
 /* This is the endpoint used by nanomsg for pub/sub broadcast messages.
@@ -34,37 +35,51 @@ char * broadcast_endpoint = "tcp://127.0.0.1:25901";
 
 tECP_Error ECP_Init( tECP_Context * context ) {
   tECP_Error err = ECP_E_NOERR;
+  int i = 0;
 
   /* Initialize context to known state */
   context->talk = -1;
   context->listen = -1;
   context->talk_id = -1;
   context->listen_id = -1;
+  context->callbacks = NULL;
 
   do {
+    sleep(1);
+    err = ECP_E_NOERR;
     /* Create talker and listener sockets. */
     if( 0 > ( context->talk = nn_socket( AF_SP, NN_PUB ) ) ) {
+      printf("1\n");
       err = ECP_E_GENERIC;
-      break;
+      continue;
+    //   break;
     }
 
     if( 0 > ( context->listen = nn_socket( AF_SP, NN_SUB ) ) ) {
+      printf("2\n");
       err = ECP_E_GENERIC;
-      break;
+      continue;
+    //   break;
     }
 
     /* Associate the broadcast endpoint with the sockets */
     if( 0 > ( context->talk_id = nn_bind( context->talk, broadcast_endpoint ) ) ) {
+      printf("bind failed %d %s\n", errno, nn_strerror(errno));
       err = ECP_E_GENERIC;
-      break;
+      continue;
+    //   break;
     }
 
     if( 0 > ( context->listen_id = nn_connect( context->listen, broadcast_endpoint ) ) ) {
+      printf("4\n");
       err = ECP_E_GENERIC;
-      break;
+      continue;
+    //   break;
     }
 
-  } while( 0 );
+    break;
+
+  } while( i++ < 10 );
 
   return( err );
 }
@@ -133,11 +148,13 @@ tECP_Error ECP_Loop( tECP_Context * context, unsigned int timeout ) {
   
   do {
     if( 0 > nn_setsockopt( context->listen, NN_SOL_SOCKET, NN_RCVTIMEO, & rcvtimeo, sizeof( int ) ) ) {
-      err = ECP_E_GENERIC;
+      printf("fail socketopt\n");
+        err = ECP_E_GENERIC;
       break;
     }
 
     if( 0 > ( recverr = nn_recv( context->listen, buffer, BUFFER_SIZE, 0 ) ) ) {
+      printf("fail recv %d %s\n", errno, nn_strerror(errno));
       if( ETIMEDOUT != errno ) {
         err = ECP_E_GENERIC;
       }

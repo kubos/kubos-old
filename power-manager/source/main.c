@@ -17,8 +17,7 @@
 #include "evented-control/ecp.h"
 #include "eps-api/eps.h"
 
-tECP_Error handle_eps_commands(tECP_Context * context, tECP_Channel channel,
-                tECP_Message * message);
+tECP_Error handle_eps_commands(tECP_Context * context, tECP_Message * message);
 
 int main()
 {
@@ -47,7 +46,7 @@ int main()
         /* Now loop for (at most) 15 seconds, looking for a message */
         for (i = 0; (i < 15) && (err == ECP_E_NOERR); i++)
         {
-            err = ECP_Loop(&context, 1000);
+            err = ECP_Loop(&context, 10000 * 1000);
         }
 
         if (err != ECP_E_NOERR)
@@ -75,19 +74,12 @@ int main()
     }
 }
 
-tECP_Error handle_eps_commands(tECP_Context * context, tECP_Channel channel,
-                tECP_Message * message)
+tECP_Error handle_eps_commands(tECP_Context * context, tECP_Message * message)
 {
     tECP_Error   err = ECP_E_NOERR;
     tECP_Message msg;
     tECP_Message_EPS_Line eps_line;
 
-    if (ECP_C_EPS != channel)
-    {
-        printf("Non-EPS message received\n");
-        err = ECP_E_GENERIC;
-    }
-    else
     {
         switch (message->id)
         {

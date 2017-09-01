@@ -61,7 +61,7 @@ int main( int argc, char * argv [] ) {
       message.id = ECP_M_SYS_BEGIN;
       
       if( ECP_E_NOERR != ( err = ECP_Broadcast( & context, ECP_C_SYS, & message ) ) ) {
-	printf( "01SR: Error calling ECP_Broadcast() %d\n", err );
+	printf( "01SR: Child Error calling ECP_Broadcast() %d\n", err );
 	break;
       }      
     } while( 0 );
@@ -76,7 +76,7 @@ int main( int argc, char * argv [] ) {
       }
 
       if( ECP_E_NOERR != ( err = ECP_Listen( & context, ECP_C_SYS, _sys_handler ) ) ) {
-	printf( "01SR: Error calling ECP_Broadcast() %d\n", err );
+	printf( "01SR: Parent Error calling ECP_Broadcast() %d\n", err );
 	break;
       }
     } while( 0 );
@@ -90,7 +90,7 @@ int main( int argc, char * argv [] ) {
   while( 0 == complete ) {
   
     if( ECP_E_NOERR != ( err = ECP_Loop( & context, 1000 * 1000 ) ) ) {
-      printf( "01SR: Error calling ECP_Broadcast() %d\n", err );
+      printf( "01SR: Error calling ECP_Loop() %d\n", err );
       break;
     }
 
