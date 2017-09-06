@@ -17,7 +17,14 @@
 #include "evented-control/ecp.h"
 #include "eps-api/eps.h"
 
-tECP_Error handle_eps_commands(tECP_Context * context, tECP_Message * message);
+#define MY_INTERFACE "org.KubOS.PowerManager"
+#define MY_PATH "/org/KubOS/PowerManager"
+
+#define STATUS_INTERFACE "org.KubOS.PowerManager.PowerStatus"
+#define STATUS_PATH "/org/KubOS/PowerManager/PowerStatus"
+#define STATUS_MEMBER "power"
+
+DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage *message, void *user_data);
 
 int main()
 {
@@ -27,9 +34,11 @@ int main()
     int          i;
     int          initialized = 0;
 
+    char * status_message = "Power On!";
+
     do
     {
-        if (ECP_E_NOERR != (err = ECP_Init(&context)))
+        if (ECP_E_NOERR != (err = ECP_Init(&context, MY_INTERFACE, message_handler)))
         {
             printf("Error %d calling ECP_Init()\n", err);
             break;
@@ -37,16 +46,12 @@ int main()
 
         initialized = 1;
 
-        if (ECP_E_NOERR != (err = ECP_Listen(&context, ECP_C_EPS, handle_eps_commands)))
-        {
-            printf("Error %d calling ECP_Listen()\n", err);
-            break;
-        }
-
         /* Now loop for (at most) 15 seconds, looking for a message */
         for (i = 0; (i < 15) && (err == ECP_E_NOERR); i++)
         {
-            err = ECP_Loop(&context, 10000 * 1000);
+            printf("Sending power status\n");
+            ECP_Broadcast(&context, STATUS_INTERFACE, STATUS_PATH, STATUS_MEMBER, status_message);
+            err = ECP_Loop(&context, 1000);
         }
 
         if (err != ECP_E_NOERR)
@@ -74,26 +79,26 @@ int main()
     }
 }
 
-tECP_Error handle_eps_commands(tECP_Context * context, tECP_Message * message)
+DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage *message, void *user_data)
 {
     tECP_Error   err = ECP_E_NOERR;
     tECP_Message msg;
     tECP_Message_EPS_Line eps_line;
 
-    {
-        switch (message->id)
-        {
-            case ECP_M_EPS_ON:
-                printf("Turning EPS power line on\n");
-                eps_line = message->content.line;
+    // {
+    //     switch (message->id)
+    //     {
+    //         case ECP_M_EPS_ON:
+    //             printf("Turning EPS power line on\n");
+    //             eps_line = message->content.line;
 
-                eps_enable_power_line(eps_line.line);
+    //             eps_enable_power_line(eps_line.line);
 
-                msg.id = ECP_M_EPS_ON_ACK;
-                err = ECP_Broadcast(context, ECP_C_EPS, &msg);
-                break;
-        }
-    }
+    //             msg.id = ECP_M_EPS_ON_ACK;
+    //             err = ECP_Broadcast(context, ECP_C_EPS, &msg);
+    //             break;
+    //     }
+    // }
 
     return (err);
 }

@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include <dbus/dbus.h>
+
 /* Macro Definitions */
 
 /* Error Codes for ECP_*() calls */
@@ -139,15 +141,17 @@ typedef struct _tECP_Context {
   int talk_id;
   int listen_id;
   tECP_ChannelAction * callbacks;
+  DBusConnection * connection;
+  DBusObjectPathVTable vtable;
 } tECP_Context;
 
 /* Callback type for ECP_Listen callbacks */
-typedef tECP_Error (*tECP_Callback)( tECP_Context * context, tECP_Message * message );
+typedef DBusHandlerResult (*tECP_Callback)( DBusConnection * connection, DBusMessage * message, void * data );
 
 /* Function Prototypes */
 
-tECP_Error ECP_Init( tECP_Context * context );
-tECP_Error ECP_Listen( tECP_Context * context, uint16_t channel, tECP_Callback callback );
-tECP_Error ECP_Broadcast( tECP_Context * context, uint16_t channel, tECP_Message * message );
+tECP_Error ECP_Init( tECP_Context * context, const char * name, tECP_Callback callback);
+tECP_Error ECP_Listen(tECP_Context * context, const char * channel);
+tECP_Error ECP_Broadcast( tECP_Context * context, const char * signal_interface, const char * signal_path, const char * signal_member, const char * message );
 tECP_Error ECP_Loop( tECP_Context * context, unsigned int timeout );
 tECP_Error ECP_Destroy( tECP_Context * context );
