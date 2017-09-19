@@ -71,9 +71,10 @@
 #define AOS_VC_COUNT      3 /* # of channels currently supported */
 
 /* File Includes */
+#include <stdint.h>
 
 /* Typedefs, Structs, Unions, Enums */
-typedef tAOSErr unsigned int;
+typedef unsigned int tAOSErr;
 
 typedef tAOSErr (*tAOSCallback)( unsigned char * data, unsigned int length );
 
