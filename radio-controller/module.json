@@ -1,0 +1,14 @@
+{
+    "license":"Apache-2.0",
+    "name":"radio-controller",
+    "repository":{
+        "url":"git://github.com/kubostech/radio-controller",
+        "type":"git"
+    },
+    "version":"0.1.0",
+    "homepage":"https://github.com/kubostech/radio-controller",
+    "testDependencies":{
+        "cmocka":"kubostech/cmocka",
+        "csp":"kubostech/libcsp"
+    }
+}
