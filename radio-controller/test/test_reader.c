@@ -46,7 +46,7 @@ void on_read( uv_fs_t * req ) {
     if( PACKET_SIZE == req->result ) {
       // Write to packet processor 
       packet_process( buffer_handle.base, req->result );
-      uv_fs_read( loop, & read_req, req->result, & buffer_handle, 1, -1, on_read );
+      uv_fs_read( loop, & read_req, open_req.result, & buffer_handle, 1, -1, on_read );
     } else {
       printf( "Short Packet!\n" );
       uv_fs_close( loop, & close_req, open_req.result, on_close );
