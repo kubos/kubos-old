@@ -14,7 +14,7 @@ endif()
 if(TARGET_LIKE_KUBOS_LINUX)
     # Two dbus includes
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include")
-    set(GLOBALLY_LINKED_TARGET_LIBS "${GLOBALLY_LINKED_TARGET_LIBS} -ldbus-1")
+    set(GLOBALLY_LINKED_TARGET_LIBS "${GLOBALLY_LINKED_TARGET_LIBS} -ldbus-1 -luv")
 endif()
 
 # Override the link rules:
