@@ -61,6 +61,11 @@
 
 #define AOS_FRAME_DATA_FIELD_SIZE ( AOS_FRAME_SIZE - AOS_FRAME_HEADER_SIZE - AOS_FRAME_TRAILER_SIZE )
 
+#define AOS_ERR_NOERR    0
+#define AOS_ERR_GENERIC  1
+#define AOS_ERR_UNKNOWN  2
+#define AOS_ERR_NULL     3
+#define AOS_ERR_ICHANNEL 4
 /*
  * The system has a fixed number of virtual channel IDs:
  */
@@ -68,7 +73,11 @@
 #define AOS_VC_RETRANSMIT 0 /* Channel used to request retransmission */
 #define AOS_VC_CONTROL    1 /* Used to send commands */
 #define AOS_VC_TELEMETRY  2 /* Used to request and report telemetry */
-#define AOS_VC_COUNT      3 /* # of channels currently supported */
+#define AOS_VC_PAYLOAD    3 /* Passes data to/from satellite payload */
+#define AOS_VC_FILE       4 /* Send / Receive Files */
+#define AOS_VC_UPDATE     5 /* Like File interface, but for SW updates */
+#define AOS_VC_SHELL      6 /* Shell commands / responses */
+#define AOS_VC_COUNT      7 /* # of channels currently supported */
 
 /* File Includes */
 #include <stdint.h>
@@ -76,11 +85,12 @@
 /* Typedefs, Structs, Unions, Enums */
 typedef unsigned int tAOSErr;
 
-typedef tAOSErr (*tAOSCallback)( unsigned char * data, unsigned int length );
+typedef tAOSErr (*tAOSCallback)(  );
 
 typedef struct {
   uint32_t last_id;
-  tAOSCallback callback;
+  tAOSCallback frame;
+  tAOSCallback exception;
 } tAOSVirtualChannel;
 
 typedef struct {
@@ -89,5 +99,5 @@ typedef struct {
 
 /* Function Prototypes */
 tAOSErr AOS_Init( tAOSParser * parser );
-tAOSErr AOS_Register( tAOSParser * parser, unsigned int channel, tAOSCallback callback );
+tAOSErr AOS_Register( tAOSParser * parser, unsigned int channel, tAOSCallback frame, tAOSCallback exception );
 tAOSErr AOS_Process( tAOSParser * parser, unsigned char * data, unsigned int length );
