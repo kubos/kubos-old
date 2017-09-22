@@ -34,7 +34,7 @@ void test_parse_version(void ** arg)
 
     packet_parse(data, &packet);
 
-    assert_int_equal(packet.header.version, 1);
+    assert_int_equal(packet.id.version, 1);
 }
 
 void test_process_packet(void ** arg)
@@ -44,12 +44,20 @@ void test_process_packet(void ** arg)
     packet_process(data, PACKET_SIZE);
 }
 
+void test_process_enable_line(void ** arg)
+{
+  uint8_t  buffer[] = "\x10\x00\x00\x00\x00\x02\x00\b\x00\x01\x01\x00\x00";
+  printf("strlen %d\n", sizeof(buffer));
+  packet_process(buffer, PACKET_SIZE);
+}
+
 int main(void)
 {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_parse_packet),
         cmocka_unit_test(test_parse_version),
         cmocka_unit_test(test_process_packet),
+        cmocka_unit_test(test_process_enable_line),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
