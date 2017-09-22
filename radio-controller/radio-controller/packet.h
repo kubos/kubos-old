@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <uv.h>
 
 #define PACKET_SIZE 256
 
@@ -23,4 +24,4 @@ bool spacepacket_parse(const uint8_t * buffer, spacepacket * packet);
 
 void spacepacket_format(uint8_t * buffer, spacepacket packet);
 
-void packet_process(uint8_t * buffer, uint16_t len );
+void packet_process(char * buffer, size_t len );
