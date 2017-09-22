@@ -17,4 +17,9 @@ void packet_process(char * base, size_t len)
     packet p;
 
     packet_parse(base, &p);
+
+    // At this point we have the payload in p.payload
+    // Now we....
+    // - Determine message type from payload
+    // - Pass along parameters to the appropriate message abstraction method
 }

@@ -41,7 +41,7 @@ void test_process_packet(void ** arg)
 {
     uint8_t data[PACKET_SIZE];
 
-    acket_process(data, PACKET_SIZE);
+    packet_process(data, PACKET_SIZE);
 }
 
 int main(void)
