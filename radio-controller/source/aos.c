@@ -18,25 +18,31 @@
  * This file implements the API for the AOS frame parser defined in aos.h
  */
 
-#include <string.h>
 #include "radio-controller/aos.h"
+#include <string.h>
 
-tAOSErr AOS_Init( tAOSParser * parser ) {
-  memset( parser, 0, sizeof( tAOSParser ) );
-  return( AOS_ERR_NOERR );
+tAOSErr AOS_Init(tAOSParser * parser)
+{
+    memset(parser, 0, sizeof(tAOSParser));
+    return (AOS_ERR_NOERR);
 }
 
-tAOSErr AOS_Register( tAOSParser * parser, unsigned int channel, tAOSCallback frame, tAOSCallback exception ) {
-  if( channel >= AOS_VC_COUNT ) {
-    return( AOS_ERR_ICHANNEL );
-  }
+tAOSErr AOS_Register(tAOSParser * parser, unsigned int channel,
+                     tAOSCallback frame, tAOSCallback exception)
+{
+    if (channel >= AOS_VC_COUNT)
+    {
+        return (AOS_ERR_ICHANNEL);
+    }
 
-  parser->channels[ channel ].frame = frame;
-  parser->channels[ channel ].exception = exception;
-  
-  return( AOS_ERR_NOERR );
+    parser->channels[channel].frame     = frame;
+    parser->channels[channel].exception = exception;
+
+    return (AOS_ERR_NOERR);
 }
 
-tAOSErr AOS_Process( tAOSParser * parser, unsigned char * data, unsigned int length ) {
-  return( AOS_ERR_NOERR );
+tAOSErr AOS_Process(tAOSParser * parser, unsigned char * data,
+                    unsigned int length)
+{
+    return (AOS_ERR_NOERR);
 }

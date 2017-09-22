@@ -14,35 +14,42 @@
  * limitations under the License.
  */
 
-#include <cmocka.h>
 #include "radio-controller/packet.h"
+#include <cmocka.h>
 
 void test_parse_packet(void ** arg)
 {
-  spacepacket packet;
-  uint8_t data[PACKET_SIZE];
+    packet  packet;
+    uint8_t data[PACKET_SIZE];
 
-  assert_true(spacepacket_parse(data, &packet));
+    assert_true(packet_parse(data, &packet));
 }
 
 void test_parse_version(void ** arg)
 {
-  spacepacket packet;
-  uint8_t data[PACKET_SIZE];
+    packet  packet;
+    uint8_t data[PACKET_SIZE];
 
-  data[0] = 1;
+    data[0] = 1;
 
-  spacepacket_parse(data, &packet);
+    packet_parse(data, &packet);
 
-  assert_int_equal(packet.header.version, 1);
+    assert_int_equal(packet.header.version, 1);
+}
 
+void test_process_packet(void ** arg)
+{
+    uint8_t data[PACKET_SIZE];
+
+    acket_process(data, PACKET_SIZE);
 }
 
 int main(void)
 {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_parse_packet),
-        cmocka_unit_test(test_parse_version)
+        cmocka_unit_test(test_parse_version),
+        cmocka_unit_test(test_process_packet),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
