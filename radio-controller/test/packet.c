@@ -19,7 +19,7 @@
 
 void test_parse_packet(void ** arg)
 {
-    packet  packet;
+    telecommand_packet  packet;
     uint8_t data[PACKET_SIZE];
 
     assert_true(packet_parse(data, &packet));
@@ -27,7 +27,7 @@ void test_parse_packet(void ** arg)
 
 void test_parse_version(void ** arg)
 {
-    packet  packet;
+    telecommand_packet  packet;
     uint8_t data[PACKET_SIZE];
 
     data[0] = 1;

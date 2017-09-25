@@ -6,6 +6,14 @@
 
 #define PACKET_SIZE 14
 
+/**
+ * Packet Identification Structure. 
+ * The same Packet ID struct is used by both Telecommand
+ * and Telemetry packet types.
+ *
+ * This is effectively the first two octets of the
+ * CCSCS SpacePacket Packet Primary Header.
+ */
 typedef struct
 {
     uint version : 3;
@@ -14,11 +22,14 @@ typedef struct
     uint app_id : 11;
 } packet_id;
 
+/**
+ * Telecommand Packet Sequence Control Structure
+ */
 typedef struct
 {
     uint flags : 2;
     uint count : 14;
-} packet_sequence;
+} telecommand_sequence;
 
 /**
  * Packet Overhead is data contained in the packet
@@ -54,32 +65,76 @@ typedef struct
     uint service_type : 8;
     /** Used with the service_type to indicate type of service request */
     uint service_subtype : 8;
-} data_field_header;
+} telecommand_data_header;
 
+/**
+ * Telecommand Packet Data Field Structure
+ */
 typedef struct
 {
-    /** Telecommand data field header */
-    data_field_header header;
+    /** Telecommand data field header - Fixed at 24 bits */
+    union {
+        telecommand_data_header header;
+        uint32_t buf : 24;
+    };
     uint8_t  payload[2];
     uint16_t error_control;
-} packet_data;
+} telecommand_data;
 
 typedef struct
 {
     /** Packet ID structure */
     packet_id id;
     /** Packet sequence control structure */
-    packet_sequence sequence;
+    telecommand_sequence sequence;
     /** Number of octets contained in the data field */
     uint16_t data_length;
     /** Packet data field structure */
-    packet_data data;
-} packet;
+    telecommand_data data;
+} telecommand_packet;
 
-bool packet_parse(const uint8_t * buffer, packet * packet);
 
-void packet_format(uint8_t * buffer, packet packet);
+typedef struct
+{
+  /** Value hard coded to 11 */
+  uint grouping_flags : 2;
+  /** Sequence count from source APID */
+  uint source_seq_count : 14;
+} telemetry_sequence;
+
+typedef struct
+{
+  uint padding : 1;
+  uint version : 3;
+  uint padding2 : 4;
+  uint service_type : 8;
+  uint service_subtype : 8;
+  long long time : 40;
+} telemetry_data_header;
+
+typedef struct
+{
+  telemetry_data_header header;
+  uint8_t data[2];
+  uint16_t error_control;
+} telemetry_data;
+
+typedef struct
+{
+  /** Packet ID structure */
+  packet_id id;
+  /** Telemetry packet sequence control */
+  telemetry_sequence sequence;
+  /** Number of octects contained in the data field */
+  uint16_t data_length;
+  /** Telemetry packet data field */
+  telemetry_data data;
+} telemetry_packet;
+
+bool packet_parse(const uint8_t * buffer, telecommand_packet * packet);
+
+void packet_format(uint8_t * buffer, telecommand_packet packet);
 
 void packet_process(char * buffer, size_t len);
 
-void packet_debug(packet p);
+void packet_debug(telecommand_packet p);

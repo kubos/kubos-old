@@ -1,7 +1,7 @@
 #include "radio-controller/packet.h"
 #include <stdio.h>
 
-bool packet_parse(const uint8_t * buffer, packet * packet)
+bool packet_parse(const uint8_t * buffer, telecommand_packet * packet)
 {
     if ((NULL != buffer) && (NULL != packet))
     {
@@ -14,10 +14,10 @@ bool packet_parse(const uint8_t * buffer, packet * packet)
 void packet_process(char * base, size_t len)
 {
     printf("In Packet Processor. w00t!\n");
-    packet  p;
+    telecommand_packet  p;
     uint8_t service_id, function_id;
 
-    packet * p_p = (packet *) base;
+    telecommand_packet * p_p = (telecommand_packet *) base;
 
     packet_parse(base, &p);
 
@@ -53,7 +53,7 @@ void packet_process(char * base, size_t len)
     }
 }
 
-void packet_debug(packet p)
+void packet_debug(telecommand_packet p)
 {
     printf("packet:id:version %x\n", p.id.version);
     printf("packet:id:type %x\n", p.id.type);
