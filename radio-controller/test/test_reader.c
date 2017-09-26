@@ -2,6 +2,9 @@
 #include <uv.h>
 #include "radio-controller/packet.h"
 
+// TDB defined for real
+#define PACKET_SIZE 128
+
 void on_read(uv_fs_t * req);
 
 char * filepath = "packets.bin";

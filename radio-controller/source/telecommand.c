@@ -1,7 +1,7 @@
-#include "radio-controller/packet.h"
+#include "radio-controller/telecommand.h"
 #include <arpa/inet.h>
 #include <stdio.h>
-#include "radio-controller/telecommand.h"
+#include "radio-controller/packet.h"
 
 #define ID_VERSION_OFFSET 0
 #define ID_VERSION_MASK 0b11100000
@@ -39,7 +39,7 @@
 #define DATA_HEAD_FLAG_SHIFT 7
 
 #define DATA_HEAD_VER_OFFSET 6
-#define DATA_HEAD_VER_MASK  0b01110000
+#define DATA_HEAD_VER_MASK 0b01110000
 #define DATA_HEAD_VER_SHIFT 4
 
 #define DATA_HEAD_ACK_OFFSET 6
@@ -57,33 +57,50 @@ bool telecommand_parse(const uint8_t * buffer, telecommand_packet * packet)
 {
     if ((NULL != buffer) && (NULL != packet))
     {
-        packet->id.version = (*(buffer + ID_VERSION_OFFSET) & ID_VERSION_MASK)  >> ID_VERSION_SHIFT;
-        packet->id.type  = (*(buffer + ID_TYPE_OFFSET) & ID_TYPE_MASK) >> ID_TYPE_SHIFT;
-        packet->id.data_field_header = (*(buffer + ID_HEADER_OFFSET) & ID_HEADER_MASK) >> ID_HEADER_SHIFT;
-        
+        packet->id.version = (*(buffer + ID_VERSION_OFFSET) & ID_VERSION_MASK)
+                             >> ID_VERSION_SHIFT;
+        packet->id.type
+            = (*(buffer + ID_TYPE_OFFSET) & ID_TYPE_MASK) >> ID_TYPE_SHIFT;
+        packet->id.data_field_header
+            = (*(buffer + ID_HEADER_OFFSET) & ID_HEADER_MASK)
+              >> ID_HEADER_SHIFT;
+
         packet->id.data_field_header = (buffer[0] & ID_HEADER_MASK) >> 3;
-        packet->id.app_id = ((*(buffer + ID_APID1_OFFSET) & ID_APID1_MASK) << ID_APID1_SHIFT) | *(buffer + ID_APID2_OFFSET);
+        packet->id.app_id
+            = ((*(buffer + ID_APID1_OFFSET) & ID_APID1_MASK) << ID_APID1_SHIFT)
+              | *(buffer + ID_APID2_OFFSET);
 
-        packet->sequence.flags = (*(buffer + SEQ_FLAGS_OFFSET) & SEQ_FLAGS_MASK) >> SEQ_FLAGS_SHIFT;
-        packet->sequence.count = (*(buffer + SEQ_COUNT_OFFSET) & SEQ_COUNT_MASK) << SEQ_COUNT_SHIFT |
-          *(buffer + SEQ_COUNT2_OFFSET);
+        packet->sequence.flags = (*(buffer + SEQ_FLAGS_OFFSET) & SEQ_FLAGS_MASK)
+                                 >> SEQ_FLAGS_SHIFT;
+        packet->sequence.count
+            = (*(buffer + SEQ_COUNT_OFFSET) & SEQ_COUNT_MASK) << SEQ_COUNT_SHIFT
+              | *(buffer + SEQ_COUNT2_OFFSET);
 
+        packet->data_length = *(buffer + DATA_LENGTH1_OFFSET) << 8
+                              | *(buffer + DATA_LENGTH2_OFFSET);
 
-        packet->data_length = *(buffer + DATA_LENGTH1_OFFSET) << 8 | *(buffer + DATA_LENGTH2_OFFSET);
+        packet->data.header.ccsds_secondary_header
+            = (*(buffer + DATA_HEAD_FLAG_OFFSET) & DATA_HEAD_FLAG_MASK)
+              >> DATA_HEAD_FLAG_SHIFT;
+        packet->data.header.tc_packet_version
+            = (*(buffer + DATA_HEAD_VER_OFFSET) & DATA_HEAD_VER_MASK)
+              >> DATA_HEAD_VER_SHIFT;
+        packet->data.header.ack
+            = (*(buffer + DATA_HEAD_ACK_OFFSET) & DATA_HEAD_ACK_MASK);
+        packet->data.header.service_type
+            = *(buffer + DATA_HEAD_SER_TYPE_OFFSET);
+        packet->data.header.service_subtype
+            = *(buffer + DATA_HEAD_SER_SUB_OFFSET);
 
-
-        packet->data.header.ccsds_secondary_header = (*(buffer + DATA_HEAD_FLAG_OFFSET) & DATA_HEAD_FLAG_MASK) >> DATA_HEAD_FLAG_SHIFT;
-        packet->data.header.tc_packet_version = (*(buffer + DATA_HEAD_VER_OFFSET) & DATA_HEAD_VER_MASK) >> DATA_HEAD_VER_SHIFT;
-        packet->data.header.ack = (*(buffer + DATA_HEAD_ACK_OFFSET) & DATA_HEAD_ACK_MASK);
-        packet->data.header.service_type = *(buffer + DATA_HEAD_SER_TYPE_OFFSET);
-        packet->data.header.service_subtype = *(buffer + DATA_HEAD_SER_SUB_OFFSET);
-        
+        packet->data.payload = malloc(sizeof(uint8_t) * packet->data_length);
         for (int i = 0; i < packet->data_length; i++)
         {
-          packet->data.payload[i] = *(buffer + i + DATA_PAYLOAD_OFFSET);
+            packet->data.payload[i] = *(buffer + i + DATA_PAYLOAD_OFFSET);
         }
 
-        packet->data.error_control = (*(buffer + packet->data_length + DATA_ERROR1_OFFSET) << 8) | *(buffer + packet->data_length + DATA_ERROR2_OFFSET);
+        packet->data.error_control
+            = (*(buffer + packet->data_length + DATA_ERROR1_OFFSET) << 8)
+              | *(buffer + packet->data_length + DATA_ERROR2_OFFSET);
 
         return true;
     }
@@ -147,8 +164,10 @@ void telecommand_debug(telecommand_packet p)
     printf("packet:data:service_subtype %d\n", p.data.header.service_subtype);
     printf("packet:data:error_control %d\n", p.data.error_control);
 
+    /**
     uint8_t buffer[PACKET_SIZE];
     memcpy(buffer, &p, PACKET_SIZE);
     for (int i = 0; i < PACKET_SIZE; i++) printf("0x%02x ", buffer[i]);
     printf("\n");
+    **/
 }

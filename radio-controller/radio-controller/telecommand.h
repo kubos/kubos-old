@@ -2,7 +2,6 @@
 
 #include "radio-controller/packet.h"
 
-
 /**
  * Telecommand Packet Sequence Control Structure
  */
@@ -53,10 +52,10 @@ typedef struct
  * Telecommand Packet Data Field Structure
  */
 typedef struct
-{ 
+{
     /** Telecommand data field header - Fixed at 24 bits */
     telecommand_data_header header;
-    uint8_t                 payload[7];
+    uint8_t *               payload;
     uint16_t                error_control;
 } telecommand_data;
 
@@ -71,7 +70,6 @@ typedef struct
     /** Packet data field structure */
     telecommand_data data;
 } telecommand_packet;
-
 
 bool telecommand_parse(const uint8_t * buffer, telecommand_packet * packet);
 

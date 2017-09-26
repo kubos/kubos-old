@@ -4,8 +4,6 @@
 #include <stdint.h>
 #include <uv.h>
 
-#define PACKET_SIZE 18
-
 /**
  * Packet Identification Structure.
  * The same Packet ID struct is used by both Telecommand
