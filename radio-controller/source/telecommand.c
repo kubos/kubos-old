@@ -1,7 +1,8 @@
-#include "radio-controller/telecommand.h"
 #include <arpa/inet.h>
 #include <stdio.h>
+
 #include "radio-controller/packet.h"
+#include "radio-controller/telecommand.h"
 
 #define ID_VERSION_OFFSET 0
 #define ID_VERSION_MASK 0b11100000
@@ -107,45 +108,39 @@ bool telecommand_parse(const uint8_t * buffer, telecommand_packet * packet)
     return false;
 }
 
+void telecommand_run(telecommand_packet p)
+{
+    uint8_t service_id, function_id;
+    service_id  = p.data.payload[0];
+    function_id = p.data.payload[1];
+
+    switch (service_id)
+    {
+        /** Power Manager **/
+        case 1:
+        {
+            switch (function_id)
+            {
+                /** Enable Rail **/
+                case 1:
+                {
+                    printf("Calling enable line\n");
+
+                    break;
+                }
+            }
+            break;
+        }
+    }
+}
+
 void telecommand_process(char * base, size_t len)
 {
     printf("In Packet Processor. w00t!\n");
     telecommand_packet p;
-    uint8_t            service_id, function_id;
 
     telecommand_parse(base, &p);
-
-    telecommand_debug(p);
-
-    // At this point we have the payload in p.payload
-    // Now we....
-    // - Determine message type from payload
-    // - Pass along parameters to the appropriate message abstraction method
-    /**
-    service_id  = p.data.payload[0];
-    function_id = p.data.payload[1];
-    printf("Service id %d function id %d\n", service_id, function_id);
-    if (p.data.header.service_type == 8)
-    {
-        switch (service_id)
-        {
-            // Power Manager Case
-            case 1:
-            {
-                // Enable Line function
-                switch (function_id)
-                {
-                    case 1:
-                    {
-                        printf("Calling enable line\n");
-                        break;
-                    }
-                    break;
-                }
-            }
-        }
-    }
-    **/
+    telecommand_run(p);
 }
 
 void telecommand_debug(telecommand_packet p)

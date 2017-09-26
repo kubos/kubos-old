@@ -12,6 +12,8 @@ void test_parse_enable_line(void ** arg)
     assert_int_equal(p.data.payload[0], 1);
     assert_int_equal(p.data.payload[1], 1);
     assert_int_equal(p.data.payload[2], 1);
+
+    telecommand_run(p);
 }
 
 int main(void)
