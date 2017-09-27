@@ -1,4 +1,22 @@
+/*
+ * Copyright (C) 2017 Kubos Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include <arpa/inet.h>
+#include <evented-control/ecp.h>
+#include <evented-control/messages.h>
 #include <stdio.h>
 
 #include "radio-controller/packet.h"
@@ -114,6 +132,13 @@ void telecommand_run(telecommand_packet p)
     service_id  = p.data.payload[0];
     function_id = p.data.payload[1];
 
+    tECP_Context context;
+
+    if (ECP_NOERR != ECP_Init(&context, "org.KubOS.client"))
+    {
+        printf("Error with ECP_Init\n");
+    }
+
     switch (service_id)
     {
         /** Power Manager **/
@@ -125,13 +150,23 @@ void telecommand_run(telecommand_packet p)
                 case 1:
                 {
                     printf("Calling enable line\n");
-
+                    if (ECP_NOERR != enable_line(&context, 1))
+                    {
+                        printf("Error with enable_line\n");
+                    }
                     break;
                 }
             }
             break;
         }
     }
+
+    for (int i = 0; i < 15; i++)
+    {
+        //        ECP_Loop(&context, 1000);
+    }
+
+    ECP_Destroy(&context);
 }
 
 void telecommand_process(char * base, size_t len)

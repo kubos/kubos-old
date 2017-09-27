@@ -5,6 +5,9 @@
         "url":"git://github.com/kubostech/radio-controller",
         "type":"git"
     },
+    "dependencies":{
+        "evented-control":"kubostech/evented-control"
+    },
     "version":"0.1.0",
     "homepage":"https://github.com/kubostech/radio-controller",
     "testDependencies":{
