@@ -23,8 +23,8 @@
  * ECP error codes
  */
 typedef enum {
-    ECP_E_NOERR = 0,
-    ECP_E_GENERIC,
+    ECP_NOERR = 0,
+    ECP_GENERIC,
 } tECP_Error;
 
 /**
@@ -36,17 +36,24 @@ struct _tECP_MessageHandler;
 /**
  * Function pointer typedef for message parser functions
  */
-typedef tECP_Error (*message_parser)(struct _tECP_Context * context, DBusMessage * message, struct _tECP_MessageHandler * handler);
+typedef tECP_Error (*message_parser)(struct _tECP_Context *        context,
+                                     DBusMessage *                 message,
+                                     struct _tECP_MessageHandler * handler);
 
 /**
  * Structure for MessageHandlers. These structures are
  * message specific and are used to parse/callback when
  * messages are received.
  */
-typedef struct _tECP_MessageHandler {
+typedef struct _tECP_MessageHandler
+{
+    /** Next MessageHandler in list */
     struct _tECP_MessageHandler * next;
+    /** Interface of DBus object that owns the method/signal */
     char * interface;
+    /** Name of DBus signal/method producing messages */
     char * member;
+    /** Function pointer to parser for handling messages */
     message_parser parser;
 } tECP_MessageHandler;
 
@@ -54,42 +61,46 @@ typedef struct _tECP_MessageHandler {
  * Context structure - currently used to hold DBus connection
  * and MessageHandler list.
  */
-typedef struct _tECP_Context {
+typedef struct _tECP_Context
+{
+    /** List of message handlers */
     tECP_MessageHandler * callbacks;
+    /** DBus connection object */
     DBusConnection * connection;
 } tECP_Context;
 
 /**
  * Callback type for ECP_Listen callbacks
  */
-typedef DBusHandlerResult (*tECP_Callback)(DBusConnection * connection, DBusMessage * message, void * data );
+typedef DBusHandlerResult (*tECP_Callback)(DBusConnection * connection,
+                                           DBusMessage * message, void * data);
 
 /**
  * Initializes data structures for ECP and connection.
  */
-tECP_Error ECP_Init( tECP_Context * context, const char * name, tECP_Callback callback);
+tECP_Error ECP_Init(tECP_Context * context, const char * name);
 
 /**
  * Creates a subscription for the specified channel.
- */ 
+ */
 tECP_Error ECP_Listen(tECP_Context * context, const char * channel);
 
 /**
  * Sends message over ECP, meant to be used for publishing data.
- */ 
-tECP_Error ECP_Broadcast( tECP_Context * context, DBusMessage * message );
+ */
+tECP_Error ECP_Broadcast(tECP_Context * context, DBusMessage * message);
 
 /**
- * ECP loop/process function. Meant to be used in place of a message 
+ * ECP loop/process function. Meant to be used in place of a message
  * processing super loop. Needs to be running in order for the ECP lib
  * to process incoming messages.
  */
-tECP_Error ECP_Loop( tECP_Context * context, unsigned int timeout );
+tECP_Error ECP_Loop(tECP_Context * context, unsigned int timeout);
 
 /**
  * Cleans up ECP connections and data structures
- */ 
-tECP_Error ECP_Destroy( tECP_Context * context );
+ */
+tECP_Error ECP_Destroy(tECP_Context * context);
 
 /**
  * Takes a message, iterates through the MessageHandlers in a context
@@ -100,11 +111,11 @@ tECP_Error ECP_Handle_Message(tECP_Context * context, DBusMessage * message);
 /**
  * Adds a MessageHandler into the context's list of handlers.
  */
-tECP_Error ECP_Add_Message_Handler(tECP_Context * context, tECP_MessageHandler * handler);
+tECP_Error ECP_Add_Message_Handler(tECP_Context *        context,
+                                   tECP_MessageHandler * handler);
 
 /**
  * Sends a method call message over ECP. Expects a reply from the message
  * and will block for up to 1000 ms until reply received.
  */
 tECP_Error ECP_Call(tECP_Context * context, DBusMessage * message);
-

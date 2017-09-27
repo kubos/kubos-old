@@ -21,31 +21,26 @@
 
 tECP_Error enable_line_handler(uint8_t line);
 
-DBusHandlerResult message_handler(DBusConnection * connection,
-                                  DBusMessage * message, void * user_data);
-static tECP_Context context;
-
 int main()
 {
     tECP_Error       err = ECP_E_NOERR;
     int              i;
     int              initialized = 0;
     eps_power_status status;
+    tECP_Context     context;
 
     do
     {
-        if (ECP_E_NOERR != (err = ECP_Init(&context, POWER_MANAGER_INTERFACE,
-                                           message_handler)))
+        if (ECP_E_NOERR != (err = ECP_Init(&context, POWER_MANAGER_INTERFACE)))
         {
             printf("Error %d calling ECP_Init()\n", err);
             break;
         }
 
-        initialized = 1;
-
         if (ECP_E_NOERR != on_enable_line(&context, &enable_line_handler))
         {
             printf("Error registering enable line callback\n");
+            break;
         }
 
         /* Now loop for (at most) 15 seconds, looking for a message */
@@ -62,37 +57,15 @@ int main()
         if (err != ECP_E_NOERR)
         {
             printf("Error %d calling ECP_Loop()\n", err);
-            break;
         }
     } while (0);
 
-    if (1 == initialized)
+    if (ECP_E_NOERR != (err = ECP_Destroy(&context)))
     {
-        if (ECP_E_NOERR != (err = ECP_Destroy(&context)))
-        {
-            printf("Error %d calling ECP_Destroy()\n", err);
-        }
+        printf("Error %d calling ECP_Destroy()\n", err);
     }
 
-    if (ECP_E_NOERR == err)
-    {
-        return (0);
-    }
-    else
-    {
-        return (2);
-    }
-}
-
-DBusHandlerResult message_handler(DBusConnection * connection,
-                                  DBusMessage * message, void * user_data)
-{
-    if (ECP_E_NOERR == ECP_Handle_Message(&context, message))
-    {
-        return DBUS_HANDLER_RESULT_HANDLED;
-    }
-
-    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    return err;
 }
 
 tECP_Error enable_line_handler(uint8_t line)
