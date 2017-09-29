@@ -39,6 +39,8 @@
 #include <errno.h>
 #include <signal.h>
 
+#include "radio-controller/telecommand.h"
+
 void _sigint_handler( int sig );
 
 char * frame_filepath   = _FRAME_FILEPATH;
@@ -109,8 +111,9 @@ int main( int argc, char * argv [] ) {
       bytes_read += t;
       
       if( frame_size == bytes_read ) {
-        printf( "mock: read a whole packet %*.*s\n", frame_size, frame_size, read_buffer );
+        if( verbose > 0 ) { fprintf( stderr, "mock: processing frame\n" ); }
         bytes_read = 0;
+        telecommand_process( read_buffer, frame_size );
       }
 
       sleep( 1 );
