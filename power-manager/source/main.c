@@ -44,7 +44,7 @@ int main()
         }
 
         /* Now loop for (at most) 15 seconds, looking for a message */
-        for (i = 0; (i < 15) && (err == ECP_NOERR); i++)
+        for (i = 0; err == ECP_NOERR; i++)
         {
             printf("Sending power status\n");
             DBusMessage * message;
