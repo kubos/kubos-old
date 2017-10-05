@@ -22,8 +22,8 @@
 #include <string.h>
 #include "evented-control/ecp.h"
 
-tECP_Error check_message(DBusMessage * message, const char * interface,
-                         const char * member)
+ECPStatus check_message(DBusMessage * message, const char * interface,
+                        const char * member)
 {
     const char * msg_interface = dbus_message_get_interface(message);
     const char * msg_member    = dbus_message_get_member(message);
@@ -31,7 +31,7 @@ tECP_Error check_message(DBusMessage * message, const char * interface,
     if ((0 == strcmp(msg_interface, interface))
         && (0 == strcmp(msg_member, member)))
     {
-        return ECP_NOERR;
+        return ECP_OK;
     }
     return ECP_GENERIC;
 }

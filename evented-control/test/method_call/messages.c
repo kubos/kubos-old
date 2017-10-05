@@ -26,12 +26,12 @@
 #include <stdlib.h>
 #include "evented-control/ecp.h"
 
-tECP_Error on_test_method_parser(tECP_Context * context, DBusMessage * message,
-                                 struct _tECP_MessageHandler * handler)
+ECPStatus on_test_method_parser(ECPContext * context, DBusMessage * message,
+                                struct _ECPMessageHandler * handler)
 {
-    DBusMessage *                    reply = NULL;
-    tECP_TestMethod_MessageHandler * method_handler
-        = (tECP_TestMethod_MessageHandler *) handler;
+    DBusMessage *                  reply = NULL;
+    ECPTestMethod_MessageHandler * method_handler
+        = (ECPTestMethod_MessageHandler *) handler;
     int16_t value = 0;
 
     dbus_message_get_args(message, NULL, DBUS_TYPE_INT16, &value);
@@ -44,9 +44,9 @@ tECP_Error on_test_method_parser(tECP_Context * context, DBusMessage * message,
     dbus_message_unref(reply);
 }
 
-tECP_Error on_test_method(tECP_Context * context, test_method_cb cb)
+ECPStatus on_test_method(ECPContext * context, test_method_cb cb)
 {
-    tECP_TestMethod_MessageHandler * test_method_handler
+    ECPTestMethod_MessageHandler * test_method_handler
         = malloc(sizeof(*test_method_handler));
     test_method_handler->super.interface = TEST_SERVER_INTERFACE;
     test_method_handler->super.member    = TEST_SERVER_METHOD;
@@ -57,7 +57,7 @@ tECP_Error on_test_method(tECP_Context * context, test_method_cb cb)
     return ECP_Add_Message_Handler(context, &test_method_handler->super);
 }
 
-tECP_Error call_test_method(tECP_Context * context, uint8_t value)
+ECPStatus call_test_method(ECPContext * context, uint8_t value)
 {
     DBusMessage * message = NULL;
 

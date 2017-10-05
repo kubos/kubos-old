@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
+/**
+ * @defgroup ECPMessages Generic Message API
+ * @addtogroup ECPMessages
+ * @{
+ */
+
 #pragma once
 
 #include "evented-control/power-manager-messages.h"
 
 /**
  * Checks to see if the message matches the specified interface and member.
+ * @param[in] message Message received from event bus
+ * @param[in] interface Interface name to check message against
+ * @param[in] member Method/Signal name to check message against
+ * @return ECPStatus ECP_OK if successful, otherwise error message
  */
-tECP_Error check_message(DBusMessage * message, const char * interface,
-                         const char * member);
+ECPStatus check_message(DBusMessage * message, const char * interface,
+                        const char * member);
+
+/* @} */
