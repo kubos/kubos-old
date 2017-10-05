@@ -18,6 +18,7 @@
 #include <evented-control/ecp.h>
 #include <evented-control/messages.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "radio-controller/packet.h"
 #include "radio-controller/telecommand.h"
@@ -139,6 +140,11 @@ void telecommand_run(telecommand_packet p)
         printf("Error with ECP_Init\n");
     }
 
+    /**
+     * This is a temporary measure to get early integration working.
+     * Ideally this payload decoding and message sending will
+     * be done elsewheres or in a more generic fashion.
+     */
     switch (service_id)
     {
         /** Power Manager **/
@@ -161,15 +167,10 @@ void telecommand_run(telecommand_packet p)
         }
     }
 
-    for (int i = 0; i < 15; i++)
-    {
-        //        ECP_Loop(&context, 1000);
-    }
-
     ECP_Destroy(&context);
 }
 
-void telecommand_process(char * base, size_t len)
+void telecommand_process(const char * base, size_t len)
 {
     printf("In Packet Processor. w00t!\n");
     telecommand_packet p;
