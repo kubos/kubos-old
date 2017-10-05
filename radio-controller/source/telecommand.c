@@ -132,9 +132,9 @@ void telecommand_run(telecommand_packet p)
     service_id  = p.data.payload[0];
     function_id = p.data.payload[1];
 
-    tECP_Context context;
+    ECPContext context;
 
-    if (ECP_NOERR != ECP_Init(&context, "org.KubOS.client"))
+    if (ECP_OK != ECP_Init(&context, "org.KubOS.client"))
     {
         printf("Error with ECP_Init\n");
     }
@@ -150,7 +150,7 @@ void telecommand_run(telecommand_packet p)
                 case 1:
                 {
                     printf("Calling enable line\n");
-                    if (ECP_NOERR != enable_line(&context, 1))
+                    if (ECP_OK != enable_line(&context, 1))
                     {
                         printf("Error with enable_line\n");
                     }
@@ -193,11 +193,4 @@ void telecommand_debug(telecommand_packet p)
     printf("packet:data:service_type %d\n", p.data.header.service_type);
     printf("packet:data:service_subtype %d\n", p.data.header.service_subtype);
     printf("packet:data:error_control %d\n", p.data.error_control);
-
-    /**
-    uint8_t buffer[PACKET_SIZE];
-    memcpy(buffer, &p, PACKET_SIZE);
-    for (int i = 0; i < PACKET_SIZE; i++) printf("0x%02x ", buffer[i]);
-    printf("\n");
-    **/
 }
