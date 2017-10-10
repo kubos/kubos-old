@@ -34,9 +34,13 @@
  */
 typedef struct
 {
+    /** Version Number. Set to 0 */
     uint version : 3;
+    /** Type. Set to 1 */
     uint type : 1;
-    uint data_field_header : 1;
+    /** Data Field Header Flag. Set to 1 */
+    uint dfh : 1;
+    /** Application Process ID */
     uint app_id : 11;
 } packet_id;
 

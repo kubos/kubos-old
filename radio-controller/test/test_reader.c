@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <uv.h>
 #include "radio-controller/packet.h"
+#include "radio-controller/telecommand.h"
 
 // TDB defined for real
 #define PACKET_SIZE 128

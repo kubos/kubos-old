@@ -28,7 +28,12 @@
  */
 typedef struct
 {
+    /** Sequence Flags. Value is 11 */
     uint flags : 2;
+    /**
+     * Sequence Count. Should be specific
+     * to the telecommand source plus APID.
+     */
     uint count : 14;
 } telecommand_sequence;
 
@@ -52,9 +57,9 @@ typedef struct
 typedef struct
 {
     /** CCSDS Secondary Header Flag - Set to 0 */
-    uint ccsds_secondary_header : 1;
+    uint csh : 1;
     /** TP Packet PUS Version Number - Set to 1 */
-    uint tc_packet_version : 3;
+    uint version : 3;
     /**
      * ACK field -
      * ---1 acceptance of packet by app
@@ -76,8 +81,10 @@ typedef struct
 {
     /** Telecommand data field header - Fixed at 24 bits */
     telecommand_data_header header;
-    uint8_t *               payload;
-    uint16_t                error_control;
+    /** Command payload */
+    uint8_t * payload;
+    /** Packet Error Control field (CRC) */
+    uint16_t error_control;
 } telecommand_data;
 
 typedef struct

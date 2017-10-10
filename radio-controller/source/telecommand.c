@@ -81,11 +81,10 @@ bool telecommand_parse(const uint8_t * buffer, telecommand_packet * packet)
                              >> ID_VERSION_SHIFT;
         packet->id.type
             = (*(buffer + ID_TYPE_OFFSET) & ID_TYPE_MASK) >> ID_TYPE_SHIFT;
-        packet->id.data_field_header
-            = (*(buffer + ID_HEADER_OFFSET) & ID_HEADER_MASK)
-              >> ID_HEADER_SHIFT;
+        packet->id.dfh = (*(buffer + ID_HEADER_OFFSET) & ID_HEADER_MASK)
+                         >> ID_HEADER_SHIFT;
 
-        packet->id.data_field_header = (buffer[0] & ID_HEADER_MASK) >> 3;
+        packet->id.dfh = (buffer[0] & ID_HEADER_MASK) >> 3;
         packet->id.app_id
             = ((*(buffer + ID_APID1_OFFSET) & ID_APID1_MASK) << ID_APID1_SHIFT)
               | *(buffer + ID_APID2_OFFSET);
@@ -99,10 +98,10 @@ bool telecommand_parse(const uint8_t * buffer, telecommand_packet * packet)
         packet->data_length = *(buffer + DATA_LENGTH1_OFFSET) << 8
                               | *(buffer + DATA_LENGTH2_OFFSET);
 
-        packet->data.header.ccsds_secondary_header
+        packet->data.header.csh
             = (*(buffer + DATA_HEAD_FLAG_OFFSET) & DATA_HEAD_FLAG_MASK)
               >> DATA_HEAD_FLAG_SHIFT;
-        packet->data.header.tc_packet_version
+        packet->data.header.version
             = (*(buffer + DATA_HEAD_VER_OFFSET) & DATA_HEAD_VER_MASK)
               >> DATA_HEAD_VER_SHIFT;
         packet->data.header.ack
@@ -170,12 +169,12 @@ void telecommand_run(telecommand_packet p)
     ECP_Destroy(&context);
 }
 
-void telecommand_process(const char * base, size_t len)
+void telecommand_process(const char * buffer, size_t len)
 {
     printf("In Packet Processor. w00t!\n");
     telecommand_packet p;
 
-    telecommand_parse(base, &p);
+    telecommand_parse(buffer, &p);
     telecommand_run(p);
 }
 
@@ -183,13 +182,13 @@ void telecommand_debug(telecommand_packet p)
 {
     printf("packet:id:version %d\n", p.id.version);
     printf("packet:id:type %d\n", p.id.type);
-    printf("packet:id:dfh %d\n", p.id.data_field_header);
+    printf("packet:id:dfh %d\n", p.id.dfh);
     printf("packet:id:app_id %d\n", p.id.app_id);
     printf("packet:sequence:flags %d\n", p.sequence.flags);
     printf("packet:sequence:count %d\n", p.sequence.count);
     printf("packet::data_length %d\n", p.data_length);
-    printf("packet:data:sheader %d\n", p.data.header.ccsds_secondary_header);
-    printf("packet:data:tcver %d\n", p.data.header.tc_packet_version);
+    printf("packet:data:sheader %d\n", p.data.header.csh);
+    printf("packet:data:tcver %d\n", p.data.header.version);
     printf("packet:data:ack %d\n", p.data.header.ack);
     printf("packet:data:service_type %d\n", p.data.header.service_type);
     printf("packet:data:service_subtype %d\n", p.data.header.service_subtype);
