@@ -1,0 +1,13 @@
+{
+    "source":"./libzmq",
+    "license":"LGPL",
+    "name":"libzmq",
+    "repository":{
+        "url":"git://github.com/kubostech/libzmq",
+        "type":"git"
+    },
+    "version":"4.2.2",
+    "homepage":"https://github.com/kubostech/libzmq",
+    "dependencies":{
+    }
+}
