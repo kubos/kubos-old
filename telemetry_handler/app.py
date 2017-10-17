@@ -12,9 +12,20 @@ app.add_url_rule(
     view_func=GraphQLView.as_view(
         'graphql',
         schema=schema,
+        graphiql=False
+    )
+)
+
+
+app.add_url_rule(
+    '/graphiql',
+    view_func=GraphQLView.as_view(
+        'graphiql',
+        schema=schema,
         graphiql=True
     )
 )
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):

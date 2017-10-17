@@ -21,10 +21,11 @@ class TelemConnectionField(SQLAlchemyConnectionField):
 
 class Query(graphene.ObjectType):
     node = relay.Node.Field()
-    all_telemetry = SQLAlchemyConnectionField(Telemetry)
-    telem_by_subsys = TelemConnectionField(Telemetry,
+    telemetery = TelemConnectionField(Telemetry,
+                                           param=graphene.String(),
                                            subsystem=graphene.String(),
-                                           param=graphene.String())
+                                           timestamp=graphene.Int(),
+                                           value=graphene.Int())
 
 
 schema = graphene.Schema(query=Query)
