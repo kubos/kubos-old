@@ -5,7 +5,7 @@ Abstract
 --------
 
 This documentation is for the Evented Control Plane (ECP)
-middleware. It is to pass "control oriented" flight domain messages
+middleware. Its role is to pass "control oriented" flight domain messages
 between software components. The ECP implements an interprocess queuing
 system that allows flight software components to listen for messages on
 "n of m" message broadcast channels.
@@ -13,17 +13,23 @@ system that allows flight software components to listen for messages on
 The ECP is not a generic messaging system. It is used to communicate
 domain-specific predefined messages related to common flight tasks. It
 is intended to link sensor elements (GPS, IMU, Star Tracker, etc.) with
-logic and control elements (Orientataion, Camera Control, Downlink
+logic and control elements (Orientation, Camera Control, Downlink
 Control, etc.) to allow the latter to be programmed in an event oriented
 fashion.
+
+This specific document mainly deals with the lower level workings of
+the ECP API. This document is intended for those maintaining the ECP
+API and creating the higher level abstractions around it. Application
+developers should only have to interact with application message
+specific abstractions which use the ECP API, not the lower level functions.
 
 Introduction
 -------------
 
 Consider the typical technique for programming spacecraft orientation
-control, for instance. Typically, we would have single a process which
-reads GPS, IMU and possibly Star Tracker data to determine it's current
-position. It then proceeds through a series of tests to determine it's
+control. Typically, we would have a single process which
+reads GPS, IMU and possibly Star Tracker data to determine its current
+position. It then proceeds through a series of tests to determine its
 current state, what task has priority at the moment and whether it is
 more important to orient the spacecraft towards the sun (batteries are
 low), towards a downlink station (storage is low) or to orient a sensor
@@ -38,8 +44,8 @@ logic is decomposed into its constituent components and implemented as
 separate, but communicating processes. Instead of a monolithic
 application implementing all control logic, we could create separate
 software processes for power, downlink and targeting control. Each of
-these logic compnents would independently determine what actions they
-think the spacecraft should take. A prioritization algorithme could
+these logic components independently determine what actions they
+think the spacecraft should take. A prioritization algorithm could
 then be run in a separate process. At any given time, the spacecraft
 would perform the highest priority task.
 
@@ -47,21 +53,77 @@ This style of programming requires developers to think clearly about
 process priorities, but it allows them to greatly simplify the logic
 of other components.
 
+How does it work?
+-----------------
+
+The ECP middleware is currently built on top of
+`D-Bus <https://www.freedesktop.org/wiki/Software/dbus/>`_.
+D-Bus provides a messaging bus which is stock to many Linux systems,
+provides abstraction of the transport layer and also provides
+the functionality for Pub Sub and RPC style communication.
+
+Ideally the ECP will completely hide away the details of how D-Bus works
+and its internals. Future implementations may not use D-Bus, therefore
+we should not be tightly coupled to how it behaves.
+
+The ECP API is split into two halves: the low level ECP API and the
+high level message API. The low level ECP API is an abstraction of
+underlying messaging layers and patterns. It does not actually define
+any messages but rather defines the tools used to create, send
+and receive those messages. This is where the D-Bus abstraction lives.
+The higher level message API is an application specific abstraction around
+the ECP API. It defines domain specific messages using the ECP API and
+provides simple functions for sending and receiving those messages.
+
+Basic flow of ECP usage by Subscriber/Client
+--------------------------------------------
+
+.. uml::
+
+   @startuml
+   Client --> ECP: Connection Request (ecp_init)
+   ECP --> DBus: Initiate Connection (dbus_bus_get)
+   ECP --> DBus: Register Name (dbus_request_name)
+   ECP --> DBus: Add Message Filter (dbus_connection_add_filter)
+   Client --> ECP: Listen Request (ecp_listen)
+   ECP --> DBus: Subscribe (dbus_bus_add_match)
+   Client --> ECP: Loop (ecp_loop)
+   ECP --> DBus: Loop (dbus_connection_read_write_dispatch)
+   DBus --> ECP: Data (callback to _ecp_message_handler)
+   ECP --> Client: Published Data (callback to message specifc handler)
+   @enduml
+
+Basic flow of ECP usage by Publisher/Server
+-------------------------------------------
+
+.. uml::
+
+   @startuml
+   Server --> ECP: Connection Request (ecp_init)
+   ECP --> DBus: Initiate Connection (dbus_bus_get)
+   ECP --> DBus: Register Name (dbus_request_name)
+   ECP --> DBus: Add Message Filter (dbus_connection_add_filter)
+   Server --> ECP: Publish data (ecp_send)
+   ECP --> DBus: Publish data (dbus_connection_send)
+   @enduml
+
 What subsystems are included?
 -----------------------------
 
-THe ECP middleware will support the following systems:
+The ECP middleware will support the following systems:
 
-  SYS - System Status & Infrastructure Information
-  RIO - Radio Control & Status
-  EPS - Power Supply Control & Status
-  GPS - Global Positioning System (GPS)
-  IMU - Intertial Measurement Unit
-  DWN - Downlink Control
-  STO - Storage Control
+  - SYS - System Status & Infrastructure Information
+  - RIO - Radio Control & Status
+  - EPS - Power Supply Control & Status
+  - GPS - Global Positioning System (GPS)
+  - IMU - Intertial Measurement Unit
+  - DWN - Downlink Control
+  - STO - Storage Control
+
+Currently only the EPS subsystem is supported.
 
 Under the hood, each system is represented by a "channel" that carries
-channel and message specific messages. Processes (clients) use the ECP
+messages specific to the system's functionality. Processes (clients) use the ECP
 to send many-cast messages between themselves. The ECP middleware API is
 "broker agnostic" in that it does not itself require a broker, but the
 ECP implementation may be based on a brokered model. Consumers of the
@@ -75,63 +137,66 @@ The EPC middleware exports a "Stock C" interface in ecp.h and a library
 (libecp) which implements its functionality. The middleware assumes an
 "Init, Use, Clean Up" pattern.
 
-* The ECP_Init() function initializes an opaque data structure and
+* The ecp_init() function initializes an opaque data structure and
   initializes the processes' link with the message bus.
 
-* The ECP_Listen() function allows the process to register a callback
+* The ecp_listen() function allows the process to register a callback
   function for a particular message or message channel. The
   ECP_Unlisten() function de-registers a callback registered with the
   ECP_Listen() function.
 
-* The ECP_Broadcast() function is used to broadcast a message to all
+* The ecp_broadcast() function is used to broadcast a message to all
   processes listening on a particular channel.
 
-* The ECP_Loop() function iterates through the event loop for a fixed
-  amount of time or following the execution of a listen callback.
+* The ecp_loop() function iterates through the event loop
+  for a fixed amount of time or until the execution of a listen callback.
+  The event loop is an internal ECP function which abstracts away the
+  work of waiting for new messages and handing them off to the
+  appropriate message handlers.
 
-* The ECP_Destroy() function unregisters callbacks, deallocates memory
+* The ecp_destroy() function unregisters callbacks, deallocates memory
   and disassociates the client from any message subscriptions
   associated with it.
 
 The ECP middleware makes no assumptions about the number of processes
 subscribing to or publishing to a particular channel. Messages received
-over the ECP_Listen() interface are not directly acknowledged. Consumers
-of the ECP API may use SYS messages to discover the address of endpoints
-responsible for sending messages.
+over the ECP_Listen() interface are not directly acknowledged. It is the
+responsibility of the subscriber to acknowledge any messages received,
+if that is appropriate for the message.
 
 Clients of the ECP middleware are expected to produce or consume messages
 broadcast on a channel; clients may both send and receive messages.
 Sending a message is simple, and requires a single call to the
-ECP_Broadcast() function. Receiving messages requires the client to
-register a callback with the ECP_Listen() function.
+ecp_broadcast() function. Receiving messages requires the client to
+register a callback with the ecp_listen() function.
 
 The ECP middleware functions each return an integer status code, cast as
-a ECPStatus type. They all return a zero upon successful completion. For
+a KECPStatus type. They all return a zero upon successful completion. For
 example, this is a typical call sequence:
 
 .. code-block:: c
 
-    ECPStatus err = ECP_OK;
+    KECPStatus err = ECP_OK;
     const char * my_interface = "org.KubOS.Client";
 
-    if(ECP_OK != (err = ECP_Init(&context, my_interface)))
+    if(ECP_OK != (err = ecp_init(&context, my_interface)))
     {
         /* Perform error recovery here */
-        printf( "Error %d when calling ECP_Init()\n", err );
+        printf( "Error %d when calling ecp_init()\n", err );
         break;
     }
 
     /* Continue execution here */
 
 The general pattern of use is init-listen-loop/send-destroy. Don't call
-ECP_Listen() or ECP_Broadcast() before calling ECP_Init() or after
-calling ECP_Destroy(). Though the operating system will likely deallocate
-memory allocated by the ECP_Init() function, there's no guarantee the
+ecp_listen() or ecp_broadcast() before calling ecp_init() or after
+calling ecp_destroy(). Though the operating system will likely deallocate
+memory allocated by the ecp_init() function, there's no guarantee the
 underlying messaging system will properly disconnect from an message
-endpoint without the ECP_Destroy() call. Always call the ECP_Destroy()
+endpoint without the ecp_destroy() call. Always call the ecp_destroy()
 function before exiting a process.
 
-Practically speaking calls to ECP_Listen, ECP_Call and ECP_Broadcast
+Practically speaking calls to ecp_listen, ecp_call and ecp_broadcast
 will be hidden behind higher level, service specific messaging APIs.
 The lower level ECP functions will be used to create these higher
 level APIs, but most likely they will not be used directly
@@ -147,24 +212,24 @@ Here is an example of the init-listen-loop/send-destroy pattern:
    #include <stdio.h>
    #include <stdlib.h>
 
-   ECPStatus status_handler(eps_power_status status);
+   KECPStatus status_handler(EPSPowerState status);
 
    #define MY_NAME "org.KubOS.client"
 
    int main(int argc, char * argv[])
    {
-       ECPStatus   err;
+       KECPStatus   err;
        ECPContext context;
 
        do
        {
 
-           if (ECP_OK != (err = ECP_Init(&context, MY_NAME)))
+           if (ECP_OK != (err = ecp_init(&context, MY_NAME)))
            {
-               printf("Error calling ECP_Init(): %d\n", err);
+               printf("Error calling ecp_init(): %d\n", err);
                break;
            }
-           printf("Successfully called ECP_Init()\n");
+           printf("Successfully called ecp_init()\n");
 
            /**
             * Hidden behind on_power_status is code which creates a
@@ -191,24 +256,27 @@ Here is an example of the init-listen-loop/send-destroy pattern:
 
            for (int i = 0; i < 10; i++)
            {
-               ECP_Loop(&context, 100);
+               ecp_loop(&context, 100);
            }
        } while (0);
 
-       if (ECP_OK != (err = ECP_Destroy(&context)))
+       if (ECP_OK != (err = ecp_destroy(&context)))
        {
-           printf("Error calling ECP_Destroy(): %d\n", err);
+           printf("Error calling ecp_destroy(): %d\n", err);
        }
 
        return (err);
    }
 
-   ECPStatus status_handler(eps_power_status status)
+   KECPStatus status_handler(EPSPowerState status)
    {
        printf("Got status %d:%d\n", status.line_one, status.line_two);
+       return ECP_OK;
    }
 
 
+ECP APIs
+--------
 
 .. toctree::
   :caption: Low Level ECP API

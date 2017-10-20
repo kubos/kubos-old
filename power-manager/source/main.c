@@ -19,27 +19,27 @@
 #include <evented-control/messages.h>
 #include <stdio.h>
 
-ECPStatus enable_line_handler(uint8_t line);
+KECPStatus enable_line_handler(uint8_t line);
 
 int main()
 {
-    ECPStatus        err = ECP_OK;
-    int              i;
-    int              initialized = 0;
-    eps_power_status status;
-    ECPContext       context;
+    KECPStatus      err = ECP_OK;
+    int             i;
+    int             initialized = 0;
+    eps_power_state status;
+    ecp_context     context;
 
     do
     {
-        if (ECP_OK != (err = ECP_Init(&context, POWER_MANAGER_INTERFACE)))
+        if (ECP_OK != (err = ecp_init(&context, POWER_MANAGER_INTERFACE)))
         {
-            printf("Error %d calling ECP_Init()\n", err);
+            fprintf(stderr, "Error %d calling ecp_init()\n", err);
             break;
         }
 
         if (ECP_OK != on_enable_line(&context, &enable_line_handler))
         {
-            printf("Error registering enable line callback\n");
+            fprintf(stderr, "Error registering enable line callback\n");
             break;
         }
 
@@ -50,25 +50,25 @@ int main()
             DBusMessage * message;
             eps_get_power_status(&status);
             format_power_status_message(status, &message);
-            ECP_Broadcast(&context, message);
-            err = ECP_Loop(&context, 1000);
+            ecp_send(&context, message);
+            err = ecp_loop(&context, 1000);
         }
 
         if (err != ECP_OK)
         {
-            printf("Error %d calling ECP_Loop()\n", err);
+            fprintf(stderr, "Error %d calling ecp_loop()\n", err);
         }
     } while (0);
 
-    if (ECP_OK != (err = ECP_Destroy(&context)))
+    if (ECP_OK != (err = ecp_destroy(&context)))
     {
-        printf("Error %d calling ECP_Destroy()\n", err);
+        fprintf(stderr, "Error %d calling ECP_Destroy()\n", err);
     }
 
     return err;
 }
 
-ECPStatus enable_line_handler(uint8_t line)
+KECPStatus enable_line_handler(uint8_t line)
 {
     printf("Enable line..\n");
     eps_enable_power_line(line);
