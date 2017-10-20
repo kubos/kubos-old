@@ -132,9 +132,9 @@ void telecommand_run(telecommand_packet p)
     service_id  = p.data.payload[0];
     function_id = p.data.payload[1];
 
-    ECPContext context;
+    ecp_context context;
 
-    if (ECP_OK != ECP_Init(&context, "org.KubOS.client"))
+    if (ECP_OK != ecp_init(&context, "org.KubOS.client"))
     {
         printf("Error with ECP_Init\n");
     }
@@ -166,7 +166,7 @@ void telecommand_run(telecommand_packet p)
         }
     }
 
-    ECP_Destroy(&context);
+    ecp_destroy(&context);
 }
 
 void telecommand_process(const char * buffer, size_t len)
