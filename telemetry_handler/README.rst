@@ -11,26 +11,37 @@ The default Telemetry table is pretty large and there are no query limits
 built into the code atm. I'd suggest trimming down the table size in the
 database before playing.
 
-
 ::
 
    python ./app.py
 
 This will start a flask server at http://127.0.0.1:5000.
-If you go to http://127.0.0.1:5000/graphql you will find a built-in
+If you go to http://127.0.0.1:5000/graphiql you will find a built-in
 GraphiQL interface.
+
+There is a raw HTTP/GraphQL endpoint found at http://127.0.0.1:5000/graphql.
 
 Valid queries will take the form of
 
 ::
 
    {
-     allTelemetry {
-       edges {
-         node {
-           timestamp,
-           subsystem,
-         }
-       }
+     telemetry {
+       timestamp,
+       subsystem
+     }
+   }
+
+
+Filtering can be done like so
+
+::
+
+   {
+     telemetry(subsystem:"PCM") {
+       timestamp,
+       subsystem,
+       param,
+       value
      }
    }
