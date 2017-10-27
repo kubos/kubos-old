@@ -1,0 +1,17 @@
+{
+    "bin":"./source",
+    "license":"Apache-2.0",
+    "name":"radio-controller-bin",
+    "repository":{
+        "url":"git://github.com/kubostech/radio-controller-bin",
+        "type":"git"
+    },
+    "dependencies":{
+        "evented-control":"kubostech/evented-control"
+    },
+    "version":"0.1.0",
+    "homepage":"https://github.com/kubostech/radio-controller-bin",
+    "dependencies":{
+        "radio-controller":"kubostech/radio-controller"
+    }
+}
