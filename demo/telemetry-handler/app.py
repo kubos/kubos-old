@@ -1,9 +1,8 @@
-#!/usr/bin/env python
-
 from flask import Flask
 from flask_graphql import GraphQLView
-from schema import schema
 
+from models import db_session
+from schema import schema, Telemetry
 
 def create_app():
     app = Flask(__name__)
@@ -29,3 +28,8 @@ def create_app():
     )
 
     return app
+
+
+# @app.teardown_appcontext
+# def shutdown_session(exception=None):
+#     db_session.remove()

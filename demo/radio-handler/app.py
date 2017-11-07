@@ -1,46 +1,53 @@
 from flask import Flask, request
 import requests
 
-app = Flask(__name__)
-app.debug = True
+config = None
 
-APP_IP = "http://127.0.0.1"
-TELEMETRY = "%s:5001/graphql" % APP_IP
-PAYLOAD = "%s:5002" % APP_IP
-MAJORTOM = "%s:5003" % APP_IP
-
-
-@app.route('/majortom', methods=['POST'])
 def majortom():
     print "Got message from Major Tom"
-    print request.data
     try:
         headers = {'Content-Type':request.headers['Content-Type']}
 
         if "telemetry" in request.data:
-            DEST = TELEMETRY
+            DEST = "http://%s:%s" % (config['APP_IP'], config['TELEM_PORT'])
         elif "payload" in request.data:
-            DEST = PAYLOAD
+            DEST = "http://%s:%s" % (config['APP_IP'], config['PAYLOAD_PORT'])
+
+        r = requests.post(DEST, data=request.data, headers=headers, timeout=1)
+        return r.text
+    except requests.exceptions.RequestException as e:
+        print e
+        return '{}'
+
+def kubos():
+    print "Got message from KubOS"
+    try:
+        headers = {'Content-Type':'application/json'}
+        DEST = "http://%s:%s" % (config['APP_IP'], config['MAJORTOM_PORT'])
 
         r = requests.post(DEST, data=request.data, headers=headers, timeout=0.1)
         return r.text
     except:
         return '{}'
 
-@app.route('/kubos', methods=['POST'])
-def kubos():
-    print "Got message from KubOS"
-    try:
-        headers = {'Content-Type':'application/json'}
-        r = requests.post(MAJORTOM, data=request.data, headers=headers, timeout=0.1)
-        return r.text
-    except:
-        return '{}'
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    pass
+def create_app(cfg):
+    app = Flask(__name__)
+    app.debug = True
+    global config
 
+    config = cfg
 
-if __name__ == '__main__':
-    app.run()
+    app.add_url_rule(
+        '/majortom',
+        view_func=majortom,
+        methods=['POST',]
+    )
+
+    app.add_url_rule(
+        '/kubos',
+        view_func=kubos,
+        methods=['POST',]
+    )
+
+    return app

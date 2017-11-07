@@ -6,14 +6,8 @@ from sqlalchemy.orm import (
 
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine('sqlite:///telem.db', convert_unicode=True)
-db_session = scoped_session(sessionmaker(
-    autocommit=False, autoflush=False, bind=engine))
-
+db_session = None
 Base = declarative_base()
-
-Base.query = db_session.query_property()
-
 
 class Telemetry(Base):
     __tablename__ = 'Telemetry'
@@ -21,3 +15,11 @@ class Telemetry(Base):
     subsystem = Column(String)
     param = Column(String)
     value = Column(BigInteger)
+
+def init_db(path):
+    global db_session
+    global Base
+
+    engine = create_engine("sqlite:///%s" % path, convert_unicode=True)
+    db_session = scoped_session(sessionmaker(bind=engine))
+    Base.query = db_session.query_property()
