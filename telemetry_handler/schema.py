@@ -55,8 +55,8 @@ class CreateTelemetry(graphene.Mutation):
     class Arguments:
         subsystem = graphene.String(required=True)
         param = graphene.String(required=True)
-        value = graphene.Int(required=True)
-        timestamp = graphene.Int(required=True)
+        value = graphene.Float(required=True)
+        timestamp = graphene.Float(required=True)
 
     Output = Telemetry
 
