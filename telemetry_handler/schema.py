@@ -6,6 +6,7 @@ binding dealing with the Telemetry table.
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from models import Telemetry as TelemetryModel
+from models import db_session
 
 
 class Telemetry(SQLAlchemyObjectType):
@@ -49,4 +50,29 @@ class Query(graphene.ObjectType):
             return query.limit(first)
         return query.all()
 
-schema = graphene.Schema(query=Query)
+class CreateTelemetry(graphene.Mutation):
+
+    class Arguments:
+        subsystem = graphene.String(required=True)
+        param = graphene.String(required=True)
+        value = graphene.Float(required=True)
+        timestamp = graphene.Float(required=True)
+
+    Output = Telemetry
+
+    def mutate(self, info, subsystem, param, value, timestamp):
+        new_telem = TelemetryModel(subsystem=subsystem,
+                         param=param,
+                         value=value,
+                         timestamp=timestamp)
+
+        db_session.add(new_telem)
+        db_session.commit()
+
+        return Telemetry(subsystem=subsystem, param=param, value=value, timestamp=timestamp)
+
+
+class Mutation(graphene.ObjectType):
+    create_telemetry = CreateTelemetry.Field()
+
+schema = graphene.Schema(query=Query, mutation=Mutation)

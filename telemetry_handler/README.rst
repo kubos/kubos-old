@@ -45,3 +45,21 @@ Filtering can be done like so
        value
      }
    }
+
+
+Adding telemetry (mutations) can be done like so
+
+::
+   mutation {
+     createTelemetry(
+       subsystem: "sub",
+       param: "param",
+       value: 1111,
+       timestamp: 9999
+     ) {
+       subsystem
+       param
+       value
+       timestamp
+     }
+   }
