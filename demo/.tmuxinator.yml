@@ -1,0 +1,10 @@
+project_name: demo
+project_root: .
+
+windows:
+  - demo:
+      layout: tiled
+      panes:
+        - python radio-handler/main.py config.yml
+        - python telemetry-handler/main.py config.yml telem.db
+        - python payload/main.py config.yml
