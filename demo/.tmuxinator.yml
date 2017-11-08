@@ -8,3 +8,4 @@ windows:
         - python radio-handler/main.py config.yml
         - python telemetry-handler/main.py config.yml telem.db
         - python payload/main.py config.yml
+        - python telemetry-poller/main.py config.yml 10
