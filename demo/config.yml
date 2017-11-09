@@ -1,5 +1,5 @@
 # Base IP address for demo processes
-APP_IP : "127.0.0.1"
+APP_IP : "0.0.0.0"
 
 # Process Ports
 RADIO_PORT : 5000
