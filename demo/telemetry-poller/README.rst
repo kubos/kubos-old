@@ -1,31 +1,9 @@
-Python Payload Demo
+Python Telemetry Poller Demo
 ====================
 
-This is a barebones demo of a payload implemented in Python.
+This is a barebones demo of a telemetry poller implemented in Python.
 
-This payload listens on http://127.0.0.1:5002 for
-graphql mutations and queries. Mutations represent commands,
-queries are requests for state information (telemetry).
+This poller sends a graphql query to the payload, iterates over the date sent
+back, and sends a mutation to the telemetry-handler for each subsystem/parameter.
 
-There is also a graphiql interface at http://127.0.0.1:5002/graphiql
-for ease of development.
-
-Currently this payload has a single member and function `on`.
-
-Example query:
-
-.. code::
-   {
-       payload {
-           on
-       }
-   }
-
-Example function call (mutation):
-
-.. code::
-   mutation {
-       enable(on:true) {
-           on
-       }
-   }
+The polling interval is set as the second command line argument.
