@@ -21,5 +21,13 @@ def init_db(path):
     global Base
 
     engine = create_engine("sqlite:///%s" % path, convert_unicode=True)
-    db_session = scoped_session(sessionmaker(bind=engine))
+    db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
     Base.query = db_session.query_property()
+
+def get_db():
+    global db_session
+
+    if not db_session:
+        print "ERRR"
+        return None
+    return db_session

@@ -16,7 +16,13 @@ with open(args.config) as ymlfile:
 query_str = """
 {
   payload {
-    on
+    payloadOn
+    uptime
+    startTime
+  }
+
+  thruster {
+    thrusterOn
   }
 }
 """
@@ -37,19 +43,20 @@ mutation {
 }
 """
 
-
 headers = {'Content-Type' : 'application/graphql'}
 PAYLOAD_DEST = "http://{}:{}".format(cfg['APP_IP'], cfg['PAYLOAD_PORT'])
 TELEM_DEST = "http://{}:{}".format(cfg['APP_IP'], cfg['TELEM_PORT'])
 
-
 while True:
-    r = requests.post(PAYLOAD_DEST, data=query_str, headers=headers, timeout=10)
-
-    obj = json.loads(r.text)
-    for subsys in obj['data']:
-        for param in obj['data'][subsys]:
-            milli_sec = int(round(time.time() * 1000))
-            mutant = mutate_str % (subsys, param, obj['data'][subsys][param], milli_sec)
-            r = requests.post(TELEM_DEST, data=mutant, headers=headers, timeout=10)
-    time.sleep(args.delay)
+    try:
+        r = requests.post(PAYLOAD_DEST, data=query_str, headers=headers, timeout=10)
+        obj = json.loads(r.text)
+        for subsys in obj['data']:
+            for param in obj['data'][subsys]:
+                milli_sec = int(round(time.time() * 1000))
+                mutant = mutate_str % (subsys, param, obj['data'][subsys][param], milli_sec)
+                r = requests.post(TELEM_DEST, data=mutant, headers=headers, timeout=10)
+    except:
+        print "Got errr...continuing..."
+    finally:
+        time.sleep(args.delay)
