@@ -1,7 +1,11 @@
 import graphene,time
 
 class PayloadTelemetry(graphene.ObjectType):
-    """Class modeling the payload telemetry"""
+    """Class modeling the payload telemetry
+    This class could also contain functions for manipulating
+    the payload or retrieving hardware-based state values
+    from the actual payload.
+    """
 
     # Member modeling payload on/off state
     payload_on = graphene.Boolean()
@@ -14,7 +18,10 @@ my_payload = PayloadTelemetry(payload_on=False,
                             start_time=0)
 
 class ThrusterTelemetry(graphene.ObjectType):
-    """Class modeling the thruster telemetry"""
+    """Class modeling the thruster telemetry.
+    This class could also contain functions for manipulating
+    the thruster or retrieving hardware-based state values
+    from the actual thruster."""
 
     # Member modeling payload on/off state
     thruster_on = graphene.Boolean()
@@ -29,7 +36,9 @@ class Query(graphene.ObjectType):
     thruster = graphene.Field(ThrusterTelemetry)
 
     def resolve_payload(self, info):
-        """gets payload telemetry"""
+        """This function is called when a query for the Payload
+        is received. Any function calls to retrieve or refresh live
+        payload data would be called here."""
         if my_payload.payload_on == True:
             my_payload.uptime = time.time() - my_payload.start_time
         else:
@@ -37,7 +46,10 @@ class Query(graphene.ObjectType):
 
         return my_payload
     def resolve_thruster(self, info):
-        """gets thruster telemetry"""
+        """This function is called when a query for Thruster
+        data is received. Any function calls to retrieve live
+        thruster data would be called here to ensure
+        updated information."""
         return my_thruster
 
 class PayloadEnable(graphene.Mutation):
@@ -48,6 +60,10 @@ class PayloadEnable(graphene.Mutation):
     Output = PayloadTelemetry
 
     def mutate(self, info, payload_on):
+        """This function is called when a mutation of type payloadOn
+        is received.
+        Any user logic for enabling the payload such as I2C/SPI calls
+        or custom logic should be called here."""
         if (my_payload.payload_on == False and payload_on == True):
             my_payload.start_time = time.time()
         elif (my_payload.payload_on == True and payload_on == False):
@@ -63,6 +79,10 @@ class ThrusterEnable(graphene.Mutation):
     Output = ThrusterTelemetry
 
     def mutate(self, info, thruster_on):
+        """This function is called when a mutation of type thrusterOn
+        is received.
+        Any user logic for enabling the payload thruster such as I2C/SPI calls
+        or custom logic should get called here."""
         my_thruster.thruster_on = thruster_on
         return my_thruster
 
