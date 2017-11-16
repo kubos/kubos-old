@@ -9,7 +9,7 @@ Graphene ObjectType classes for subsystem modeling.
 """
 
 import graphene
-
+from events import publish_json
 
 class Subsystem(graphene.ObjectType):
     """
@@ -34,6 +34,7 @@ class Subsystem(graphene.ObjectType):
 
         print "Sending new power state to subsystem"
         self.power_on = power_on
+        publish_json({"power_on" : self.power_on})
         return Status(status=True, subsystem=self)
 
 

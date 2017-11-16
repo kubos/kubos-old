@@ -34,3 +34,9 @@ Example mutation:
            status
        }
    }
+
+
+This example payload handler also publishes events over dbus. There is a
+single dbus path to listen for events on `/kubos/handlers/payload`. All
+events will be published over this signal path. Currently an event is
+published every time the power state is changed via mutation.
