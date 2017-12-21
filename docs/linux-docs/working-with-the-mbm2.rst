@@ -293,6 +293,23 @@ Configuration
 The static IP address can be updated by editing the `/etc/network/interfaces` file.
 By default the address is ``10.0.2.20``.
 
+If external network access is required, two files will need to be altered: 
+``/etc/resolv.conf`` and ``/etc/network/interfaces``.
+
+- ``resolv.conf`` requires some working DNS server. An example might be a single line:
+ 
+.. code-block:: shell
+
+    nameserver 8.8.8.8
+
+- ``interfaces`` requires a gateway, netmask, and a specific address. One such example might be:
+
+.. code-block:: shell
+
+    address 192.168.1.120
+    netmask 255.255.255.0
+    gateway 192.168.1.1     
+
 Examples
 ^^^^^^^^
 
