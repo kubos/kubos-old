@@ -40,6 +40,11 @@ connector in order to establish a debug console connection.
 This connection will be passed through to a Kubos Vagrant image as
 `/dev/FTDI`.
 
+**Note:** using ``more`` or ``less`` over a serial connection with KubOS Linux 
+can, in some circumstances, cause an interface hang that is only recoverable 
+via a second connection (say, ``ssh``) and killing the offending serial 
+connection.
+
 Status LEDs
 -----------
 
