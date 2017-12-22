@@ -376,11 +376,7 @@ Resources
 Configuration
 ^^^^^^^^^^^^^
 
-<<<<<<< HEAD
 The static IP address can be updated by editing the ``/etc/network/interfaces`` file.
-=======
-The static IP address can be updated by editing the ``/etc/network/interfaces`` file.
->>>>>>> b9769bded987373e6250cf91bcd0a3f8e0dd7c45
 By default the address is ``10.0.2.20``.
 
 If external network access is required, two files will need to be altered: 
