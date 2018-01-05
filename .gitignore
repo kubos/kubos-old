@@ -63,3 +63,8 @@ upload.tar.gz
 .*.sw*
 vm/.vagrant/
 .vscode
+.projectile
+*.bk
+
+# rust stuff
+target/
