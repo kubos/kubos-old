@@ -15,7 +15,6 @@
 //
 
 use libc::uint8_t;
-use std::default::Default;
 
 pub const LENGTH_TELEMETRY_HOUSEKEEPING: usize = 37;
 pub const LENGTH_TELEMETRY_GET_VERSION: usize = 34;
@@ -31,19 +30,6 @@ pub struct supervisor_version(pub [uint8_t; LENGTH_TELEMETRY_GET_VERSION]);
 
 #[repr(C)]
 pub struct supervisor_housekeeping(pub [uint8_t; LENGTH_TELEMETRY_HOUSEKEEPING]);
-
-impl Default for supervisor_housekeeping {
-    fn default() -> supervisor_housekeeping {
-        supervisor_housekeeping([0; LENGTH_TELEMETRY_HOUSEKEEPING])
-    }
-}
-
-impl Default for supervisor_version {
-    fn default() -> supervisor_version {
-        supervisor_version([0; LENGTH_TELEMETRY_GET_VERSION])
-    }
-}
-
 
 /// Bring in C functions from kubos-hal-iobc
 extern "C" {

@@ -16,6 +16,8 @@
 
 extern crate libc;
 
+use std::mem;
+
 mod ffi;
 
 /// Structure returned by supervisor_version
@@ -35,6 +37,8 @@ pub struct SupervisorVersion {
     pub crc: u8,
 }
 
+/// Structure for individual enable statuses
+/// Used in SupervisorHousekeeping
 #[derive(Debug)]
 pub struct SupervisorEnableStatus {
     pub power_obc: u8,
@@ -58,7 +62,7 @@ pub struct SupervisorHousekeeping {
     pub crc8: u8,
 }
 
-/// Create safe Rust wrapper
+/// Supervisor emergency reset interface
 pub fn supervisor_emergency_reset() -> Result<(), String> {
     match unsafe { ffi::supervisor_emergency_reset() } {
         true => Ok(()),
@@ -66,6 +70,7 @@ pub fn supervisor_emergency_reset() -> Result<(), String> {
     }
 }
 
+/// Supervisor reset interface
 pub fn supervisor_reset() -> Result<(), String> {
     match unsafe { ffi::supervisor_reset() } {
         true => Ok(()),
@@ -73,6 +78,7 @@ pub fn supervisor_reset() -> Result<(), String> {
     }
 }
 
+/// Supervisor powercycle interface
 pub fn supervisor_powercycle() -> Result<(), String> {
     match unsafe { ffi::supervisor_powercycle() } {
         true => Ok(()),
@@ -80,7 +86,8 @@ pub fn supervisor_powercycle() -> Result<(), String> {
     }
 }
 
-pub fn convert_raw_version(raw: ffi::supervisor_version) -> SupervisorVersion {
+/// Converts raw bytes from iOBC into SupervisorVersion
+fn convert_raw_version(raw: ffi::supervisor_version) -> SupervisorVersion {
     SupervisorVersion {
         dummy: raw.0[0] as u8,
         spi_command_status: raw.0[1] as u8,
@@ -89,12 +96,10 @@ pub fn convert_raw_version(raw: ffi::supervisor_version) -> SupervisorVersion {
         minor_version: raw.0[4] as u8,
         patch_version: raw.0[5] as u8,
         git_head_version: {
-            (raw.0[9] as u32) << 24 | (raw.0[8] as u32) << 16 | (raw.0[7] as u32) << 8 |
-                (raw.0[6] as u32)
+            (raw.0[6] as u32) | (raw.0[7] as u32) << 8 | (raw.0[8] as u32) << 16
+                | (raw.0[9] as u32) << 24
         },
-        serial_number: {
-            (raw.0[11] as u16) << 8 | (raw.0[10] as u16)
-        },
+        serial_number: { (raw.0[10] as u16) | (raw.0[11] as u16) << 8 },
         compile_information: {
             (&raw.0[12..(12 + ffi::LENGTH_COMPILE_INFORMATION)])
                 .iter()
@@ -107,10 +112,10 @@ pub fn convert_raw_version(raw: ffi::supervisor_version) -> SupervisorVersion {
     }
 }
 
+/// Interface for retrieving iOBC supervisor version data
 pub fn supervisor_version() -> Result<SupervisorVersion, String> {
-    let mut version: ffi::supervisor_version = Default::default();
+    let mut version: ffi::supervisor_version = unsafe { mem::uninitialized() };
     let version_result = unsafe { ffi::supervisor_get_version(&mut version) };
-
     if !version_result {
         Err(String::from("Problem retrieving supervisor version"))
     } else {
@@ -118,18 +123,14 @@ pub fn supervisor_version() -> Result<SupervisorVersion, String> {
     }
 }
 
-pub fn convert_raw_housekeeping(raw: ffi::supervisor_housekeeping) -> SupervisorHousekeeping {
-    println!(
-        "Converting...{} {} {} {}",
-        raw.0[3],
-        raw.0[4],
-        raw.0[5],
-        raw.0[6]
-    );
+/// Converts raw bytes from iOBC into SupervisorHousekeeping
+fn convert_raw_housekeeping(raw: ffi::supervisor_housekeeping) -> SupervisorHousekeeping {
     SupervisorHousekeeping {
         dummy: raw.0[0] as u8,
         spi_command_status: raw.0[1] as u8,
         enable_status: SupervisorEnableStatus {
+            // We bitmask rather than split the int
+            // across bitfields
             power_obc: (raw.0[2] as u8) & 0x1,
             power_rtc: ((raw.0[2] as u8) & 0x2) >> 1,
             supervisor_mode: ((raw.0[2] as u8) & 0x4) >> 2,
@@ -137,23 +138,22 @@ pub fn convert_raw_housekeeping(raw: ffi::supervisor_housekeeping) -> Supervisor
             power_off_rtc: ((raw.0[2] as u8) & 0x40) >> 6,
         },
         supervisor_uptime: {
-            (raw.0[3] as u32) | (raw.0[4] as u32) << 8 | (raw.0[5] as u32) << 16 |
-                (raw.0[6] as u32) << 24
+            (raw.0[3] as u32) | (raw.0[4] as u32) << 8 | (raw.0[5] as u32) << 16
+                | (raw.0[6] as u32) << 24
         },
         iobc_uptime: {
-            (raw.0[7] as u32) | (raw.0[8] as u32) << 8 | (raw.0[9] as u32) << 16 |
-                (raw.0[10] as u32) << 24
+            (raw.0[7] as u32) | (raw.0[8] as u32) << 8 | (raw.0[9] as u32) << 16
+                | (raw.0[10] as u32) << 24
         },
         iobc_reset_count: {
-            (raw.0[11] as u32) | (raw.0[12] as u32) << 8 | (raw.0[13] as u32) << 16 |
-                (raw.0[14] as u32) << 24
+            (raw.0[11] as u32) | (raw.0[12] as u32) << 8 | (raw.0[13] as u32) << 16
+                | (raw.0[14] as u32) << 24
         },
         adc_data: {
+            // combining bytes into 16-bit uints
             let mut v = Vec::<u16>::new();
             for i in 0..(ffi::SUPERVISOR_NUMBER_OF_ADC_CHANNELS) {
-                v.push(
-                    (raw.0[15 + 2 * i] as u16) | (raw.0[15 + 2 * i + 1] as u16) << 8,
-                );
+                v.push((raw.0[15 + 2 * i] as u16) | (raw.0[15 + 2 * i + 1] as u16) << 8);
             }
             v
         },
@@ -162,8 +162,9 @@ pub fn convert_raw_housekeeping(raw: ffi::supervisor_housekeeping) -> Supervisor
     }
 }
 
+/// Interface for fetching iOBC supervisor housekeeping data
 pub fn supervisor_housekeeping() -> Result<SupervisorHousekeeping, String> {
-    let mut raw: ffi::supervisor_housekeeping = Default::default();
+    let mut raw: ffi::supervisor_housekeeping = unsafe { mem::uninitialized() };
     let result = unsafe { ffi::supervisor_get_housekeeping(&mut raw) };
 
     if !result {
@@ -177,10 +178,11 @@ pub fn supervisor_housekeeping() -> Result<SupervisorHousekeeping, String> {
 mod tests {
     use super::*;
 
+    /// Accuracy testing conversion of raw bytes into non-C
+    /// SupervisorVersion structure
     #[test]
     fn test_convert_version() {
-        let raw: ffi::supervisor_version = ffi::supervisor_version(
-            [
+        let raw: ffi::supervisor_version = ffi::supervisor_version([
                 // dummy (u8)
                 0,
                 // spi_command_status (u8)
@@ -227,9 +229,10 @@ mod tests {
                 32,
                 // crc8 (u8)
                 33,
-            ],
-        );
+            ]);
+
         let version = convert_raw_version(raw);
+
         assert_eq!(version.dummy, 0);
         assert_eq!(version.spi_command_status, 1);
         assert_eq!(version.major_version, 3);
@@ -237,18 +240,33 @@ mod tests {
         assert_eq!(version.patch_version, 5);
         assert_eq!(version.git_head_version, 151521030);
         assert_eq!(version.serial_number, 2826);
+        for i in 12..31 {
+            assert_eq!(version.compile_information[i - 12], i as i8);
+        }
         assert_eq!(version.clock_speed, 31);
         assert_eq!(version.code_type, 32);
         assert_eq!(version.crc, 33);
     }
 
+    /// Accuracy testing conversion of raw bytes into non-C
+    /// SupervisorHousekeeping structure
     #[test]
     fn test_convert_housekeeping() {
-        let raw: ffi::supervisor_housekeeping = ffi::supervisor_housekeeping(
-            [
+        let raw: ffi::supervisor_housekeeping = ffi::supervisor_housekeeping([
                 // dummy (u8), spi_command_status (u8), enable_status (u8)
                 0,
                 1,
+                // enable_status (u8) is a bitfield in the C structure
+                // power_obc : 1
+                // power_rtc : 1
+                // supervisor_mode : 1
+                // padding : 2
+                // busy_rtc : 1
+                // power_off_rtc : 1
+                // padding: 1
+                // Using 34 gives us -
+                // 0 0 1 0 0 0 1 0
+                // which results in alternating 1/0 field values
                 34,
                 // super_uptime (u32)
                 3,
@@ -290,8 +308,7 @@ mod tests {
                 12,
                 // crc8
                 13,
-            ],
-        );
+            ]);
 
         let housekeeping = convert_raw_housekeeping(raw);
 
