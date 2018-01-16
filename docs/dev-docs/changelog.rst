@@ -1,6 +1,20 @@
 Kubos Changelog
 ===============
 
+Upcoming
+--------
+
+- Added API for D-Bus based Evented Messaging
+- Added iOBC UART support and demo [Docs](http://docs.kubos.co/working-with-the-iobc.html#uart)
+- Added Ethernet support for MBM2/BBB [Docs](http://docs.kubos.co/working-with-the-bbb.html#ethernet)
+- Added generic radio API [Docs](http://docs.kubos.co/device-api/radio.html)
+- Added Python-based example subsystem handler
+- Added generic ADCS API [Docs](http://docs.kubos.co/device-api/adcs.html)
+- Added Rust-based example subsystem handler
+- Added iOBC SPI support [Docs](http://docs.kubos.co/working-with-the-iobc.html#spi)
+- Added `cargo kubos` subcommand for Cargo-->Yotta integration
+- Upgraded to BuildRoot LTS 2017.2.8
+
 v1.0.1 - Aug 4 2017
 -------------------
 
