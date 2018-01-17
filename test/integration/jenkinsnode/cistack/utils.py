@@ -10,21 +10,27 @@ from time import sleep
 import RPi.GPIO as GPIO
 
 
+global errstr
 errstr = "*** ERROR (functions):"
 
 def supportedBoards():
-    """Return a list of the supported boards."""
+    """
+    Return a list of the supported boards.
+    """
     supportedboards = [
     'pyboard-gcc',
     'stm32f407-disco-gcc',
     'msp430f5529-gcc', 
-    'na-satbus-3c0-gcc'
+    'na-satbus-3c0-gcc',
+    'noboard'
     ]
     return supportedboards
 
 
 def boardList():
-    """Return a nicely formatted string of the supported boards."""
+    """
+    Return a nicely formatted string of the supported boards.
+    """
     boards = supportedBoards()
     boardlist = str("")
     for i in boards:
@@ -43,7 +49,8 @@ def requiredUtils():
     'kubos',
     'lsusb',
     'gdb',
-    'uname'
+    'uname',
+    'bossac'
     ]
     return requiredutils
 
@@ -74,6 +81,7 @@ def getTarget(target):
     from pyboard import Pyboard
     from stm32f407discovery import STM32F407Discovery
     from msp430f5529 import MSP430
+    from noboard import NoBoard
 
 #     log = logging.getLogger('logfoo') 
 
@@ -96,6 +104,10 @@ def getTarget(target):
         logging.debug("Matched STM32F405 NanoAvionics SatBus 3c0")
         return NAsatbus()
 
+    elif target == "noboard":
+        logging.debug("Matched an unspecified board with only power commands available.")
+        return NoBoard()
+
     else:
         logging.error("Unsupported board -- no 'Target' class available.")
         return None
@@ -104,7 +116,9 @@ def getTarget(target):
 
 
 def getBoardConfigs(boards):
-    """Ensure that the board identifier is supported."""
+    """
+    Ensure that the board identifier is supported.
+    """
 #    log = logging.getLogger('logfoo') 
     for i in boards:
         try:
@@ -142,6 +156,8 @@ def parseBoardIdentifier(lsusbpattern):
             True, 'USE dfu-util!', '***'], 
         '0451:2046': ['TI MSP430F5529 Launchpad', 
             True, 'USE mspdebug!', '***'],
+        '1366:0101':['Atmel SEGGER programmer', 
+            False, 'NOT SUPPORTED', 'bossac'],
         '0451:f432': ['TI MSP430G2553 Launchpad', 
             False, 'NOT SUPPORTED', '/usr/bin/sleep 1']
     }
@@ -179,6 +195,9 @@ def whichUSBboard():
 
 
 def findBin(command):
+    """
+    Search for the argument in the system PATH.
+    """
 #    log = logging.getLogger('logfoo')
     cmd = str("/usr/bin/which %s" % command)
     logging.debug("Looking for %s in system binary PATHs." % command)
@@ -210,13 +229,16 @@ def checkRoot():
 
 
 def readOpts():
-    """Read command line arguments and return Namespace object."""
-    parser = argparse.ArgumentParser(description = helpstring)
+    """
+    Read command line arguments and return Namespace object.
+    """
+    parser = argparse.ArgumentParser(description = helpstring,
+        formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.add_argument("-r", "--root", action = 'store', \
+    parser.add_argument("-r", "--root", action = 'store_true', \
         dest = "requireroot", default = False, help = "This script no longer \
-requires root access to run, meaning you must implement \
-a udev rule to enable user-land access to the device, or else just \
+requires root access, meaning you must implement \n\
+a udev rule to enable user-land access to the device, or else just \n\
 remember to sudo when running this script. \n\
 \n\
 Hint: ATTRS{idVendor}==\"0483\", ATTRS{idProduct}==\"df11\" \n\
@@ -226,43 +248,43 @@ Therefore, you can set this to True, but we don't advise it.", \
 
     parser.add_argument("-f", "--file", action = 'store', \
         dest = "inputbinary", default="kubos-rt-example", \
-        help = "provide a filename for the compiled binary file to \
-upload", metavar = "FILE", required = True)
+        help = "Provide a filename for the compiled binary file to \
+upload", metavar = "FILE", required = False)
 
     parser.add_argument("-v", "--verbose", \
         action = 'store_true', dest = "verbose",
-        help = "set INFO log level", default = 0, \
+        help = "Set INFO log level", default = 0, \
         required = False)
 
     parser.add_argument("--debug", action = 'store_true', \
-        dest = "debug", help="set DEBUG log level", default = 0, \
+        dest = "debug", help="Set DEBUG log level", default = 0, \
         required = False)
 
     parser.add_argument("--quiet", action = 'store_true', \
-        dest = "quiet", help="set ERROR log level", default = 0, \
+        dest = "quiet", help="Set ERROR log level", default = 0, \
         required = False)
 
     parser.add_argument("-p", "--path", action = 'store', \
         dest = "binfilepath", default = "/var/lib/ansible/",
-        help = "provide a path to the binary you want to flash", \
+        help = "Provide a path to the binary you want to flash", \
         metavar = "PATH", required = False)
 
     parser.add_argument("-b", "--board", action = 'store', \
         dest = "board", default = "stm32f407-disco-gcc",
-        help = "the target board (and architecture) supported by the \
+        help = "The target board (and architecture) supported by the \
 Kubos SDK", metavar = "TARGET", required = True)
    
-    parser.add_argument("-i", "--ignore-warnings", action = 'store', \
+    parser.add_argument("-i", "--ignore-warnings", action = 'store_true', \
         dest = 'ignoreGPIOwarnings', default = False, \
         help = "Ignore any warnings from the RPi.GPIO module. Not \
 recommended.", required = False)
 
-    parser.add_argument("--free-pins", action = 'store', \
+    parser.add_argument("--free-pins", action = 'store_true', \
         dest = 'freepins', default = False, \
         help = "Use RPi.GPIO module to Free GPIO pins when done. Usually \
 unnecessary.", required = False)
 
-    parser.add_argument("--shutdown", action = 'store', \
+    parser.add_argument("--shutdown", action = 'store_true', \
         dest = 'shutdown', default = False, \
         help = "Shut off the board when done. Usually unnecessary.",
         required = False)
@@ -275,6 +297,18 @@ unnecessary.", required = False)
         - 'lib' imports the file as a library; \n\
         - 'checks' runs tests on each of the flags and options.\n",\
         metavar = "COMMAND", required = False)
+
+    parser.add_argument("--powerup", action = 'store_true', \
+        dest = 'powerup', default = False, \
+        help = "Power up the target board and exit.",
+        required = False)
+
+    parser.add_argument("--powerdown", \
+        action = 'store_true', dest = 'powerdown', default = False, \
+        help = "Power down the target board and exit.",
+        required = False)
+
+
 
     arguments = parser.parse_args()
 
@@ -327,7 +361,6 @@ def startupChecks(args):
     """
 #    log = logging.getLogger('logfoo') 
     
-
     logging.debug("Command line arguments are: %s " % str(args))
     if not args:
         logging.error("Command line arguments returned None. Exiting.")
@@ -403,13 +436,14 @@ def cleanUp(target, args):
 # Here's a global text variable.
 boardlist = boardList()
 global helpstring
-helpstring = str("cistack.py; a python utility that provides a series \
-of abstracted functions to interact with supported KubOS \
-target boards, through the Kubos CISTACK Pi Hat interface. The library \
-provides numerous functions, but chief among them is the ability to  \
-upload a compiled binary executable to each board using the flashing \
-functions in the library. As such, the user must provide, at a minimum, \
-three arguments to any script that calls this (readOpts) function. \n\
+helpstring = str("cistack.py:\n\
+a python utility that provides a series \n\
+of abstracted functions to interact with supported KubOS \n\
+target boards, through the Kubos CISTACK Pi Hat interface. The library \n\
+provides numerous functions, but chief among them is the ability to  \n\
+upload a compiled binary executable to each board using the flashing \n\
+functions in the library. As such, the user must provide, at a minimum, \n\
+three arguments to any script that calls this (readOpts) function. \n\n\
 \n\
 Example:\n\
 \n\
