@@ -7,15 +7,16 @@ Overview
 
 :doc:`dev-docs/changelog`
 
-The Kubos platform provides small satellite developers the tools and
-libraries necessary to quickly bring up space ready software. We
-leverage multiple existing open source projects like FreeRTOS and CSP,
-along with our own custom framework and SDK.
+The Kubos platform provides satellite developers the tools and libraries necessary to quickly bring up space ready software. We leverage multiple existing open source projects, along with our own custom framework and SDK. 
 
-Looking to build an application on Kubos? Check out our quick start guides:
+What is KubOS, and what does it do? Check out our Architecture guide to give an overview of how KubOS works and what it provides:
 
- - :doc:`KubOS Linux quick start guide <linux-docs/first-linux-project>`
- - :doc:`KubOS RT quick start guide <rt-docs/first-rt-project>`
+ - :doc:`KubOS Architecture Overview <architecture/architecture-overview>`
+
+Trying to integration a Payload or create your mission code? Check out our examples: 
+
+ - :doc:`Example Payload Service <services/example-payload-service>`
+ - :doc:`Example Mission Application <applications/example-mission-application>`
 
 Having issues? Want a new feature? `Come talk to
 us! <https://slack.kubos.co/>`__
@@ -46,17 +47,16 @@ Boards Currently Supported by Kubos
 
 .. toctree::
     :hidden:
-
-    First Time Users <first-time-users>
-    FAQs and Troubleshooting Tips <faq-troubleshooting>
+    
+    KubOS Architecture <architecture/index>
+    Kubos Services <services/index>
+    Kubos Applications <applications/index>
     Installation Docs <installation-docs/index>
-    Examples <sdk-docs/sdk-examples>
     Kubos SDK <sdk-docs/index>
-    KubOS RT <rt-docs/index>
     KubOS Linux <linux-docs/index>
-    Kubos Middleware <middleware/index>
     Kubos APIs <apis/index>
     Developer Docs <dev-docs/index>
+    FAQs and Troubleshooting Tips <faq-troubleshooting>
 
 Indices and tables
 ------------------

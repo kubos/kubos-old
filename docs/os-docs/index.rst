@@ -10,14 +10,6 @@ recovery logic.
 KubOS Linux projects are built into binaries which will run as Linux user space 
 applications.
 
-Newbie Docs
------------
-
-.. toctree::
-    :maxdepth: 1
-    
-    Creating Your First KubOS Linux Project <first-linux-project>
-
 Installation Docs
 -----------------
 
