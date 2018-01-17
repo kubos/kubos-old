@@ -9,7 +9,7 @@ Overview
 
 The Kubos platform provides satellite developers the tools and libraries necessary to quickly bring up space ready software. We leverage multiple existing open source projects, along with our own custom framework and SDK. 
 
-What is KubOS, and what does it do? Check out our Architecture guide to give an overview of how KubOS works and what it provides:
+What is KubOS? Check out our Architecture guide to give an overview of how KubOS works and what it provides:
 
  - :doc:`KubOS Architecture Overview <architecture/architecture-overview>`
 
@@ -18,7 +18,7 @@ Trying to integration a Payload or create your mission code? Check out our examp
  - :doc:`Example Payload Service <services/example-payload-service>`
  - :doc:`Example Mission Application <applications/example-mission-application>`
 
-Having issues? Want a new feature? `Come talk to
+Having issues? Want a new feature? Just want to say hello? `Come talk to
 us! <https://slack.kubos.co/>`__
 
 If for some reason Slack won't work for you, feel free to email us at
@@ -43,10 +43,10 @@ Boards Currently Supported by Kubos
     KubOS Architecture <architecture/index>
     Kubos Services <services/index>
     Kubos Applications <applications/index>
-    Installation Docs <installation-docs/index>
-    Kubos SDK <sdk-docs/index>
-    KubOS Linux <linux-docs/index>
     Kubos APIs <apis/index>
+    KubOS Linux <linux-docs/index>
+    Kubos SDK <sdk-docs/index>
+    Installation Docs <installation-docs/index>
     Developer Docs <dev-docs/index>
     FAQs and Troubleshooting Tips <faq-troubleshooting>
 
