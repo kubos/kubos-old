@@ -80,9 +80,19 @@ Hardware APIs are a 2 tier system. The lower tier is specific to the exact piece
 Core Services
 ~~~~~~~~~~~~~
 
-The Core Services listed in the diagram: 
+The Core Services are all the services that provide critical Flight Software capability. Any service that does not interact with hardware or not specific to a mission falls within this category. Each of these services are discussed in the Services section found :doc:`here <services/index>`.
 
 Mission Specific Code
 ~~~~~~~~~~~~~~~~~~~~~
 
-If you're mostly concerned with "What do I actually need to write?" this section is for you. Things that have to be written no matter 
+If you're mostly concerned with "What do I actually need to write?" this section is for you. Things that have to be written or changed no matter what are the Payload Service and the Mission Applications. 
+
+Payload Service
+^^^^^^^^^^^^^^^
+
+It is recommended to integrate a payload in the same way as the rest of the bus hardware. An example of a Payload Service can be found :doc:`here <services/example-payload-service>`. That being said, the Payload Service is custom for the mission, and can be accomplished any way the payload developer sees fit. The only hard requirement is that it can send/receive IP communication to connect with the rest of the services.  
+
+Mission Applications
+^^^^^^^^^^^^^^^^^^^^
+
+The Mission Applications, as previously discussed, handle all the onboard decision making. They are monitoring the battery to make sure the proper systems get turned off when it's low, they handle abort procedures when an operation encounters an error, they handle what telemetry gets beaconed, how often, and where it goes, etc. These are, by nature, mission specific, but some of them can be largely reused due to the abstract nature of the hardware integration, such as the housekeeping or telemetry logging applications. These are typically written or adapted by the user. More information, requirements, examples, and formatting for these can be found :doc:`here <applications/index>`.
