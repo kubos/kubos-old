@@ -40,8 +40,6 @@ The final portion of the KubOS system is the Mission Applications. These applica
 Typical Mission Architecture
 ----------------------------
 
-Below is a diagram of a typical mission using KubOS. 
-
 .. figure:: images/mission_diagram.png
     :align: center
 
@@ -65,7 +63,19 @@ The Communication Service is what integrates the Gateway (and the API developed 
 Hardware Integration
 ~~~~~~~~~~~~~~~~~~~~
 
-Kubos integrates hardware
+For a list of the hardware currently supported by KubOS, look :doc:`here <index>`. 
+
+Supported hardware is hardware that has both an API and an associated service. This architecture allows us to integrate hardware from several different vendors while keeping the application layer mostly hardware independent. Any supported hardware configuration can be used without changing mission application code.
+
+Hardware Services
+^^^^^^^^^^^^^^^^^
+
+Hardware Services are GraphQL Server enpoints that take in Queries/Mutations and utilized the Hardware API to complete them. More information on Hardware Services can be found :doc:`here <services/hardware-services>`, and more information on GraphQL can be found :doc:`here <services/graphql>`. 
+
+Hardware APIs
+^^^^^^^^^^^^^
+
+Hardware APIs are a 2 tier system. The lower tier is specific to the exact piece of hardware and it's configuration, and must be written for every piece of hardware integrated. The upper tier accesses the lower tier, and is accessed by the associated Hardware Services. This upper tier is mostly portable between different units of similar purpose (eg, different brands of battery or ADCS), but sometimes must be augmented. More detailed descriptions of the different layers and current supported hardware APIs can be found :doc:`here <apis/index>`. 
 
 Core Services
 ~~~~~~~~~~~~~
