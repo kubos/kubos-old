@@ -40,7 +40,7 @@ Boards Currently Supported by Kubos
 .. toctree::
     :hidden:
     
-    KubOS Architecture <architecture/index>
+    KubOS Architecture <architecture-overview>
     Kubos Services <services/index>
     Kubos Applications <applications/index>
     Kubos APIs <apis/index>

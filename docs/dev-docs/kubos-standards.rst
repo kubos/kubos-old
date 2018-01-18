@@ -29,7 +29,7 @@ Components within Kubos breakdown as follows:
 - Service - A persistent process that is used to interact with the system. These typically call APIs.
 - Application - Makes decisions and uses the services. 
 
-Components added to the system should be referred to/labeled accordingly. See the :doc:`Architecture Overview <../architecture/architecture-overview>` document for more information on each component's roll. 
+Components added to the system should be referred to/labeled accordingly. See the :doc:`Architecture Overview <../architecture-overview>` document for more information on each component's roll. 
 
 File Naming
 ###########
