@@ -85,7 +85,7 @@ The Core Services are all the services that provide critical Flight Software cap
 Mission Specific Code
 ~~~~~~~~~~~~~~~~~~~~~
 
-If you're mostly concerned with "What do I actually need to develop?" this section is for you. Things that have to be written or changed no matter what are the Payload Service and the Mission Applications. 
+If you're mostly concerned with "What do I actually need to develop?" this section is for you. Things that have to be written or changed no matter what are the Payload Service and the Mission Applications. These are highlighted in green in the mission diagram above. 
 
 Payload Service
 ^^^^^^^^^^^^^^^
