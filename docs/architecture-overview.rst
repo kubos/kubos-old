@@ -1,7 +1,11 @@
 KubOS Architecture Overview
 ===========================
 
-The KubOS system is designed to take care of every aspect of the satellite flight software. From the board up, it has every component you need to complete a mission. The stack is shown below:
+The KubOS system is designed to take care of every aspect of the satellite flight software. From the board up, it has every component you need to complete a mission. 
+
+
+The KubOS Stack
+---------------
 
 .. figure:: images/architecture_stack.png
     :align: center
@@ -32,6 +36,7 @@ Mission Applications
 
 The final portion of the KubOS system is the Mission Applications. These applications are anything that governs the behavior of the satellite. Some common examples are deployment, housekeeping, and telemetry beaconing. Basically anything that you want the satellite to do autonomously goes into this category. More information on and examples of Mission Applications can be found :doc:`here <applications/index.rst>`. 
 
+
 Typical Mission Architecture
 ----------------------------
 
@@ -41,8 +46,5 @@ Below is a diagram of a typical mission using KubOS.
     :align: center
 
 In the above diagram, everything in blue is typically Kubos-developed, while everything in green would be mission code and written by the user for their specific mission and payload. 
-
-
------------------------
 
 Kubos is continually integrating new hardware
