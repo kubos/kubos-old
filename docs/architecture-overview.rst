@@ -70,7 +70,7 @@ Supported hardware is hardware that has both an API and an associated service. T
 Hardware Services
 ^^^^^^^^^^^^^^^^^
 
-Hardware Services are GraphQL Server enpoints that take in Queries/Mutations and utilized the Hardware API to complete them. More information on Hardware Services can be found :doc:`here <services/hardware-services>`, and more information on GraphQL can be found :doc:`here <services/graphql>`. 
+Hardware Services are GraphQL Server enpoints that take in Queries/Mutations and exercise the Hardware API to complete them. More information on Hardware Services can be found :doc:`here <services/hardware-services>`, and more information on GraphQL can be found :doc:`here <services/graphql>`. 
 
 Hardware APIs
 ^^^^^^^^^^^^^
