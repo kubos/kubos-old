@@ -80,7 +80,7 @@ Hardware APIs are a 2 tier system. The lower tier is specific to the exact piece
 Core Services
 ~~~~~~~~~~~~~
 
-The Core Services are all the services that provide critical Flight Software capability. Any service that does not interact with hardware or not specific to a mission falls within this category. Each of these services are discussed in the Services section found :doc:`here <services/index>`.
+The Core Services are all the services that provide critical Flight Software capability. Any service that does not interact with hardware or is not specific to a mission falls within this category. Each of these services are discussed in the Services section found :doc:`here <services/core-services>`.
 
 Mission Specific Code
 ~~~~~~~~~~~~~~~~~~~~~
