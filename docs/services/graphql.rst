@@ -1,7 +1,7 @@
 GraphQL
 =======
 
-GraphQL is a query language used to simplify commanding and telemetry gathering on the satellite. More information about GraphQL in general can be found here: graphql.org 
+GraphQL is a query language used to simplify commanding and telemetry gathering on the satellite. More information about GraphQL in general can be found here: http://graphql.org/ 
 
 
 What uses GraphQL? 
