@@ -1,10 +1,5 @@
 Kubos Applications
-===========
-
-Kubos Applications...do things
-
-Newbie Docs
------------
+==================
 
 .. toctree::
     :maxdepth: 1
