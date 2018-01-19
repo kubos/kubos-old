@@ -4,16 +4,27 @@ Kubos Changelog
 Upcoming
 --------
 
-- Added API for D-Bus based Evented Messaging
-- Added iOBC UART support and demo [Docs](http://docs.kubos.co/working-with-the-iobc.html#uart)
-- Added Ethernet support for MBM2/BBB [Docs](http://docs.kubos.co/working-with-the-bbb.html#ethernet)
-- Added generic radio API [Docs](http://docs.kubos.co/device-api/radio.html)
-- Added Python-based example subsystem handler
-- Added generic ADCS API [Docs](http://docs.kubos.co/device-api/adcs.html)
-- Added Rust-based example subsystem handler
-- Added iOBC SPI support [Docs](http://docs.kubos.co/working-with-the-iobc.html#spi)
-- Added `cargo kubos` subcommand for Cargo-->Yotta integration
+**TODO:** Verify/fix the doc links
+
+- `Added iOBC UART support and demo <http://docs.kubos.co/working-with-the-iobc.html#uart>`__
+- `Added iOBC SPI support <http://docs.kubos.co/working-with-the-iobc.html#spi>`__
+
+- `Added Ethernet support for MBM2/BBB <http://docs.kubos.co/working-with-the-bbb.html#ethernet>`__
+
+- `Added generic radio API <http://docs.kubos.co/device-api/radio.html>`__
+- `Added generic ADCS API <http://docs.kubos.co/device-api/adcs.html>`__
+
+- `Added an I2C HAL for Linux <link>`
+
+- `Added Python-based example subsystem handler <link>`__
+- `Added Rust-based example subsystem handler <link>`__
+- `Added 'cargo kubos' subcommand for Cargo-->Yotta integration <link>`__
+
 - Upgraded to BuildRoot LTS 2017.2.8
+- `Documented Windows PowerShell v3+ requirement <link>`__
+
+- Refactored the repo to remove deprecated code
+- Re-organized the docs to have a more nested structure
 
 v1.0.1 - Aug 4 2017
 -------------------
